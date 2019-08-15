@@ -1,33 +1,1246 @@
-.App {
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+
+Header
+
+*/
+
+#header{
+  height: 15vh;
+  min-width: 100vw;
+
+  display:flex;
+  align-items: flex-end;
+
+  background-image: url("./assets/main-header.jpg");
+}
+
+.IconWrapper{
+  position: absolute;
+  top: 0vh;
+  height: 10vh;
+
+  display: flex;
+  align-items: flex-start;
+}
+
+#icon{
+  width: 5vw;
+  height: 7vh;
+}
+
+#icon_name{
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.75em;
+  font-weight: 200;
+  color: white;
+  width: 90vw;
+}
+
+.TabWrapper{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.tabs{
+  width: 12vw;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  font-size: 2.5em;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tabs:hover{
+  text-decoration: underline;
+}
+
+
+
+/*
+
+Workout Page
+
+*/
+
+#WoContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100vw;
+  min-height: 85vh;
+}
+
+#WoWrapper{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  margin-top: 2vh;
+  width: 100%;
+  height: 6vh;
+}
+
+.WoDropdownDiv{
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  cursor:pointer;
+}
+
+.WoDropdownDiv:hover .WoViews{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.WoViews{
+  width: 30vw;
+  box-sizing: border-box;
+  border: 1px solid #1F0CAD;
+
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 600;
+  text-align: center;
+  color: black;
+}
+
+.WoViews:hover{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.WoViewsDropdown{
+  visibility: hidden;
+  text-decoration: none;
+  display:flex;
+  flex-direction: column;
+
+  /* border: 1px solid #1F0CAD; */
+  background-color: #1F0CAD;
+}
+
+.WoDropdownDiv:hover .WoViewsDropdown{
+  visibility: visible;
+}
+
+.WoDropdownItem{
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15em;
+  font-weight: 200;
+  color: white;
+
+  border-top: 1px solid white;
+  text-decoration: none;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.WoDropdownItem:active{
+  color: red;
 }
 
-.App-header {
-  background-color: #282c34;
+#CurrentRoutine{
+  min-width: 96.8vw;
+  min-height: 75vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 3vh;
+  font-family: 'Nunito',sans-serif;
+}
+
+.CurrentRoutineItems{
+  width: 90vw;
+  min-height: 0vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 1px solid #1F0CAD;
+  margin-bottom: 3vh;
+  box-shadow: 10px 10px 10px #707070;
+}
+
+.CollapsibleCurrentRoutine{
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.CurrentRoutineItemHeader{
+  width: 98.5%;
+  height: 12vh;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  font-size: 3em;
+  font-weight: 600;
+  color: #1F0CAD;
+  cursor:pointer;
+}
+
+.CurrentRoutineItemHeader > img{
+  margin-top: 0.7vh;
+  width: 7vw;
+  height: 8vh;
+}
+
+.CurrentRoutineSetsReps{
+  width: 92%;
+  margin-bottom: 1vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.CurrentRoutineSetsReps > p{
+  width: 12vw;
+
+  display: flex;
+  justify-content: center;
+
+  font-size: 2em;
+  font-weight: 200;
+
+}
+
+.CurrentRoutineValues, .CurrentRoutineValues:focus{
+  resize: none;
+  border: none;
+  outline: none;
+  overflow: auto;
+
+  border-bottom: 1px solid #1F0CAD;
+  width: 12vw;
+  height: 10vh;
+
+  text-align: center;
+  font-size: 3em;
+  font-weight: 200;
+  color: #1F0CAD;
+}
+
+.CurrentRoutineAddSet{
+  height: 10vh;
+  width: 100%;
+
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vh;
+
+  font-size: 2.25em;
+  font-weight: 200;
+  cursor: pointer
+}
+
+.CurrentRoutineAddSet:hover > p{
+  color: #1F0CAD;
+}
+
+#routineBtn{
+  height: 8.5vh;
+  width: 8.5vw;
+
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+
+#editBtn{
+  height: 8.5vh;
+  width: 8.5vw;
+  position: fixed;
+  right: 0;
+  bottom: 10vh;
+  cursor:pointer;
+}
+
+#routineBtn:hover, #editBtn:hover{
+  opacity: 0.75;
+}
+
+/*
+
+Routine View Page
+
+
+*/
+
+#RoutineHeader{
+  position:sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  width: 100vw;
+  border-bottom: 1px solid #1F0CAD;
+  background-color: white;
+}
+
+#RoutineHeaderWrapper{
+  width: 90%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#RoutineName{
+  width: 50%;
+  height: 70%;
+  resize: none;
+  border: none;
+  overflow: auto;
+}
+
+ #RoutineName:focus, #RoutineName{
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  color: black;
+  font-size: 3em;
+}
+
+#RoutineFinish{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  font-size: 3em;
+  text-decoration: none;
+  color: #1F0CAD;
+}
+
+#RoutineFooter{
+  position: sticky;
+  bottom:0;
+  width: 100vw;
+  height: 8vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #1F0CAD;
+  background-color: white;
+}
+
+.FooterBtns{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 2.5em;
+  text-decoration: none;
+  text-align: center;
+
+  height: 100%;
+  width: 50%;
+}
+
+.FooterBtns:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+.FooterBtns:active{
+  color: red;
+}
+
+#RoutineBtn{
+  border-right: 1px solid #1F0CAD;
+}
+
+#RoutineList{
+  height: 87vh;
+  min-width: 100vw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.RoutineLi{
+  width: 90vw;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1F0CAD;
+}
+
+.RoutineLiInfo{
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+}
+
+.RoutineLiDelBtn{
+  color: #6F0CAD;
+  cursor: pointer;
+}
+
+
+/*
+
+ADD EXERCISE VIEW
+
+*/
+
+#AddExerciseView{
   min-height: 100vh;
+}
+
+#AddExerciseHeader{
+  min-width: 100vw;
+  height: 25vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  border-bottom: 1px solid #1F0CAD;
+  font-family: 'Nunito',sans-serif;
+}
+
+#AddExerciseName{
+  color: #1F0CAD;
+  font-size: 1.75em;
+}
+
+#ExerciseSearchBar, #ExerciseSearchBar:focus{
+  width: 79.8vw;
+  height: 10vh;
+
+  resize: none;
+  border: 1px solid #1F0CAD;
+
+  font-weight: 200;
+  font-size: 2em;
+}
+
+#AddExerciseName{
+  font-family: 'Nunito', sans-serif;
+}
+
+#AddExerciseOptionsWrapper{
+  width: 80vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.AddExerciseOptions{
+  height: 3.5vh;
+  width: 20vw;
+
+  position: relative;
+  display: inline-block;
+
+  font-size: 1em;
+  font-weight: 200;
+  cursor: pointer;
+}
+
+.AddExerciseOptions:hover .AeViews{
+  color: white;
+  background-color: #1F0CAD;
+  border: none;
+}
+
+.AeViews{
+  width: 20vw;
+  height: 3.5vh;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.25em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.AeViews:hover{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.AeViewsDropdown{
+  width: 20vw;
+  visibility: hidden;
+  text-decoration: none;
+  display:flex;
+  flex-direction: column;
+
+  background-color: #1F0CAD;
+}
+
+.AddExerciseOptions:hover .AeViewsDropdown{
+  visibility: visible;
+}
+
+.AeOptionItem{
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15em;
+  font-weight: 200;
+  color: white;
+
+  border-top: 1px solid white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.AeOptionItem:active{
+  color: red;
+}
+
+#AddExerciseFavoriteBtn{
+  width: 20vw;
+  height: 3.75vh;
+  border: 1px solid #1F0CAD;
+
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.25em;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+#AddExerciseFavoriteBtn:hover{
+  color: white;
+  background-color: #1F0CAD;
+}
+
+#AddExerciseList{
+  height: 67vh;
+  width: 100vw;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AddExerciseItem{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5vh;
+
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  font-style: italic;
+  margin-top: 1.5vh;
+}
+
+#AddExerciseCheckboxWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#AddExerciseCheckBox{
+  border: 1.5px solid black;
+  height: 25px;
+  width: 25px;
+  margin-bottom: 1.2vh;
+}
+
+#AddExerciseFavorite{
+  height: 46.5px;
+  width: 52.5px;
+}
+
+#AddExerciseCheckBox:hover , #AddExerciseFavorite:hover{
+  cursor: pointer;
+}
+
+/*
+
+NUTRITION PAGE STUFF
+
+*/
+
+#NutritionContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+
+#NutritionView{
+  height: 25vh;
+  width: 85vw;
+
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  border: 1px solid #1F0CAD;
+  margin-top: 2vh;
+}
+
+#CaloriesToday{
+  font-family: 'Nunito', sans-serif;
+  font-size: 4em;
+}
+
+#NutritionViewMacroWrapper{
+  width: 75%;
+  height: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.macros{
+  font-family: 'Nunito', sans-serif;
+  font-size: 3em;
+}
+
+#NVButtonsWrapper{
+  width: 85vw;
+  height: 12vh;
+
+  display: flex;
+  flex-direction: column;
+  margin: 1vh;
+}
+
+.NVInnerWrapper{
+  width: 85vw;
+  height: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NVButtons{
+  height: 5vh;
+  width: 42vw;
+  background-color: white;
+  border: 1px solid #1F0CAD;
+
+  font-family: 'Nunito',sans-serif;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.NVButtons:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+#NutritionMealDividers{
+  width: 85vw;
+  border: 1px solid black;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3vh;
+}
+
+#MealNameWrapper{
+  height: 7vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+
+  background-color: #1F0CAD;
+}
+
+#MealNameWrapper > p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  color: white;
+}
+
+#NutritionDownArrowImg{
+  height: 7vh;
+  width: 6vw;
+  margin-top: 1vh;
+}
+
+#MealItemsWrapper{
+  height: auto;
+  width: 95%;
+}
+
+#AddFoodImgWrapper{
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-top: 1px solid black;
+  background-color: #1F0CAD;
+}
+
+#AddFoodImgWrapper:hover{
+  opacity: 0.85;
+}
+
+#AddFoodImg{
+  height: 6vh;
+  width: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#AddFoodImg:hover{
+  cursor: pointer;
+}
+
+#NutritionMealItems{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#NutritionMealItems > p{
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+}
+
+/*
+
+BMR Calculator for Nutrition Page
+
+*/
+#BMRCalculator{
+  display: flex;
+  flex-direction: column;
+}
+
+#BMRHeader{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 15vh;
+  width: 100vw;
+}
+
+#bmrTitle{
+  font-size: 3em;
+}
+
+#bmrDescription{
+
+}
+
+.bmrInfo{
+  font-family: 'Nunito', sans-serif;
+  color: #1F0CAD;
+}
+
+#userInfoOuter{
+  height: 70vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.userInfoWrapper{
+  width: 40vw;
+  display:flex;
+  margin-bottom: 3vh;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userTraits{
+  font-family: 'Nunito',sans-serif;
+  font-size: 3em;
+}
+
+.userTraitsAnswer{
+  border: 1px solid #707070;
+  height: 6vh;
+  width: 12vw;
+  resize:none;
+  opacity: 0.8;
+}
+
+#ftInWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  width: 12vw;
+}
+
+#feet, #inches{
+  width: 5vw;
+}
+
+#cm{
+  display:none;
+}
+
+.userTraitsAnswer:focus, .userTraitsAnswer,
+#feet:focus, #inches:focus,
+#feet, #inches
+{
+ outline: none;
+ font-family: 'Nunito', sans-serif;
+ font-weight: 200;
+ color: #1F0CAD;
+ font-size: 2em;
+}
+
+#ActivityDropdownWrapper{
+  height: 6vh;
+  cursor: pointer;
+}
+
+#ActivityDropdownWrapper:hover #ActivityDiv{
+  background-color: #1f0cad;
+  color: white;
+  border:none;
+}
+
+#ActivityDiv{
+  width: 12vw;
+  border: 1px solid #707070;
+
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  text-align: center;
+  color: #1F0CAD;
+}
+
+#ActivityDiv:hover{
+  background-color: #1f0cad;
+  color: white;
+  border:none;
+}
+
+#ActivityDropdown{
+  display:none;
+  text-decoration: none;
+  flex-direction: column;
+
+  border: 1px solid #1f0cad;
+  background-color: #1f0cad;
+}
+
+#ActivityDropdownWrapper:hover #ActivityDropdown{
+  display:flex;
+}
+
+.ActivityDropdownLi{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  color: white;
+  border-top: 1px solid white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.ActivityDropdownLi:active{
+  color: red;
+}
+
+
+#BMRButtonWrapper{
+  position: fixed;
+  bottom: 5vh;
+  right: 5vw;
+  width: 25vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bmrButton{
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  border: 1px solid #1F0CAD;
+  width: 11vw;
+  height: 7vh;
+  cursor: pointer;
+}
+
+.bmrButton:hover{
+  color: #ffffff;
+  background-color: #1F0CAD;
+}
+
+/*
+
+Macro Calculator for Nutrition Page
+
+*/
+#MacroCalculator{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#macroTitleWrapper{
+  min-width: 100vw;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  margin-bottom: 2vh;
+}
+
+#MacroTitle{
+  display: flex;
+  justify-content: center;
+  color: #1F0CAD;
+  font-family: 'Nunito',sans-serif;
+  font-size: 3em;
+}
+
+#macroInfoDiv{
+  width: 95vw;
+  white-space: pre-line;
+  border: 1px solid black;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.5em;
+  padding-left: 1vh;
+  margin-bottom: 5vh;
+}
+
+#macroBoxWrapper{
+  height: 45vh;
+  width: 95vw;
+  display: flex;
+  justify-content: space-around;
+}
+
+#macroValueSpecifier,
+#macroCarbsWrapper,
+#macroFatWrapper,
+#macroProteinWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.macroPercentBox, .macroPercentBox:focus{
+  height: 7vh;
+  width: 10vw;
+  border: 1px solid #1F0CAD;
+  resize:none;
+
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  color: #1F0CAD;
+}
+
+#macroValueSpecifier > p,
+#macroCarbsWrapper > p,
+#macroFatWrapper > p,
+#macroProteinWrapper > p{
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  color: #1F0CAD;
+}
+
+
+#MacroButtonWrapper{
+  position: fixed;
+  bottom: 5vh;
+  right: 2.5vw;
+  width: 25vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.macroButton{
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  border: 1px solid #1F0CAD;
+  width: 11vw;
+  height: 7vh;
+}
+
+.macroButton:hover{
+  color: #ffffff;
+  background-color: #1F0CAD;
+}
+
+/*
+
+Add Food Page
+
+*/
+#AddFoodView{
+  height: 100vh;
+}
+
+#AddFoodHeader{
+  min-width: 100vw;
+  height: 25vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  border-bottom: 1px solid #1F0CAD;
+}
+
+#AddFoodHeader > h1{
+  font-family: 'Nunito',sans-serif;
+  font-size: 2.5em;
+  color: #1F0CAD;
+}
+
+#AddFoodSearch, #AddFoodSearch:focus{
+  resize: none;
+  border: 1px solid #1F0CAD;
+  height: 10vh;
+  width: 79.8vw;
+  font-family: 'Nunito',sans-serif;
+  font-size: 3em;
+  font-weight: 200;
+}
+
+#AddFoodButtonWrapper{
+  height: 10vh;
+  width: 80vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SortBtns{
+  width: 20vw;
+  height: 5vh;
+  border: 1px solid #1F0CAD;
+  font-family: 'Nunito',sans-serif;
+  font-size: 1.25em;
+  font-weight: 200;
+}
+
+.SortBtns:hover{
+  background-color: #1F0CAD;
+  color: white;
+  cursor: pointer;
+}
+
+#AddFoodFinishBtn{
+  position: sticky;
+  bottom: 0vh;
+  left: 92vw;
+
+  height: 7vh;
+  width: 100vw;
+  border: 1px solid #1F0CAD;
+  color: #1F0CAD;
+  font-size: 2em;
+  cursor:pointer;
+}
+
+#AddFoodFinishBtn:hover{
+  cursor: pointer;
+  background-color: #1F0CAD;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#AddFoodItemList{
+  height: 68vh;
+  width: 100vw;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.AddFoodItem{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5vh;
+
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  font-style: italic;
+}
+
+#AddFoodCheckboxWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#AddFoodCheckBox{
+  border: 1.5px solid black;
+  height: 25px;
+  width: 25px;
+  margin-bottom: 1.2vh;
+}
+
+#AddFoodFavorite{
+  height: 46.5px;
+  width: 52.5px;
+}
+
+#AddFoodCheckBox:hover , #AddFoodFavorite:hover{
+  cursor: pointer;
+}
+
+/*
+
+STORY PAGE STUFF
+
+*/
+
+#Story{
+  min-width: 100vw;
+  min-height: 85vh;
+}
+
+#StorySubmission{
+  min-width: 100vw;
+  height: 40vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#StorySubmitText, #StorySubmitText:focus{
+  resize: none;
+  border: 1px solid #1F0CAD;
+  height: 25vh;
+  width: 84.8vw;
+
+  font-family: 'Nunito',sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+}
+
+#StorySubmissionButtons{
+  height: 10vh;
+  width: 85vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#StorySubmitMediaWrapper{
+  width: 21vw;
+  height: 7vh;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.StorySubmitMediaBtns{
+  height: 7vh;
+  width: 10vw;
+  border: 1px solid #1F0CAD;
+  font-size: 0.85em;
+}
+
+.StorySubmitMediaBtns:hover{
+  background-color: #1F0CAD;
+  color: white;
+  cursor: pointer;
+}
+
+#StorySubmitBtn{
+  height: 7vh;
+  width: 8vw;
+  background-color: #1F0CAD;
+  color: white;
+  font-size: 0.85em;
+}
+
+#StorySubmitBtn:hover{
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+#UserStories{
+  min-width: 100vw;
+  min-height: 60vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#Stories{
+  width: 84.8vw;
+  min-height: 30vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 1px solid #1F0CAD;
+  margin-bottom: 3vh;
+  font-family: 'Nunito',sans-serif;
+}
+
+.StoriesDateDiv{
+  width: 100%;
+  height: 5vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  background-color: #1F0CAD;
+  color: white;
+  font-size: 1.25em;
+}
+
+.StoriesTextDiv{
+  margin: 2vh;
+  width: 98%;
+  height: 15vh;
+  overflow: auto;
+}
+
+.StoriesMediaDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.StoriesMediaDiv > img{
+  max-width: 100%;
 }
