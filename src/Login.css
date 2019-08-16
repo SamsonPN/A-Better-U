@@ -1,0 +1,73 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+#LoginPage{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#LoginInfo{
+  position: absolute;
+  height: 50vh;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+
+  background-color: rgba(0,0,0,0.9);
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+  opacity: 0.925;
+}
+
+h1{
+  font-size: 8vw;
+  font-weight: 200;
+}
+
+p{
+  font-size: 1.5vw;
+}
+
+#googleBtn{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  height: 10vh;
+  width: 25vw;
+
+  background-color: white;
+  color: black;
+  opacity: black;
+  font-family: 'Helvetica';
+  font-size: 1.5vw;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+#googleBtn:active{
+  background-color: #1F0CAD;
+}
+
+#GoogleImg{
+  height: 70%;
+  width: 20%;
+  margin-right: 2.5vw;
+  margin-left: 10px;
+}

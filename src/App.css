@@ -254,25 +254,31 @@ Workout Page
   color: #1F0CAD;
 }
 
-#routineBtn{
+#routineBtn, #editBtn, #deleteBtn{
   height: 8.5vh;
   width: 8.5vw;
 
   position: fixed;
   right: 0;
-  bottom: 0;
+  cursor: pointer;
+}
+
+#routineBtn{
+  bottom:20vh;
 }
 
 #editBtn{
-  height: 8.5vh;
-  width: 8.5vw;
-  position: fixed;
   right: 0;
   bottom: 10vh;
-  cursor:pointer;
 }
 
-#routineBtn:hover, #editBtn:hover{
+#deleteBtn{
+  bottom: 0vh;
+}
+
+
+
+#routineBtn:hover, #editBtn:hover, #deleteBtn:hover{
   opacity: 0.75;
 }
 
