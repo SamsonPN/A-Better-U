@@ -10,6 +10,7 @@ class AddFoodView extends Component {
   }
   onEnter = (e) => {
     if(e.key === 'Enter'){
+      e.preventDefault();
       let search = document.getElementById('AddFoodSearch').value
       let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=DEMO_KEY`)
       fetch(uri)

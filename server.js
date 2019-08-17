@@ -17,7 +17,7 @@ const port = 9000;
 // })
 
 const exerciseInfo = {
-  url: 'https://api.nal.usda.gov/ndb/search/?format=json&q=butter&sort=n&max=25&offset=0&api_key=DEMO_KEY ',
+  url: 'https://wger.de/api/v2/exerciseinfo/',
   method: 'GET',
   headers: {
     'Accept': 'application/json'

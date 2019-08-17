@@ -3,6 +3,11 @@
   padding: 0;
 }
 
+#root{
+  width: 100vw;
+  height: 100vh;
+}
+
 /*
 
 Header
@@ -1053,8 +1058,9 @@ Add Food Page
   height: 5vh;
   border: 1px solid #1F0CAD;
   font-family: 'Nunito',sans-serif;
-  font-size: 1.25em;
+  font-size: 1.5em;
   font-weight: 200;
+  overflow: auto;
 }
 
 .SortBtns:hover{
@@ -1102,6 +1108,7 @@ Add Food Page
   font-size: 1.5vw;
   font-weight: 200;
   font-style: italic;
+  cursor:pointer;
 }
 
 #AddFoodCheckboxWrapper{
@@ -1110,20 +1117,16 @@ Add Food Page
   align-items: center;
 }
 
-#AddFoodCheckBox{
+.AddFoodCheckBox{
   border: 1.5px solid black;
   height: 25px;
   width: 25px;
   margin-bottom: 1.2vh;
 }
 
-#AddFoodFavorite{
+.AddFoodFavorite{
   height: 46.5px;
   width: 52.5px;
-}
-
-#AddFoodCheckBox:hover , #AddFoodFavorite:hover{
-  cursor: pointer;
 }
 
 /*
