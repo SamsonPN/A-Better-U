@@ -15,12 +15,34 @@ import Story from './Components/StoryPage/StoryPage.jsx';
 
 class App extends Component {
   state ={
+    data: null,
     Macros: [
       {name: 'Protein', value: '200'},
       {name: 'Fat', value:'50'},
       {name: 'Carbs', value:'250'}
     ]
   }
+
+  componentDidMount(){
+    //call our fetch function once component mounts
+    this.callBackendAPI()
+      .then(res => {
+        this.setState({data: res.express});
+        //alert(this.state.data);
+      })
+      .catch(err => console.log(err));
+  }
+
+  callBackendAPI = async () => {
+    const response = await fetch('/express_backend');
+    const body = await response.json();
+
+    if (response.status !== 200){
+      throw Error(body.message)
+    }
+    return body;
+  };
+
   render() {
     return (
       <Router>

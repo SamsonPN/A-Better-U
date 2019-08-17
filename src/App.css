@@ -607,7 +607,7 @@ NUTRITION PAGE STUFF
 
 #CaloriesToday{
   font-family: 'Nunito', sans-serif;
-  font-size: 4em;
+  font-size: 5vw;
 }
 
 #NutritionViewMacroWrapper{
@@ -621,6 +621,7 @@ NUTRITION PAGE STUFF
 .macros{
   font-family: 'Nunito', sans-serif;
   font-size: 3em;
+  font-size: 3.5vw;
 }
 
 #NVButtonsWrapper{
@@ -1098,7 +1099,7 @@ Add Food Page
   margin-top: 1.5vh;
 
   font-family: 'Nunito',sans-serif;
-  font-size: 2em;
+  font-size: 1.5vw;
   font-weight: 200;
   font-style: italic;
 }

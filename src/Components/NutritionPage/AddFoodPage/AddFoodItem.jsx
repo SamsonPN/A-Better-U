@@ -7,7 +7,7 @@ class AddFoodItem extends Component {
   render() {
     return (
       <div className="AddFoodItem">
-        <p>Food Item</p>
+        <p>{this.props.name}</p>
         <div id="AddFoodCheckboxWrapper">
           <div id="AddFoodCheckBox" title="Click to add food"></div>
           <img id="AddFoodFavorite" src={Heart} alt="Favorites Icon" title="Click to add to favorites"/>
