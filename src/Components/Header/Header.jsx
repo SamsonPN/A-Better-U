@@ -4,12 +4,11 @@ import IconName from './HeaderIconName.jsx';
 
 
 class Header extends Component {
-
   render() {
     return (
       <div id='header'>
         <IconName />
-        <TabWrapper />
+        <TabWrapper/>
       </div>
     );
   }

@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
 class BMRCalculator extends Component {
+  componentDidMount(){
+    document.getElementById('header').style.display = 'none';
+  }
+
+  componentWillUnmount(){
+    console.log('Unmounted')
+    document.getElementById('header').style.display = 'flex';
+  }
+
   render() {
     return (
       <div id="BMRCalculator">
@@ -18,26 +27,26 @@ class BMRCalculator extends Component {
         <div id="userInfoOuter">
           <div className="userInfoWrapper">
             <p className="userTraits">Sex</p>
-            <textarea className="userTraitsAnswer">M or F</textarea>
+            <textarea className="userTraitsAnswer" defaultValue="M/F"></textarea>
           </div>
 
           <div className="userInfoWrapper">
             <p className="userTraits">Age</p>
-            <textarea className="userTraitsAnswer">Age</textarea>
+            <textarea className="userTraitsAnswer" defaultValue="Age"></textarea>
           </div>
 
           <div className="userInfoWrapper">
             <p className="userTraits">Height</p>
             <div id="ftInWrapper">
-              <textarea id="feet" className="userTraitsAnswer">feet</textarea>
-              <textarea id="inches" className="userTraitsAnswer">inches</textarea>
+              <textarea id="feet" className="userTraitsAnswer" defaultValue="feet"></textarea>
+              <textarea id="inches" className="userTraitsAnswer" defaultValue="inches"></textarea>
             </div>
-            <textarea id="cm" className="userTraitsAnswer">cm</textarea>
+            <textarea id="cm" className="userTraitsAnswer" defaultValue="cm"></textarea>
           </div>
 
           <div className="userInfoWrapper">
             <p className="userTraits">Weight</p>
-            <textarea className="userTraitsAnswer">lbs</textarea>
+            <textarea className="userTraitsAnswer" defaultValue="lbs"></textarea>
           </div>
 
           <div className="userInfoWrapper">

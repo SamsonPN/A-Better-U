@@ -8,7 +8,7 @@ class AddFoodHeader extends Component {
   render() {
     return (
       <div id="AddFoodHeader">
-        <h1>Add Items</h1>
+        <h1>Add {this.props.currentMeal}</h1>
 
         <textarea id="AddFoodSearch"
           onClick={this.clearText}

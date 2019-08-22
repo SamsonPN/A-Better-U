@@ -4,12 +4,11 @@ class NutritionMealItems extends Component {
   render() {
     return (
       <div id="NutritionMealItems">
-        <p>Item Name</p>
+        <p>{this.props.name}</p>
         <p>###</p>
       </div>
     );
   }
-
 }
 
 export default NutritionMealItems;

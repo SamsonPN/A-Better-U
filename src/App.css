@@ -2,12 +2,6 @@
   margin: 0;
   padding: 0;
 }
-
-#root{
-  width: 100vw;
-  height: 100vh;
-}
-
 /*
 
 Header
@@ -663,7 +657,7 @@ NUTRITION PAGE STUFF
   color: white;
 }
 
-#NutritionMealDividers{
+.NutritionMealDividers{
   width: 85vw;
   border: 1px solid black;
   display:flex;
@@ -672,7 +666,7 @@ NUTRITION PAGE STUFF
   margin-bottom: 3vh;
 }
 
-#MealNameWrapper{
+.MealNameWrapper{
   height: 7vh;
   width: 100%;
 
@@ -684,25 +678,25 @@ NUTRITION PAGE STUFF
   background-color: #1F0CAD;
 }
 
-#MealNameWrapper > p {
+.MealNameWrapper > p {
   font-family: 'Nunito', sans-serif;
   font-size: 2em;
   font-weight: 200;
   color: white;
 }
 
-#NutritionDownArrowImg{
+.NutritionDownArrowImg{
   height: 7vh;
   width: 6vw;
   margin-top: 1vh;
 }
 
-#MealItemsWrapper{
+.MealItemsWrapper{
   height: auto;
   width: 95%;
 }
 
-#AddFoodImgWrapper{
+.AddFoodImgWrapper{
   height: 7vh;
   width: 100%;
   display: flex;
@@ -712,11 +706,11 @@ NUTRITION PAGE STUFF
   background-color: #1F0CAD;
 }
 
-#AddFoodImgWrapper:hover{
+.AddFoodImgWrapper:hover{
   opacity: 0.85;
 }
 
-#AddFoodImg{
+.AddFoodImg{
   height: 6vh;
   width: 5vw;
   display: flex;
@@ -724,7 +718,7 @@ NUTRITION PAGE STUFF
   align-items: center;
 }
 
-#AddFoodImg:hover{
+.AddFoodImg:hover{
   cursor: pointer;
 }
 
@@ -745,6 +739,11 @@ BMR Calculator for Nutrition Page
 
 */
 #BMRCalculator{
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
 }
@@ -1069,23 +1068,20 @@ Add Food Page
   cursor: pointer;
 }
 
-#AddFoodFinishBtn{
+#AddFoodCounter{
   position: sticky;
   bottom: 0vh;
   left: 92vw;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   height: 7vh;
   width: 100vw;
-  border: 1px solid #1F0CAD;
+  border-top: 1px solid #1F0CAD;
   color: #1F0CAD;
   font-size: 2em;
-  cursor:pointer;
-}
-
-#AddFoodFinishBtn:hover{
-  cursor: pointer;
-  background-color: #1F0CAD;
-  color: white;
 }
 
 #AddFoodItemList{

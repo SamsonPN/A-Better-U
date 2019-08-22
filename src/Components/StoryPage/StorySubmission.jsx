@@ -6,12 +6,11 @@ class StorySubmission extends Component {
   render() {
     return (
       <div id="StorySubmission">
-        <textarea id="StorySubmitText">Your story starts today</textarea>
+        <textarea id="StorySubmitText" defaultValue="Your Story starts today"></textarea>
         <StorySubmissionButtons/>
       </div>
     );
   }
-
 }
 
 export default StorySubmission;
