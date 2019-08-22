@@ -2,26 +2,16 @@ import React, { Component } from 'react';
 import NutritionView from './NutritionView.jsx';
 import {default as NVBtns} from './NutritionViewButtons.jsx';
 import {default as Meals} from './NutritionMealDividers.jsx';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
-import AddFoodView from '../AddFoodPage/AddFoodView.jsx';
-import BMRCalculator from '../BMRCalculator.jsx';
-import MacroCalculator from '../MacroCalculator.jsx';
 
 class Nutrition extends Component {
   state = {
-    currentMeal:'',
     Breakfast: [],
     Lunch: [],
     Dinner: [],
     Snacks: []
   }
 
-  currentMeal = (name) => {
-    this.setState({ currentMeal: name})
-  }
-
   componentWillMount(){
-    console.log("Nutrition Mounted")
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -53,28 +43,16 @@ class Nutrition extends Component {
 
   render() {
     return (
-      <Router>
-        <Route exact path={`${this.props.match.path}`} render={props => (
           <div id="NutritionContainer">
             <NutritionView/>
             <NVBtns/>
-            <Meals name="Breakfast" FoodAdded={this.state.Breakfast} currentMeal={this.currentMeal}/>
-            <Meals name="Lunch" FoodAdded={this.state.Lunch} currentMeal={this.currentMeal} />
-            <Meals name="Dinner" FoodAdded={this.state.Dinner} currentMeal={this.currentMeal} />
-            <Meals name="Snacks" FoodAdded={this.state.Snacks} currentMeal={this.currentMeal} />
+            <Meals name="Breakfast" FoodAdded={this.state.Breakfast} currentMeal={this.props.currentMeal}/>
+            <Meals name="Lunch" FoodAdded={this.state.Lunch} currentMeal={this.props.currentMeal} />
+            <Meals name="Dinner" FoodAdded={this.state.Dinner} currentMeal={this.props.currentMeal} />
+            <Meals name="Snacks" FoodAdded={this.state.Snacks} currentMeal={this.props.currentMeal} />
           </div>
-        )}/>
-
-          <Route exact path={`${this.props.match.path}/addfood`} render={props =>(
-              <AddFoodView ForceUpdate={this.ForceUpdate} currentMeal={this.state.currentMeal}/>
-            )}/>
-
-          <Route exact path="/nutrition/bmrcalculator" component={BMRCalculator}/>
-          <Route exact path="/nutrition/macrocalculator" component={MacroCalculator}/>
-      </Router>
     )
   }
-
 }
 
 export default Nutrition;

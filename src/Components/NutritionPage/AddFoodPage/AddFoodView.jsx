@@ -16,7 +16,7 @@ class AddFoodView extends Component {
     if(e.key === 'Enter'){
       e.preventDefault();
       let search = document.getElementById('AddFoodSearch').value;
-      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`)
+      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=DEMO_KEY`)
       fetch(uri)
         .then(response => response.json())
         .then(data => {
@@ -89,16 +89,6 @@ class AddFoodView extends Component {
       }
     }
 
-    componentDidMount(){
-      document.getElementById('header').style.display = 'none';
-      this.setState({ FoodAdded: [] })
-      console.log(`This should be the empty FoodAdded: ${this.state.FoodAdded}`)
-    }
-
-    componentWillUnmount(){
-      document.getElementById('header').style.display = 'flex';
-    }
-
   render() {
     return (
       <div id="AddFoodView">
@@ -110,7 +100,7 @@ class AddFoodView extends Component {
 
         <Link to="/nutrition">
           <div id="AddFoodCounter" onClick={this.StoreData}>
-            <p onClick={this.props.ForceUpdate} >Add {this.state.FoodAdded.length} items</p>
+            <p onClick={this.props.update} >Add {this.state.FoodAdded.length} items</p>
           </div>
         </Link>
       </div>

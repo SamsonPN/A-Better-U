@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
 class BMRCalculator extends Component {
-  componentDidMount(){
-    document.getElementById('header').style.display = 'none';
-  }
-
-  componentWillUnmount(){
-    console.log('Unmounted')
-    document.getElementById('header').style.display = 'flex';
-  }
-
   render() {
     return (
       <div id="BMRCalculator">

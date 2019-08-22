@@ -6,19 +6,16 @@ import UpArrow from '../../../assets/up-arrow.svg';
 
 class NutritionMealDividers extends Component {
   state = {
-    mealItems:'',
-    FoodAdded: this.props.FoodAdded
+    mealItems:''
   }
 
-  componentDidMount(){
-    const meal_Items = this.state.FoodAdded.map((item) =>
-        <MealItems name={item.name} />
-    );
-    this.setState( { mealItems: meal_Items } )
-  }
 
   render() {
     const { name } = this.props;
+
+    const meal_Items = this.props.FoodAdded.map((item) =>
+        <MealItems key={item.name} name={item.name} ndbno={item.ndbno}/>
+    );
 
     return (
         <div className="NutritionMealDividers">
@@ -29,7 +26,7 @@ class NutritionMealDividers extends Component {
           </div>
 
           <div className="MealItemsWrapper">
-            {this.state.mealItems}
+            {meal_Items}
           </div>
 
           <Link className="AddFoodImgWrapper" to="/nutrition/addfood">

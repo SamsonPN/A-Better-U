@@ -2,14 +2,6 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
 class MacroCalculator extends Component {
-  componentDidMount(){
-    document.getElementById('header').style.display = 'none';
-  }
-
-  componentWillUnmount(){
-    console.log('Unmounted')
-    document.getElementById('header').style.display = 'flex';
-  }
   render() {
     const text = 'Recommended percentage of total calories for each macronutrient:\n\nCarbs: 45-65%\nFat: 20-35%\nProtein: 10-35%'
     return (

@@ -692,6 +692,8 @@ NUTRITION PAGE STUFF
 }
 
 .MealItemsWrapper{
+  margin-top: 1vh;
+  margin-bottom: 1vh;
   height: auto;
   width: 95%;
 }
@@ -722,15 +724,16 @@ NUTRITION PAGE STUFF
   cursor: pointer;
 }
 
-#NutritionMealItems{
+.NutritionMealItems{
   width: 100%;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #707070;
 }
 
-#NutritionMealItems > p{
+.NutritionMealItems > p{
   font-family: 'Nunito', sans-serif;
-  font-size: 2em;
+  font-size: 1.25em;
 }
 
 /*
