@@ -5,16 +5,18 @@ import AddFood from '../../../assets/add-food.svg';
 import UpArrow from '../../../assets/up-arrow.svg';
 
 class NutritionMealDividers extends Component {
-  state = {
-    mealItems:''
-  }
-
-
   render() {
     const { name } = this.props;
 
     const meal_Items = this.props.FoodAdded.map((item) =>
-        <MealItems key={item.name} name={item.name} ndbno={item.ndbno}/>
+        <MealItems
+          key={item.name}
+          name={item.name}
+          ndbno={item.ndbno}
+          meal={this.props.name}
+          updateCalories={this.props.updateCalories}
+          displayFood={this.props.displayFood}
+          />
     );
 
     return (

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {default as SortBtns} from './AddFoodSortButtons.jsx'
 
+//might remove this component and put it into AddFoodView
+
 class AddFoodHeader extends Component {
   clearText = (e) => {
     document.getElementById('AddFoodSearch').value = "";

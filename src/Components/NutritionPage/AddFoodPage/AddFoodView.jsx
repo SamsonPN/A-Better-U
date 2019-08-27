@@ -10,13 +10,14 @@ class AddFoodView extends Component {
     FoodSearch: [],
     FoodAdded: [],
     FavoriteFoods: [],
+    servings: {}
   }
 
   onEnter = (e) => {
-    if(e.key === 'Enter'){
+    let search = document.getElementById('AddFoodSearch').value;
+    if(e.key === 'Enter' && search !== ''){
       e.preventDefault();
-      let search = document.getElementById('AddFoodSearch').value;
-      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=DEMO_KEY`)
+      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=`)
       fetch(uri)
         .then(response => response.json())
         .then(data => {
@@ -37,7 +38,11 @@ class AddFoodView extends Component {
         checkbox.style.backgroundColor = '#1F0CAD';
 
         let newState = [{"name": name, "ndbno": ndbno}];
-        this.setState(previousState => ( { FoodAdded: previousState.FoodAdded.concat(newState) } ), function(){console.log(this.state.FoodAdded)})
+        this.setState(previousState => ( {
+          FoodAdded: previousState.FoodAdded.concat(newState),
+          servings: {...previousState.servings, [ndbno]: '1'}
+        } ))
+
       }
 
       else {
@@ -46,14 +51,17 @@ class AddFoodView extends Component {
           return item.name !== name
         })
 
-        this.setState(previousState =>
-          ({ FoodAdded: newState}), function(){console.log(this.state.FoodAdded)})
+        let {[ndbno]: value, ...withoutObject} = this.state.servings;
+        this.setState(previousState => ( {
+          FoodAdded: newState,
+          servings: withoutObject
+        } ), function(){console.log(this.state.servings)})
+
       }
     }
 
     FavoriteFood = (name, offset, ndbno) => {
       let favoriteBox = document.getElementsByClassName('AddFoodFavorite')[offset];
-      console.log(favoriteBox.src)
       if(favoriteBox.src === `http://localhost:3000${Heart}`){
         favoriteBox.src = BlueHeart;
       }
@@ -73,7 +81,8 @@ class AddFoodView extends Component {
       let requestObject = {
         "date": today,
         "meal": this.props.currentMeal,
-        "FoodAdded": this.state.FoodAdded
+        "FoodAdded": this.state.FoodAdded,
+        "servings": this.state.servings
       }
 
       if(FoodAdded.length > 0 && this.props.currentMeal !== ""){
@@ -110,6 +119,3 @@ class AddFoodView extends Component {
 }
 
 export default AddFoodView;
-
-/*onclick of the finish button, it should update the state of the component
-which would hopefully re-render it*/
