@@ -3,6 +3,12 @@ import NutritionView from './NutritionView.jsx';
 import {default as NVBtns} from './NutritionViewButtons.jsx';
 import {default as Meals} from './NutritionMealDividers.jsx';
 
+/*
+try to consolidate all changes at once and then input them into the server later. right now,
+it should just update the nutrition page's state, and once you click "Complete Today's Entry",
+then you can put them into the server
+*/
+
 class Nutrition extends Component {
   state = {
     Breakfast : [],
@@ -12,7 +18,9 @@ class Nutrition extends Component {
     calories: 0,
     protein: 0,
     fat: 0,
-    carbs: 0
+    carbs: 0,
+    delete: false,
+    deleteItems: []
   }
 
   FillFoodData = (data) => {
@@ -118,8 +126,63 @@ class Nutrition extends Component {
 
   }
 
+  ShowDeleteBar = (meal, ndbno, servings) => {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = today.getFullYear();
+    today = mm + '/' + (dd) + '/' + yyyy;
+
+    let item = [{
+      "date": today,
+      "meal": meal,
+      "ndbno": ndbno,
+      "servings": servings
+    }]
+
+    let duplicate = false;
+
+    this.state.deleteItems.forEach(delItem => {
+      if(delItem.ndbno === item[0].ndbno && delItem.meal === item[0].meal){
+        duplicate = true;
+      }
+    })
+
+    if(duplicate === false){
+      this.setState(previousState => ({
+        delete: true,
+        deleteItems: previousState.deleteItems.concat(item)
+      }), function(){console.log(this.state.deleteItems)});
+    }
+  }
+
   componentDidMount(){
     this.FetchFood()
+  }
+
+  DeleteItems = () => {
+    this.setState( {delete: false})
+
+    let requestObject = {
+      delete: this.state.deleteItems
+    }
+
+    fetch('/deleteFood', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+    this.FetchFood();
+  }
+
+  RemoveDeleteBar = () => {
+    this.setState( {
+      delete: false,
+      deleteItems: []
+    })
+
   }
 
   render() {
@@ -133,6 +196,7 @@ class Nutrition extends Component {
               FoodAdded={this.state.Breakfast}
               currentMeal={this.props.currentMeal}
               updateCalories={this.FetchFood}
+              showDelete={this.ShowDeleteBar}
               />
 
             <Meals name="Lunch"
@@ -140,6 +204,7 @@ class Nutrition extends Component {
               FoodAdded={this.state.Lunch}
               currentMeal={this.props.currentMeal}
               updateCalories={this.FetchFood}
+              showDelete={this.ShowDeleteBar}
               />
 
             <Meals name="Dinner"
@@ -147,6 +212,7 @@ class Nutrition extends Component {
               FoodAdded={this.state.Dinner}
               currentMeal={this.props.currentMeal}
               updateCalories={this.FetchFood}
+              showDelete={this.ShowDeleteBar}
               />
 
             <Meals name="Snacks"
@@ -154,7 +220,18 @@ class Nutrition extends Component {
               FoodAdded={this.state.Snacks}
               currentMeal={this.props.currentMeal}
               updateCalories={this.FetchFood}
+              showDelete={this.ShowDeleteBar}
               />
+
+            {this.state.delete ?
+              <div id="DeleteBar">
+                <p>Delete {this.state.deleteItems.length} item(s)?</p>
+                <p onClick={this.DeleteItems} className="DeleteBarOptns">Yes</p>
+                <p>/</p>
+                <p onClick={this.RemoveDeleteBar} className="DeleteBarOptns">No</p>
+              </div>
+              : null
+            }
           </div>
     )
   }

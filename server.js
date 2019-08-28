@@ -24,15 +24,24 @@ client.connect((err)=> {
 
   //initiates collection with documents for each meal for each day
   collection.insertMany( [
-  {"date": today, "meal": "Breakfast", "FoodAdded":[],"servings": {} },
-  {"date": today, "meal": "Lunch", "FoodAdded":[],"servings": {} },
-  {"date": today, "meal": "Dinner", "FoodAdded":[],"servings": {} },
-  {"date": today, "meal": "Snacks", "FoodAdded":[],"servings": {} }
-  ] ).
-    catch(err => console.log(err))
+  {"date": today, "type" : "foods", "meal": "Breakfast", "FoodAdded":[],"servings": {} },
+  {"date": today, "type" : "foods", "meal": "Lunch", "FoodAdded":[],"servings": {} },
+  {"date": today, "type" : "foods", "meal": "Dinner", "FoodAdded":[],"servings": {} },
+  {"date": today, "type" : "foods", "meal": "Snacks", "FoodAdded":[],"servings": {} },
+  {"date": today, "type" : "totals", "calories": 0, "protein": 0, "fat": 0, "carbs": 0}
+  ])
+    .catch(err => console.log(err))
+
+  const goals = db.collection('nutritionGoals')
+
+  goals.insertOne({
+    "type" : "goals", "CalorieGoal": 0, "ProteinGoal": 0, "FatGoal": 0, "CarbsGoal": 0
+  })
+    .catch(err => console.log(err))
 
   //ensures that no duplicates are added into the collection
-  collection.createIndex({"date": 1, "meal": 1}, {unique: true})
+  collection.createIndex( { "date": 1, "meal": 1 }, {unique: true} );
+  goals.createIndex( { "type": 1 }, {unique: true} );
 
 })
 
@@ -62,7 +71,7 @@ app.post('/insertFood', (req,res) => {
   var ndbno;
 
   collection.updateOne(
-    { "date" : req.body.date, "meal" : req.body.meal } ,
+    { "date" : req.body.date, "meal" : req.body.meal, "type" : "foods" } ,
     { $addToSet: {"FoodAdded": { $each: req.body.FoodAdded } } } )
     .then(result => {
       if(result.result.nModified !== 0){
@@ -83,7 +92,7 @@ app.get('/getFood/:date', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
 
-  collection.find( { "date": req.params.date } )
+  collection.find( { "date": req.params.date, "type": "foods" } )
   .toArray()
   .then(items => {
     res.json(items)
@@ -99,40 +108,55 @@ app.get('/getServings/:date/:meal', (req,res) => {
     .then(result => res.json(result))
 })
 
+app.get('/getGoals', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('nutritionGoals');
+
+  collection.findOne( {"type" : "goals"})
+    .then(result => res.json(result))
+})
+
 app.put('/updateServings', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
   let ndbno = `servings.${req.body.ndbno}`;
 
+  console.log(req.body)
   collection.updateOne( {"date" : req.body.date, "meal": req.body.meal}, {$set: {[ndbno]: req.body.servings}})
+})
+
+app.put('/updateGoals', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('nutritionGoals');
+
+  if(req.body.CalorieGoal !== undefined){
+  collection.updateOne( {"type" : "goals" }, { $set: {"CalorieGoal" : req.body.CalorieGoal}})
+    .catch(err => console.error(error))
+  }else{
+    collection.updateOne( {"type" : "goals" }, { $set : {
+      "ProteinGoal" : req.body.ProteinGoal,
+      "FatGoal" : req.body.FatGoal,
+      "CarbsGoal": req.body.CarbsGoal
+    }})
+  }
 })
 
 app.delete('/deleteFood', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
-  console.log(req.body);
 
-  collection.bulkWrite([
-    {updateOne: {
-      "filter": {"date" : req.body.date , "meal" : req.body.meal },
-      "update" : { $pull: { "FoodAdded": {"ndbno": req.body.ndbno} } } }
-     },
-    {updateOne: {
-      "filter" : { "date" : req.body.date, "meal" : req.body.meal },
-      "update" : { $unset: { ["servings." + req.body.ndbno] : req.body.servings} } }
-    }
-  ])
-  .then(result => console.log(result.result.nModified))
-  .catch(err => console.error)
+  req.body.delete.forEach( item => {
+    collection.bulkWrite([
+      {updateOne: {
+        "filter": {"date" : item.date, "meal" : item.meal },
+        "update" : { $pull: { "FoodAdded": {"ndbno": item.ndbno} } } }
+       },
+      {updateOne: {
+        "filter" : { "date" : item.date, "meal" : item.meal },
+        "update" : { $unset: { ["servings." + item.ndbno] : item.servings} } }
+      }
+    ])
+    .then(result => console.log(`Items modified: ${result.result.nModified}`))
+    .catch(err => console.error(error))
+  })
 })
-
-
-/* use in conjunction with .bulkWrite to do multiple operations.
-  - should delete the food from FoodAdded, and also remove its ndbno from the servings too
-
-db.nutrition.updateOne( { "date" : "08/26/2019" , "meal" : "Snacks"}, { $pull: {"FoodAdded": {"ndbno": "45108940"}}})
-use this to delete any foods and the servings associated with it from all documents
-
-db.nutrition.updateOne( {"date" : "08/26/2019", "meal" : "Snacks"}, {$unset: {["servings.43570"]:"1"}})
-- use this code to remove any servings from the servings thing
-*/

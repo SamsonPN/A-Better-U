@@ -610,7 +610,7 @@ NUTRITION PAGE STUFF
 }
 
 #NutritionViewMacroWrapper{
-  width: 75%;
+  width: 100%;
   height: 30%;
   display: flex;
   justify-content: space-around;
@@ -749,6 +749,36 @@ NUTRITION PAGE STUFF
  margin-top: 0.5vh;
 }
 
+#DeleteBar{
+  position: fixed;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 85.1vw;
+  height: 7vh;
+
+  background-color: red;
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+}
+
+#DeleteBar > p{
+  margin-right: 2vh;
+}
+
+.DeleteBarOptns{
+  cursor: pointer;
+}
+
+.DeleteBarOptns:active{
+  color: #1F0CAD;
+}
+
 .NutritionItemModal{
   position: fixed;
   display: flex;
@@ -869,14 +899,11 @@ BMR Calculator for Nutrition Page
   justify-content: center;
   height: 15vh;
   width: 100vw;
+  margin-bottom: 10px;
 }
 
 #bmrTitle{
   font-size: 3em;
-}
-
-#bmrDescription{
-
 }
 
 .bmrInfo{
@@ -888,16 +915,22 @@ BMR Calculator for Nutrition Page
   height: 70vh;
   width: 100vw;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+}
 
+.userInfoColumn{
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .userInfoWrapper{
   width: 40vw;
   display:flex;
-  margin-bottom: 3vh;
   justify-content: space-between;
   align-items: center;
 }
@@ -942,35 +975,35 @@ BMR Calculator for Nutrition Page
  font-size: 2em;
 }
 
-#ActivityDropdownWrapper{
+.BMRDropdownWrapper{
   height: 6vh;
   cursor: pointer;
 }
 
-#ActivityDropdownWrapper:hover #ActivityDiv{
+.BMRDropdownWrapper:hover .BMRDropdownDiv{
   background-color: #1f0cad;
   color: white;
   border:none;
 }
 
-#ActivityDiv{
+.BMRDropdownDiv{
   width: 12vw;
   border: 1px solid #707070;
 
   font-family: 'Nunito', sans-serif;
-  font-size: 2em;
+  font-size: 1.65em;
   font-weight: 200;
   text-align: center;
   color: #1F0CAD;
 }
 
-#ActivityDiv:hover{
+.BMRDropdownDiv:hover{
   background-color: #1f0cad;
   color: white;
   border:none;
 }
 
-#ActivityDropdown{
+.BMRDropdown{
   display:none;
   text-decoration: none;
   flex-direction: column;
@@ -979,11 +1012,11 @@ BMR Calculator for Nutrition Page
   background-color: #1f0cad;
 }
 
-#ActivityDropdownWrapper:hover #ActivityDropdown{
+.BMRDropdownWrapper:hover .BMRDropdown{
   display:flex;
 }
 
-.ActivityDropdownLi{
+.ActivityDropdownLi, .GoalDropdownLi{
   font-family: 'Nunito', sans-serif;
   font-weight: 200;
   color: white;
@@ -992,21 +1025,13 @@ BMR Calculator for Nutrition Page
   text-align: center;
 }
 
-.ActivityDropdownLi:active{
+.ActivityDropdownLi:active, .GoalDropdownLi:active{
   color: red;
 }
 
-
-#BMRButtonWrapper{
-  position: fixed;
-  bottom: 5vh;
-  right: 5vw;
-  width: 25vw;
-  display: flex;
-  justify-content: space-between;
-}
-
 .bmrButton{
+  position: fixed;
+  bottom: 4vh;
   font-family: 'Nunito',sans-serif;
   font-size: 2em;
   border: 1px solid #1F0CAD;
@@ -1019,6 +1044,41 @@ BMR Calculator for Nutrition Page
   color: #ffffff;
   background-color: #1F0CAD;
 }
+
+#bmrCalculateBtn{
+  right: 51vw;
+}
+
+#bmrFinishBtn{
+  right: 35vw;
+}
+
+#BMRModal{
+  position: absolute;
+  background-color: rgba(0,0,0,0.7);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+#BMRModalContent{
+  height: 50vh;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: white;
+  color: #1F0CAD;
+  font-family: 'Nunito', sans-serif;
+  font-size: 5em;
+  font-weight: 200;
+}
+
 
 /*
 
@@ -1057,7 +1117,7 @@ Macro Calculator for Nutrition Page
   font-family: 'Nunito', sans-serif;
   font-size: 1.5em;
   padding-left: 1vh;
-  margin-bottom: 5vh;
+  margin-bottom: 1vh;
 }
 
 #macroBoxWrapper{
@@ -1084,8 +1144,9 @@ Macro Calculator for Nutrition Page
   resize:none;
 
   font-family: 'Nunito',sans-serif;
-  font-size: 2em;
+  font-size: 2.5em;
   color: #1F0CAD;
+  text-align: center;
 }
 
 #macroValueSpecifier > p,

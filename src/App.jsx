@@ -12,10 +12,15 @@ import BMRCalculator from './Components/NutritionPage/BMRCalculator.jsx';
 import MacroCalculator from './Components/NutritionPage/MacroCalculator.jsx';
 import Story from './Components/StoryPage/StoryPage.jsx';
 
+/*
+NEXT GOAL ONCE DONE WITH MINOR IMPLEMENTATIONS:
+  - DO ALL THE FETCHING REQUESTS HERE!
+  - THEN SET THE STATE AND PASS IT ON AS PROPS TO NUTRITION ETC
 
+*/
 class App extends Component {
   state = {
-    currentMeal: '',
+    currentMeal: 'Breakfast',
     Macros: [
       {name: 'Protein', value: '200'},
       {name: 'Fat', value:'50'},
@@ -52,8 +57,8 @@ class App extends Component {
              <AddFoodView currentMeal={this.state.currentMeal} />
            )}/>
 
-           <Route exact path="/nutrition/bmrcalculator" component={BMRCalculator}/>
-           <Route exact path="/nutrition/macrocalculator" component={MacroCalculator}/>
+       <Route exact path="/nutrition/bmrcalculator" component={BMRCalculator}/>
+       <Route exact path="/nutrition/macrocalculator" component={MacroCalculator}/>
 
 
         <Route exact path="/" render={props => (

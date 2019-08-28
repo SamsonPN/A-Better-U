@@ -57,31 +57,31 @@ class NutritionMealItems extends Component {
     this.setState( {servings: new_serving})
   }
 
-  DeleteItem = () => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '/' + (dd) + '/' + yyyy;
-
-    let requestObject = {
-      "date" : today,
-      "meal" : this.props.meal,
-      "ndbno" : this.props.ndbno,
-      "servings" : this.state.servings
-    }
-
-    fetch('/deleteFood', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestObject)
-    })
-
-    this.props.updateCalories();
-    this.props.displayFood();
-  }
+  // DeleteItem = () => {
+  //   let today = new Date();
+  //   let dd = String(today.getDate()).padStart(2, '0');
+  //   let mm = String(today.getMonth() + 1).padStart(2, '0');
+  //   let yyyy = today.getFullYear();
+  //   today = mm + '/' + (dd) + '/' + yyyy;
+  //
+  //   let requestObject = {
+  //     "date" : today,
+  //     "meal" : this.props.meal,
+  //     "ndbno" : this.props.ndbno,
+  //     "servings" : this.state.servings
+  //   }
+  //
+  //   fetch('/deleteFood', {
+  //     method: 'DELETE',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(requestObject)
+  //   })
+  //
+  //   this.props.updateCalories();
+  //   this.props.displayFood();
+  // }
 
   render() {
     const id = this.props.meal + this.props.name;
@@ -92,7 +92,11 @@ class NutritionMealItems extends Component {
         <p onClick={this.ShowModal}>{this.props.name}</p>
         <div>
           <p>{Math.round(this.state.calories * this.state.servings)}</p>
-          <img id={"delete"+id} className="NutritionDeleteBtn" src={DeleteBtn} alt="Delete Button" onClick={this.DeleteItem}/>
+          <img id={"delete"+id}
+            className="NutritionDeleteBtn"
+            src={DeleteBtn}
+            alt="Delete Button"
+            onClick={this.props.showDelete.bind(this, this.props.meal, this.props.ndbno, this.state.servings)}/>
         </div>
       </div>
 

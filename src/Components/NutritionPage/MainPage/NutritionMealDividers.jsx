@@ -16,6 +16,7 @@ class NutritionMealDividers extends Component {
           meal={this.props.name}
           updateCalories={this.props.updateCalories}
           displayFood={this.props.displayFood}
+          showDelete={this.props.showDelete}
           />
     );
 

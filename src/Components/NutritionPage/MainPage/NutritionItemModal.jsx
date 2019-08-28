@@ -26,7 +26,7 @@ class NutritionItemModal extends Component {
     if(servings !== ''){
       fetch('/updateServings', {
         method: "PUT",
-        mode: 'same-origin',
+        mode: "same-origin",
         headers: {
           'Content-Type': 'application/json'
         },
