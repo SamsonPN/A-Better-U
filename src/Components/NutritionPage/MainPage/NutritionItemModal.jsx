@@ -68,11 +68,14 @@ class NutritionItemModal extends Component {
                 Serving Size: {nutrients.qty + ' ' + nutrients.label + ' '}
                 ({nutrients.eqv + nutrients.eunit})
               </p>
-              <div className="ModalServingDiv">
+
+             {/* <div className="ModalServingDiv">
                 <p>Servings: </p>
                 <textarea id={'textarea' + id} className="NutritionModalTextArea" defaultValue={this.props.servings} onKeyPress={this.PreventEnter}></textarea>
-                <button className="SaveServingBtn" onClick={this.SaveServing}>Save</button>
+              <button className="SaveServingBtn" onClick={this.SaveServing}>Save</button>
               </div>
+            */}
+
             </div>
 
           </div>

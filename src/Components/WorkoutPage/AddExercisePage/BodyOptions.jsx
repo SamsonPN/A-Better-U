@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 
 class BodyOptions extends Component {
+  ShowValue = (id) => {
+    document.getElementsByClassName('AeViews')[0].textContent = document.getElementById(id).textContent;
+    this.props.searchCategory();
+  }
+
   render() {
+    const muscles = this.props.muscles.map(item =>
+      <BodyOptionItem key={item} name={item} ShowValue={this.ShowValue} />
+    )
     return (
       <div className="AddExerciseOptions">
-        <div className="AeViews">Body Part</div>
+        <div className="AeViews">Muscles</div>
         <ul className="AeViewsDropdown">
-          <BodyOptionItem/>
-          <BodyOptionItem/>
-          <BodyOptionItem/>
-          <BodyOptionItem/>
+          {muscles}
         </ul>
       </div>
-
     );
   }
 }
@@ -20,10 +24,9 @@ class BodyOptions extends Component {
 export default BodyOptions;
 
 class BodyOptionItem extends Component {
-
   render() {
     return (
-      <a className="AeOptionItem" href='#!'>Body Part</a>
+      <div className="AeOptionItem" id={this.props.name} onClick={this.props.ShowValue.bind(this, this.props.name)}>{this.props.name}</div>
     );
   }
 }

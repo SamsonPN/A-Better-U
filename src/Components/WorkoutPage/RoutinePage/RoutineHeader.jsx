@@ -8,7 +8,7 @@ class RoutineHeader extends Component {
     return (
       <div id="RoutineHeader">
         <div id="RoutineHeaderWrapper">
-          <textarea id="RoutineName">Routine Name</textarea>
+          <textarea id="RoutineName" placeholder="Routine Name"></textarea>
           <Link id="RoutineFinish" to="/workout">Finish</Link>
         </div>
       </div>

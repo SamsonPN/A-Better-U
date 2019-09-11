@@ -7,12 +7,11 @@ class NutritionMealItems extends Component {
     calories: '',
     nutrition_report: '',
     showModal: false,
-    servings: ''
-
+    servings: 1
   }
 
   FetchReport = (today) => {
-    let usda_uri = encodeURI(`https://api.nal.usda.gov/ndb/reports/?ndbno=${this.props.ndbno}&type=b&format=json&api_key=`);
+    let usda_uri = encodeURI(`https://api.nal.usda.gov/ndb/reports/?ndbno=${this.props.ndbno}&type=b&format=json&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`);
     fetch(usda_uri)
       .then(response => response.json())
       .then(data => {
@@ -57,46 +56,41 @@ class NutritionMealItems extends Component {
     this.setState( {servings: new_serving})
   }
 
-  // DeleteItem = () => {
-  //   let today = new Date();
-  //   let dd = String(today.getDate()).padStart(2, '0');
-  //   let mm = String(today.getMonth() + 1).padStart(2, '0');
-  //   let yyyy = today.getFullYear();
-  //   today = mm + '/' + (dd) + '/' + yyyy;
-  //
-  //   let requestObject = {
-  //     "date" : today,
-  //     "meal" : this.props.meal,
-  //     "ndbno" : this.props.ndbno,
-  //     "servings" : this.state.servings
-  //   }
-  //
-  //   fetch('/deleteFood', {
-  //     method: 'DELETE',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(requestObject)
-  //   })
-  //
-  //   this.props.updateCalories();
-  //   this.props.displayFood();
-  // }
+  PreventEnter = (e) => {
+    if (e.key === 'Enter'){
+      e.preventDefault()
+    }
+  }
 
   render() {
     const id = this.props.meal + this.props.name;
+    const {name, meal, ndbno} = this.props;
     return (
       <React.Fragment>
 
       <div className="NutritionMealItems">
-        <p onClick={this.ShowModal}>{this.props.name}</p>
+
+        <div className="NutritionMealServingsWrapper">
+
+          <p onClick={this.ShowModal}>{name}</p>
+
+          <div className="MealServingDiv">
+            <p>Servings: </p>
+            <textarea id={'textarea' + id} className="MealTextArea" defaultValue={this.state.servings} onKeyPress={this.PreventEnter}></textarea>
+          <button className="MealSaveServingBtn" onKeyPress={this.PreventEnter} onClick={this.props.showUpdate.bind(this, meal, ndbno, id)}>Save</button>
+          </div>
+
+        </div>
+
         <div>
           <p>{Math.round(this.state.calories * this.state.servings)}</p>
           <img id={"delete"+id}
             className="NutritionDeleteBtn"
             src={DeleteBtn}
             alt="Delete Button"
-            onClick={this.props.showDelete.bind(this, this.props.meal, this.props.ndbno, this.state.servings)}/>
+            onClick={this.props.showDelete.bind(this, meal, ndbno, this.state.servings, id)}
+           />
+
         </div>
       </div>
 

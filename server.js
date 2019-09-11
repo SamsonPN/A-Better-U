@@ -65,6 +65,13 @@ app.listen(port, function(){
   console.log(`Listening on port ${port}`);
 });
 
+/*
+
+Nutrition Operations
+
+*/
+
+// inserts all recorded food items into the database
 app.post('/insertFood', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
@@ -88,6 +95,8 @@ app.post('/insertFood', (req,res) => {
     .catch(err => console.error(`Failed to insert item: ${err}`))
 })
 
+
+// returns all food that have been consumed today
 app.get('/getFood/:date', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
@@ -100,6 +109,7 @@ app.get('/getFood/:date', (req,res) => {
   .catch(err => console.error(`Failed to find documents ${err}`))
 })
 
+//returns the the servings for each food item that was recorded today
 app.get('/getServings/:date/:meal', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
@@ -108,6 +118,7 @@ app.get('/getServings/:date/:meal', (req,res) => {
     .then(result => res.json(result))
 })
 
+// returns the user's calorie/macronutrient goals as JSON
 app.get('/getGoals', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutritionGoals');
@@ -116,23 +127,27 @@ app.get('/getGoals', (req,res) => {
     .then(result => res.json(result))
 })
 
+//updates the servings of each food for a particular meal/day
 app.put('/updateServings', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
-  let ndbno = `servings.${req.body.ndbno}`;
 
   console.log(req.body)
-  collection.updateOne( {"date" : req.body.date, "meal": req.body.meal}, {$set: {[ndbno]: req.body.servings}})
+  req.body.update.forEach(item => {
+    collection.updateOne( {"date" : item.date, "meal": item.meal}, {$set: {["servings."+ item.ndbno ] : item.servings} } )
+  })
 })
 
+// updates the users' goals such as weight loss goals and macronutrient goals
 app.put('/updateGoals', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutritionGoals');
 
+  //updates the bmr goals only
   if(req.body.CalorieGoal !== undefined){
   collection.updateOne( {"type" : "goals" }, { $set: {"CalorieGoal" : req.body.CalorieGoal}})
     .catch(err => console.error(error))
-  }else{
+  }else{ //else updates the macronutrient goals
     collection.updateOne( {"type" : "goals" }, { $set : {
       "ProteinGoal" : req.body.ProteinGoal,
       "FatGoal" : req.body.FatGoal,
@@ -141,6 +156,22 @@ app.put('/updateGoals', (req,res) => {
   }
 })
 
+// stores the user's food entry values today like amount of calories, protein, fat, carbs, consumed
+app.put('/storeFoodEntry', (req, res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('nutrition');
+
+  collection.updateOne( { "date": req.body.date, "type": "totals"}, { $set: {
+      "calories": req.body.calories,
+      "protein": req.body.protein,
+      "fat": req.body.fat,
+      "carbs": req.body.carbs
+    }
+  })
+    .catch(err => console.error(err))
+})
+
+// deletes any food items from the database that the user deleted in the client
 app.delete('/deleteFood', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
@@ -159,4 +190,56 @@ app.delete('/deleteFood', (req,res) => {
     .then(result => console.log(`Items modified: ${result.result.nModified}`))
     .catch(err => console.error(error))
   })
+})
+
+/*
+
+Workout Operations
+
+*/
+
+app.get('/getExerciseTypes', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('exerciseList');
+
+  collection.findOne( { "record" : "Exercise Types"} )
+    .then(result => res.json(result))
+})
+
+app.get('/getExerciseByCategory/:muscle/:type', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('exerciseList');
+
+  if (req.params.muscle !== "Muscles" && req.params.type !== "Exercise Type"){
+  collection.find( { "muscle" : req.params.muscle, "type": req.params.type} )
+    .sort( { "name": 1} )
+    .toArray()
+    .then(items => {res.json(items)})
+    .catch( err => console.error(err))
+  }
+  else if (req. params.muscle === "Muscles") {
+    collection.find( { "type": req.params.type} )
+      .sort( { "name": 1} )
+      .toArray()
+      .then(items => {res.json(items)})
+      .catch( err => console.error(err))
+    }
+  else {
+    collection.find( { "muscle" : req.params.muscle} )
+      .sort( { "name": 1} )
+      .toArray()
+      .then(items => {res.json(items)})
+      .catch( err => console.error(err))
+    }
+})
+
+app.get('/getExerciseBySearch/:search', (req, res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('exerciseList');
+
+  collection.find( { "name" : {$regex: req.params.search, $options: "i" }})
+    .sort( { "name": 1} )
+    .toArray()
+    .then(items => {res.json(items)})
+    .catch( err => console.error(err))
 })

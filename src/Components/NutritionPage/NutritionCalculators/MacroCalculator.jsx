@@ -44,10 +44,7 @@ class MacroCalculator extends Component {
       }
     })
 
-    console.log(CarbsGoal)
-
-
-    if(isNaN(CarbsGoal) && isNaN(FatGoal) && isNaN(ProteinGoal)){
+    if( isNaN(CarbsGoal) && isNaN(FatGoal) && isNaN(ProteinGoal) ){
       alert("Please enter valid numbers only (no % needed)!")
     }
     else if (CarbsGoal + FatGoal + ProteinGoal !== 100){
@@ -63,8 +60,7 @@ class MacroCalculator extends Component {
   }
 
   StoreMacros= () => {
-    if(this.state.BMR !== ''){
-
+    if( this.state.ProteinGoal !== '' && this.state.FatGoal !== '' && this.state.CarbsGoal !== '' ) {
       let requestObject = {
         "ProteinGoal": this.state.ProteinGoal,
         "FatGoal": this.state.FatGoal,
@@ -80,9 +76,6 @@ class MacroCalculator extends Component {
         body: JSON.stringify(requestObject)
       })
       .catch(err => console.error(err))
-    }
-    else{
-      alert("Data not stored!")
     }
   }
 

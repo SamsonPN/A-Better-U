@@ -335,9 +335,9 @@ Routine View Page
 
 #RoutineFooter{
   position: sticky;
-  bottom:0;
+  bottom: 0;
   width: 100vw;
-  height: 8vh;
+  height: 5vh;
 
   display: flex;
   justify-content: center;
@@ -347,12 +347,14 @@ Routine View Page
 }
 
 .FooterBtns{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
-  font-size: 2.5em;
+  font-size: 2em;
   text-decoration: none;
   text-align: center;
-
   height: 100%;
   width: 50%;
 }
@@ -371,22 +373,20 @@ Routine View Page
 }
 
 #RoutineList{
-  height: 87vh;
-  min-width: 100vw;
-
+  height:85vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
 }
 
 .RoutineLi{
   width: 90vw;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #1F0CAD;
+  margin-top: 5vh;
 }
 
 .RoutineLiInfo{
@@ -408,7 +408,7 @@ ADD EXERCISE VIEW
 */
 
 #AddExerciseView{
-  min-height: 100vh;
+  height: 100vh;
 }
 
 #AddExerciseHeader{
@@ -487,7 +487,10 @@ ADD EXERCISE VIEW
 }
 
 .AeViewsDropdown{
+  height: 30vh;
   width: 20vw;
+  overflow: auto;
+
   visibility: hidden;
   text-decoration: none;
   display:flex;
@@ -507,7 +510,6 @@ ADD EXERCISE VIEW
   color: white;
 
   border-top: 1px solid white;
-  text-decoration: none;
   text-align: center;
 }
 
@@ -533,7 +535,7 @@ ADD EXERCISE VIEW
 }
 
 #AddExerciseList{
-  height: 67vh;
+  height: 70vh;
   width: 100vw;
   overflow: auto;
   display: flex;
@@ -554,26 +556,42 @@ ADD EXERCISE VIEW
   margin-top: 1.5vh;
 }
 
-#AddExerciseCheckboxWrapper{
+.AddExerciseCheckboxWrapper{
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-#AddExerciseCheckBox{
+.AddExerciseCheckBox{
   border: 1.5px solid black;
   height: 25px;
   width: 25px;
   margin-bottom: 1.2vh;
 }
 
-#AddExerciseFavorite{
+.AddExerciseFavorite{
   height: 46.5px;
   width: 52.5px;
 }
 
-#AddExerciseCheckBox:hover , #AddExerciseFavorite:hover{
+.AddExerciseCheckBox:hover , .AddExerciseFavorite:hover{
   cursor: pointer;
+}
+
+#AddExerciseConfirmation{
+  height: 8vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #1F0CAD;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  color: white;
+  z-index: 1;
+
+  background-color: blue;
 }
 
 /*
@@ -660,10 +678,15 @@ NUTRITION PAGE STUFF
 .NutritionMealDividers{
   width: 85vw;
   border: 1px solid black;
-  display:flex;
+  margin-bottom: 3vh;
+}
+
+.MealItemCollapsible{
+  width: 100%;
+  height: 100%;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 3vh;
 }
 
 .MealNameWrapper{
@@ -689,6 +712,7 @@ NUTRITION PAGE STUFF
   height: 7vh;
   width: 6vw;
   margin-top: 1vh;
+  cursor: pointer;
 }
 
 .MealItemsWrapper{
@@ -706,6 +730,7 @@ NUTRITION PAGE STUFF
   align-items: flex-end;
   border-top: 1px solid black;
   background-color: #1F0CAD;
+  cursor: pointer;
 }
 
 .AddFoodImgWrapper:hover{
@@ -718,7 +743,6 @@ NUTRITION PAGE STUFF
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 }
 
 .NutritionMealItems{
@@ -733,7 +757,7 @@ NUTRITION PAGE STUFF
 
 .NutritionMealItems > div{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   font-family: 'Nunito', sans-serif;
   font-size: 1.25em;
 }
@@ -743,13 +767,59 @@ NUTRITION PAGE STUFF
   font-size: 1.25em;
 }
 
+.NutritionMealServingsWrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+.MealServingDiv{
+  height: 5vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.MealTextArea, .MealTextArea:active{
+  outline: none;
+  resize: none;
+  border: none;
+
+  width: 10%;
+  height: 80%;
+
+  border-bottom: 1px solid #1F0CAD;
+  margin-left: 1vw;
+  margin-right: 1vw;
+
+  font-family: 'Nunito',sans-serif;
+  font-size: 1em;
+  text-align: center;
+}
+
+.MealSaveServingBtn{
+  outline: none;
+  width: 5em;
+  height: 80%;
+
+  background-color: #1F0CAD;
+  color: white;
+  font-family: 'Nunito',sans-serif;
+}
+
+
+
+
+
+
+
+
 .NutritionDeleteBtn{
  height: 5vh;
  margin-left: 2vh;
  margin-top: 0.5vh;
 }
 
-#DeleteBar{
+.UpdateDeleteBars{
   position: fixed;
   bottom: 0;
 
@@ -767,11 +837,15 @@ NUTRITION PAGE STUFF
   font-size: 2em;
 }
 
-#DeleteBar > p{
+#UpdateBar{
+  background-color: green;
+}
+
+.UpdateDeleteBars > p{
   margin-right: 2vh;
 }
 
-.DeleteBarOptns{
+.BarOptns{
   cursor: pointer;
 }
 
@@ -876,6 +950,29 @@ NUTRITION PAGE STUFF
   margin-top: 0.5%;
   margin-bottom: 0.5%;
 }
+
+#CompleteFoodEntryBtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 7vh;
+  width: 85.1vw;
+
+  background-color: #1F0CAD;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  margin-bottom: 3vh;
+  cursor: pointer;
+}
+
+#CompleteFoodEntryBtn:hover{
+  opacity: 0.85;
+}
+
+
 
 /*
 

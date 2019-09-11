@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NutritionContext from '../../../ReactContext.js';
 import AddFoodHeader from './AddFoodHeader.jsx';
 import AddFoodItemList from './AddFoodItemList.jsx';
 import Heart from '../../../assets/heart.svg';
@@ -13,11 +14,13 @@ class AddFoodView extends Component {
     servings: {}
   }
 
+  static contextType = NutritionContext;
+
   onEnter = (e) => {
     let search = document.getElementById('AddFoodSearch').value;
     if(e.key === 'Enter' && search !== ''){
       e.preventDefault();
-      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=`)
+      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`)
       fetch(uri)
         .then(response => response.json())
         .then(data => {
@@ -101,7 +104,7 @@ class AddFoodView extends Component {
   render() {
     return (
       <div id="AddFoodView">
-        <AddFoodHeader onEnter={this.onEnter} currentMeal={this.props.currentMeal}/>
+        <AddFoodHeader onEnter={this.onEnter} currentMeal={this.context.currentMeal}/>
 
         <AddFoodItemList search={this.state.FoodSearch}
           AddFood={this.AddFood}

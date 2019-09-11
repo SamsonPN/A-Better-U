@@ -30,9 +30,6 @@ class BMRCalculator extends Component {
     showModal: false
   }
 
-  componentDidMount(){
-  }
-
   ChangeActivity = (index) => {
     let activity = document.getElementsByClassName('ActivityDropdownLi')[index].textContent;
     this.setState( {
@@ -112,9 +109,6 @@ class BMRCalculator extends Component {
         body: JSON.stringify(requestObject)
       })
       .catch(err => console.error(err))
-    }
-    else{
-      alert("Data not stored!")
     }
   }
 
