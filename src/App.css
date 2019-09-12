@@ -313,7 +313,7 @@ Routine View Page
   height: 70%;
   resize: none;
   border: none;
-  overflow: auto;
+  overflow: hidden;
 }
 
  #RoutineName:focus, #RoutineName{
@@ -322,7 +322,7 @@ Routine View Page
   font-weight: 800;
   font-style: italic;
   color: black;
-  font-size: 3em;
+  font-size: 2.85em;
 }
 
 #RoutineFinish{
@@ -398,6 +398,13 @@ Routine View Page
 .RoutineLiDelBtn{
   color: #6F0CAD;
   cursor: pointer;
+}
+
+#EmptyRoutineMsg{
+  position: absolute;
+  left: 20.75vw;
+  top: 47vh;
+  font-size: 2em;
 }
 
 

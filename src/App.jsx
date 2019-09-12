@@ -24,8 +24,7 @@ NEXT GOAL ONCE DONE WITH MINOR IMPLEMENTATIONS:
 class App extends Component {
   state = {
     today: "01%2F01%2F2019",
-    currentMeal: 'Breakfast',
-    exercises: []
+    currentMeal: 'Breakfast'
     // Breakfast : [],
     // Lunch: [],
     // Dinner: [],
@@ -52,12 +51,6 @@ class App extends Component {
     this.setState({ currentMeal: name})
   }
 
-  AddToRoutine = (exercises) => {
-    this.setState({
-      exercises
-    })
-  }
-
 
   render() {
     return (
@@ -70,13 +63,8 @@ class App extends Component {
               </React.Fragment>
              )} />
 
-           <Route exact path="/workout/routineview" render={props => (
-               <RoutineView exercises={this.state.exercises} />
-             )} />
-
-           <Route exact path="/workout/addroutine" render={props => (
-               <AddExerciseView AddToRoutine={this.AddToRoutine} />
-             )} />
+           <Route exact path="/workout/routineview" component={RoutineView}/>
+           <Route exact path="/workout/addroutine" component={AddExerciseView}/>
 
            {/*<NutritionProvider value={{
                FetchFood: this.FetchFood,

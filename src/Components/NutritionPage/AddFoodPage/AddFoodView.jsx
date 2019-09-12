@@ -73,7 +73,7 @@ class AddFoodView extends Component {
       }
     }
 
-    StoreData = () =>{
+    StoreData = () => {
       let FoodAdded = this.state.FoodAdded;
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, '0');
@@ -84,7 +84,7 @@ class AddFoodView extends Component {
       let requestObject = {
         "date": today,
         "meal": this.props.currentMeal,
-        "FoodAdded": this.state.FoodAdded,
+        "FoodAdded": FoodAdded,
         "servings": this.state.servings
       }
 

@@ -243,3 +243,35 @@ app.get('/getExerciseBySearch/:search', (req, res) => {
     .then(items => {res.json(items)})
     .catch( err => console.error(err))
 })
+
+app.get('/getRoutineExercises/:name', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+
+  collection.findOne( { "name": req.params.name } )
+    .then(result => res.json(result))
+})
+
+//inserts exercises into the routine collection
+app.post('/insertRoutineExercises', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+
+  collection.updateOne(
+   { "name" : req.body.name } ,
+   { $addToSet: {"exercises": { $each: req.body.exercises } } },
+   {upsert: true}
+   )
+    .catch(err => console.error(`Failed to insert item: ${err}`))
+})
+
+app.put('/changeRoutineName', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+
+  collection.updateOne(
+    { "name": req.body.oldName },
+    {$set: { "name" : req.body.newName } }
+  )
+    .catch(err => console.error(err))
+})

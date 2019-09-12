@@ -70,11 +70,12 @@ class AddExerciseView extends Component {
 
   AddExercise = (name, type, muscle) => {
     let checkbox = document.getElementById(name + type + muscle + 'checkbox');
+    let newState;
 
     if (checkbox.style.backgroundColor === "" || checkbox.style.backgroundColor === "white"){
       checkbox.style.backgroundColor = '#1F0CAD';
 
-      let newState = [{"name": name, "muscle": muscle, "type": type}];
+      newState = [{"name": name, "muscle": muscle, "type": type}];
       this.setState(previousState => ( {
         addItems: previousState.addItems.concat(newState),
         add: true
@@ -85,20 +86,37 @@ class AddExerciseView extends Component {
 
     else {
       checkbox.style.backgroundColor = "white";
-      let newState = this.state.addItems.filter( item => {
+      newState = this.state.addItems.filter( item => {
         return item.name !== name || item.muscle !== muscle || item.type !== type
       })
 
       this.setState({
         addItems: newState
-      }, function() {
-        console.log(this.state.addItems);
+      }, function(){
+        if(this.state.addItems.length === 0){
+          this.setState({
+            add: false
+          })
+        }
       })
     }
   }
 
-  ApproveExerciseAdditon = () => {
-    this.props.AddToRoutine(this.state.addItems);
+  StoreExercises = () => {
+    let requestObject = {
+      "name": "Routine Name",
+      "exercises": this.state.addItems
+    }
+
+    fetch('/insertRoutineExercises', {
+      method: 'POST',
+      mode: 'same-origin',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+      .catch(err => console.log(err))
     this.RemoveBar();
   }
 
@@ -120,7 +138,7 @@ class AddExerciseView extends Component {
           {this.state.add ?
             <div id="AddExerciseConfirmation" className="UpdateDeleteBars">
               <p>Add {this.state.addItems.length} exercise(s)?</p>
-              <p onClick={this.ApproveExerciseAdditon} className="BarOptns">Yes</p>
+              <p onClick={this.StoreExercises}className="BarOptns">Yes</p>
               <p>/</p>
               <p onClick={this.RemoveBar} className="BarOptns">No</p>
             </div>
