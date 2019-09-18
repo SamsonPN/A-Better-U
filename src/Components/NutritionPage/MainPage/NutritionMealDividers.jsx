@@ -9,9 +9,10 @@ class NutritionMealDividers extends Component {
   state = {
     collapseDiv: false
   }
+
   CollapseMealDiv = () => {
-    let collapsible = document.getElementById('Collapse' + this.props.name);
-    let arrowImg = document.getElementById(this.props.name + 'img')
+    let collapsible = document.getElementById('Collapse' + this.props.meal);
+    let arrowImg = document.getElementById(this.props.meal + 'img');
 
     this.setState(prevState => ({
       collapseDiv: !prevState.collapseDiv
@@ -26,19 +27,19 @@ class NutritionMealDividers extends Component {
       }
     })
   }
-  render() {
-    const { name } = this.props;
 
+  render() {
     const meal_Items = this.props.FoodAdded.map((item) =>
         <MealItems
           key={item.name}
           name={item.name}
           ndbno={item.ndbno}
-          meal={this.props.name}
-          updateCalories={this.props.updateCalories}
-          displayFood={this.props.displayFood}
+          meal={this.props.meal}
+          report={this.props.report}
+          servings={item.servings}
+          updateServings={this.props.updateServings}
+          saveServing={this.props.saveServing}
           showDelete={this.props.showDelete}
-          showUpdate={this.props.showUpdate}
           />
     );
 
@@ -46,17 +47,17 @@ class NutritionMealDividers extends Component {
         <div className="NutritionMealDividers">
 
           <div className="MealNameWrapper">
-            <p className="MealName">{this.props.name}</p>
-            <img className="NutritionDownArrowImg" src={UpArrow} alt="Down arrow" onClick={this.CollapseMealDiv} id={this.props.name+"img"}/>
+            <p className="MealName">{this.props.meal}</p>
+            <img className="NutritionDownArrowImg" src={UpArrow} alt="Down arrow" onClick={this.CollapseMealDiv} id={this.props.meal+"img"}/>
           </div>
 
-          <div className="MealItemCollapsible" id={"Collapse" + this.props.name}>
+          <div className="MealItemCollapsible" id={"Collapse" + this.props.meal}>
             <div className="MealItemsWrapper">
               {meal_Items}
             </div>
             <Link className="AddFoodImgWrapper" to="/nutrition/addfood">
               <div >
-                <img className="AddFoodImg" src={AddFood} alt="Add Food" title="Add Food" onClick={this.props.currentMeal.bind(this, name )}/>
+                <img className="AddFoodImg" src={AddFood} alt="Add Food" title="Add Food" onClick={this.props.currentMeal.bind(this, this.props.meal )}/>
               </div>
             </Link>
           </div>

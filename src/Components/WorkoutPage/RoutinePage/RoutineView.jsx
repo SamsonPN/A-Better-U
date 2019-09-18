@@ -9,7 +9,8 @@ import RoutineFooter from './RoutineFooter.jsx';
 
 class RoutineView extends Component {
   state = {
-    exercises: []
+    exercises: [],
+    finished: true
   }
 
   componentDidMount(){
@@ -17,25 +18,59 @@ class RoutineView extends Component {
     fetch(`/getRoutineExercises/${name}`)
       .then(res => res.json())
       .then(data => {
-        this.setState({
-          exercises: data.exercises
-        })
+        if (data){
+          this.setState({
+            exercises: data.exercises
+          }, function(){
+            let finished = this.state.exercises.length === 0 ? true : false;
+            this.setState({
+              finished
+            })
+          })
+        }
+     })
+  }
+
+  AllowRedirect = (e) => {
+    if(e.target.value !== 'Routine Name' && e.target.value !== ''){
+      this.setState({
+        finished: true
       })
+    }
+    else if (e.target.value === 'Routine Name'){
+      this.setState({
+        finished: false
+      })
+    }
+  }
+
+  DeleteExercise = (name, type) => {
+    let exercises = this.state.exercises;
+    exercises = exercises.filter( item => {
+      return item.name !== name || item.type !== type;
+    })
+
+    this.setState({
+      exercises
+    }, function(){
+      console.log(this.state.finished)
+    })
   }
 
   StoreRoutineName = () => {
     let name = document.getElementById('RoutineName').value;
 
-    if (name === 'Routine Name'){
+    if (name === 'Routine Name' && this.state.exercises.length !== 0){
       alert("Please enter a name for your routine!")
     }
     else {
       let requestObject = {
         "oldName": 'Routine Name',
-        "newName": name
+        "newName": name,
+        "exercises": this.state.exercises
       }
 
-      fetch('/changeRoutineName', {
+      fetch('/updateRoutine', {
         method: 'PUT',
         mode: 'same-origin',
         headers:{
@@ -48,9 +83,14 @@ class RoutineView extends Component {
 
   render() {
     return (
-      <div>
-          <RoutineHeader RoutineName={this.props.name || 'Routine Name'} store={this.StoreRoutineName}/>
-          <RoutineList exercises={this.state.exercises}/>
+      <div id="RoutineView">
+          <RoutineHeader
+            RoutineName={this.props.name || 'Routine Name'}
+            store={this.StoreRoutineName}
+            redirect={this.AllowRedirect}
+            finished={this.state.finished}
+          />
+        <RoutineList exercises={this.state.exercises} delete={this.DeleteExercise}/>
           <RoutineFooter/>
       </div>
     );

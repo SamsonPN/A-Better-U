@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import NutritionContext from '../../../ReactContext.js';
 import AddFoodHeader from './AddFoodHeader.jsx';
 import AddFoodItemList from './AddFoodItemList.jsx';
 import Heart from '../../../assets/heart.svg';
@@ -10,12 +9,8 @@ class AddFoodView extends Component {
   state = {
     FoodSearch: [],
     FoodAdded: [],
-    FavoriteFoods: [],
-    servings: {}
+    FavoriteFoods: []
   }
-
-  static contextType = NutritionContext;
-
   onEnter = (e) => {
     let search = document.getElementById('AddFoodSearch').value;
     if(e.key === 'Enter' && search !== ''){
@@ -40,12 +35,10 @@ class AddFoodView extends Component {
       if (checkbox.style.backgroundColor === "" || checkbox.style.backgroundColor === "white"){
         checkbox.style.backgroundColor = '#1F0CAD';
 
-        let newState = [{"name": name, "ndbno": ndbno}];
+        let newState = [{"name": name, "ndbno": ndbno, "servings" : 1}];
         this.setState(previousState => ( {
-          FoodAdded: previousState.FoodAdded.concat(newState),
-          servings: {...previousState.servings, [ndbno]: '1'}
+          FoodAdded: previousState.FoodAdded.concat(newState)
         } ))
-
       }
 
       else {
@@ -54,11 +47,9 @@ class AddFoodView extends Component {
           return item.name !== name
         })
 
-        let {[ndbno]: value, ...withoutObject} = this.state.servings;
         this.setState(previousState => ( {
           FoodAdded: newState,
-          servings: withoutObject
-        } ), function(){console.log(this.state.servings)})
+        } ))
 
       }
     }
@@ -84,8 +75,7 @@ class AddFoodView extends Component {
       let requestObject = {
         "date": today,
         "meal": this.props.currentMeal,
-        "FoodAdded": FoodAdded,
-        "servings": this.state.servings
+        "FoodAdded": FoodAdded
       }
 
       if(FoodAdded.length > 0 && this.props.currentMeal !== ""){
@@ -104,7 +94,7 @@ class AddFoodView extends Component {
   render() {
     return (
       <div id="AddFoodView">
-        <AddFoodHeader onEnter={this.onEnter} currentMeal={this.context.currentMeal}/>
+        <AddFoodHeader onEnter={this.onEnter} currentMeal={this.props.currentMeal}/>
 
         <AddFoodItemList search={this.state.FoodSearch}
           AddFood={this.AddFood}

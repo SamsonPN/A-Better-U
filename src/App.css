@@ -120,12 +120,13 @@ Workout Page
 }
 
 .WoViewsDropdown{
+  max-height: 25vh;
+  overflow: auto;
   visibility: hidden;
   text-decoration: none;
   display:flex;
   flex-direction: column;
 
-  /* border: 1px solid #1F0CAD; */
   background-color: #1F0CAD;
 }
 
@@ -181,7 +182,7 @@ Workout Page
 
 .CurrentRoutineItemHeader{
   width: 98.5%;
-  height: 12vh;
+  height: 9vh;
 
   display: flex;
   justify-content: space-between;
@@ -190,17 +191,17 @@ Workout Page
   font-size: 3em;
   font-weight: 600;
   color: #1F0CAD;
-  cursor:pointer;
 }
 
 .CurrentRoutineItemHeader > img{
   margin-top: 0.7vh;
   width: 7vw;
   height: 8vh;
+  cursor:pointer;
 }
 
 .CurrentRoutineSetsReps{
-  width: 92%;
+  width: 93.5%;
   margin-bottom: 1vh;
   display: flex;
   justify-content: space-between;
@@ -208,30 +209,34 @@ Workout Page
 }
 
 .CurrentRoutineSetsReps > p{
-  width: 12vw;
-
-  display: flex;
-  justify-content: center;
-
-  font-size: 2em;
+  height: 10vh;
+  line-height: 1.9;
+  font-size: 3em;
   font-weight: 200;
-
+  color: #1F0CAD;
 }
 
 .CurrentRoutineValues, .CurrentRoutineValues:focus{
   resize: none;
   border: none;
   outline: none;
-  overflow: auto;
+  overflow: hidden;
 
-  border-bottom: 1px solid #1F0CAD;
   width: 12vw;
   height: 10vh;
+  border-bottom: 1px solid #1F0CAD;
 
   text-align: center;
   font-size: 3em;
   font-weight: 200;
   color: #1F0CAD;
+  line-height: 1.75;
+}
+
+.SetDeleteBtn{
+ height: 7vh;
+ margin-top: 3vh;
+ cursor: pointer;
 }
 
 .CurrentRoutineAddSet{
@@ -246,47 +251,44 @@ Workout Page
 
   font-size: 2.25em;
   font-weight: 200;
-  cursor: pointer
+  cursor: pointer;
+}
+
+.CurrentRoutineAddSet > p{
+  margin-right: 1.75vh;
 }
 
 .CurrentRoutineAddSet:hover > p{
   color: #1F0CAD;
+  text-decoration: underline;
 }
 
-#routineBtn, #editBtn, #deleteBtn{
-  height: 8.5vh;
-  width: 8.5vw;
-
+#WoIconWrapper{
+  width: 8.1vw;
   position: fixed;
   right: 0;
+  bottom: 0;
+}
+
+.WoBtns{
+  height: 8.5vh;
+  width: 100%;
   cursor: pointer;
 }
 
-#routineBtn{
-  bottom:20vh;
-}
-
-#editBtn{
-  right: 0;
-  bottom: 10vh;
-}
-
-#deleteBtn{
-  bottom: 0vh;
-}
-
-
-
-#routineBtn:hover, #editBtn:hover, #deleteBtn:hover{
+.WoBtns:hover{
   opacity: 0.75;
 }
-
 /*
 
 Routine View Page
 
 
 */
+
+#RoutineView{
+  height: 100vh;
+}
 
 #RoutineHeader{
   position:sticky;
@@ -331,6 +333,7 @@ Routine View Page
   font-size: 3em;
   text-decoration: none;
   color: #1F0CAD;
+  cursor:pointer;
 }
 
 #RoutineFooter{
@@ -378,6 +381,7 @@ Routine View Page
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: auto;
 }
 
 .RoutineLi{
@@ -400,11 +404,12 @@ Routine View Page
   cursor: pointer;
 }
 
-#EmptyRoutineMsg{
+.EmptyRoutineMsg{
   position: absolute;
   left: 20.75vw;
   top: 47vh;
   font-size: 2em;
+  z-index: -1;
 }
 
 
@@ -774,52 +779,6 @@ NUTRITION PAGE STUFF
   font-size: 1.25em;
 }
 
-.NutritionMealServingsWrapper{
-  display: flex;
-  flex-direction: column;
-}
-
-.MealServingDiv{
-  height: 5vh;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.MealTextArea, .MealTextArea:active{
-  outline: none;
-  resize: none;
-  border: none;
-
-  width: 10%;
-  height: 80%;
-
-  border-bottom: 1px solid #1F0CAD;
-  margin-left: 1vw;
-  margin-right: 1vw;
-
-  font-family: 'Nunito',sans-serif;
-  font-size: 1em;
-  text-align: center;
-}
-
-.MealSaveServingBtn{
-  outline: none;
-  width: 5em;
-  height: 80%;
-
-  background-color: #1F0CAD;
-  color: white;
-  font-family: 'Nunito',sans-serif;
-}
-
-
-
-
-
-
-
-
 .NutritionDeleteBtn{
  height: 5vh;
  margin-left: 2vh;
@@ -908,10 +867,10 @@ NUTRITION PAGE STUFF
 
 .ModalServingDiv{
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: flex-start;
   width: 30%;
   height: 30%;
+  line-height: 1.25;
 }
 
 .NutritionModalTextArea{
@@ -927,15 +886,6 @@ NUTRITION PAGE STUFF
   text-align: center;
   background-color: #1F0CAD;
   border-bottom: 1px solid white;
-}
-
-.SaveServingBtn{
-  background-color: #1F0CAD;
-  color: white;
-  font: 1em;
-  width: 20%;
-  height: 70%;
-  overflow-x: auto;
 }
 
 .NutritionModalBody{

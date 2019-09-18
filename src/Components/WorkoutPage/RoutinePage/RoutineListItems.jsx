@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 class RoutineListItems extends Component {
 
   render() {
+    const {name, type} = this.props;
     return (
       <div className="RoutineLi">
-        <p className="RoutineLiInfo">{this.props.name} ({this.props.type})</p>
-        <p className="RoutineLiInfo RoutineLiDelBtn">X</p>
+        <p className="RoutineLiInfo">{name} ({type})</p>
+        <p className="RoutineLiInfo RoutineLiDelBtn" onClick={this.props.delete.bind(this, name, type)}>X</p>
       </div>
     );
   }

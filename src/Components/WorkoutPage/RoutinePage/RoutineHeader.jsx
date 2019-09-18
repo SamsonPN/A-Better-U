@@ -13,8 +13,17 @@ class RoutineHeader extends Component {
     return (
       <div id="RoutineHeader">
         <div id="RoutineHeaderWrapper">
-          <textarea id="RoutineName" defaultValue={this.props.RoutineName} onKeyPress={this.PreventEnter}></textarea>
-          <Link id="RoutineFinish" to="/workout" onClick={this.props.store}>Finish</Link>
+          <textarea id="RoutineName"
+            defaultValue={this.props.RoutineName}
+            onKeyPress={this.PreventEnter}
+            onChange={this.props.redirect}>
+          </textarea>
+
+          {this.props.finished ?
+            <Link id="RoutineFinish" to="/workout" onClick={this.props.store}>Finish</Link>
+            :
+            <div id="RoutineFinish" onClick={this.props.store}>Finish</div>
+          }
         </div>
       </div>
     );

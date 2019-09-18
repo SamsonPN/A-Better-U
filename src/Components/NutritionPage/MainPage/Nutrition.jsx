@@ -4,16 +4,19 @@ import {default as NVBtns} from './NutritionViewButtons.jsx';
 import {default as Meals} from './NutritionMealDividers.jsx';
 import BlackDeleteBtn from '../../../assets/delete-food-button.svg';
 import RedDeleteBtn from '../../../assets/red-delete-food-button.svg';
-import NutritionContext from '../../../ReactContext.js';
 
 /*
 try to consolidate all changes at once and then input them into the server later. right now,
 it should just update the nutrition page's state, and once you click "Complete Today's Entry",
 then you can put them into the server
+
+IT IS TOO FUCKING SLOW. REFACTOR IT TOMORROW IMMEDIATELY!!!
 */
 
 class Nutrition extends Component {
   state = {
+    reports: {},
+    ndbno_list: '',
     Breakfast : [],
     Lunch: [],
     Dinner: [],
@@ -23,23 +26,37 @@ class Nutrition extends Component {
     fat: 0,
     carbs: 0,
     delete: false,
-    deleteItems: [],
-    update: false,
-    updateItems: []
+    deleteItems: []
   }
-
-  static contextType = NutritionContext;
 
   componentDidMount(){
     this.FetchFood()
   }
 
+  // adds all food arrays into each meal slot. # of items = 4.
   FillFoodData = (data) => {
-    data.forEach(item =>(
+    data.forEach(item =>{
       this.setState( { [item.meal] : item.FoodAdded })
-      )
-    )
+    })
   }
+
+  GetNDBNO = (data) => {
+    let ndbno_list = "";
+
+    data.forEach(item => {
+      item.FoodAdded.forEach( item => {
+        let ndbno = "ndbno=" + item.ndbno + "&";
+        if (ndbno_list.indexOf(ndbno) === -1){
+        ndbno_list += ndbno
+        }
+      })
+    })
+
+    this.setState({
+      ndbno_list
+    })
+  }
+
   FetchFood = () => {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -51,25 +68,16 @@ class Nutrition extends Component {
     fetch(uri)
     .then(response => response.json())
     .then(data => {
-      let ndbno_list = "";
-      let servings = {};
 
       this.FillFoodData(data);
+      this.GetNDBNO(data);
 
-      data.forEach(item => {
-        //these 2 fill the servings object with meal objects
-        servings[item.meal] = item.servings;
-        servings[item.meal + "_Count"] = item.FoodAdded.length;
-
-        for(var x in item.servings){
-          ndbno_list += "ndbno=" + x + "&";
-        }
-       })
-
-      if(ndbno_list !== ''){
-        this.FetchServings(ndbno_list, servings);
+      if(this.state.ndbno_list !== ''){
+        this.FetchReports()
       }
       else {
+        //when deleting all items from routine
+        //this will ensure that the values are updated properly
         this.setState({
           calories: 0,
           protein: 0,
@@ -80,62 +88,117 @@ class Nutrition extends Component {
     })
   }
 
-  FetchServings = (ndbno, servings) => {
-    let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${ndbno}&type=b&format=json&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`);
+  DetermineMeal = (servings, i) => {
+    let meal;
+    let BC = servings["Breakfast_Count"];
+    let DC = servings["Dinner_Count"] + BC;
+    let LC = servings["Lunch_Count"] + DC;
+
+    if( i < BC ){
+      meal = "Breakfast";
+    }
+    else if ( BC <= i && i < DC ) {
+        meal = "Dinner";
+      }
+    else if ( DC <= i  && i < LC ) {
+        meal="Lunch";
+      }
+    else {
+      meal="Snacks";
+    }
+    return meal
+  }
+
+  FetchReports = () => {
+    let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${this.state.ndbno_list}&type=b&format=json&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`);
     fetch(uri,{
       mode: 'cors'
     })
       .then(res => res.json())
       .then(data => {
-        let calories = 0;
-        let protein = 0;
-        let fat = 0;
-        let carbs = 0;
-        let meal;
+        let reports = {}
 
-        data.foods.forEach((item, i) => {
-          let ndbno = item.food.desc.ndbno;
-          let nutrient = item.food.nutrients;
-
-          if( i < servings["Breakfast_Count"]){
-            meal = "Breakfast";
-          }
-          else if (servings["Breakfast_Count"] <= i && i < (servings["Breakfast_Count"] + servings["Dinner_Count"]) ) {
-              meal = "Dinner";
-            }
-          else if ( (servings["Breakfast_Count"] + servings["Dinner_Count"] <= i) && i < (servings["Breakfast_Count"] + servings["Dinner_Count"] + servings["Lunch_Count"]) ) {
-              meal="Lunch";
-            }
-          else{
-            meal="Snacks";
-          }
-
-          if (nutrient[0].name !== "Water"){
-            calories += nutrient[0].value * servings[meal][ndbno];
-            protein += nutrient[1].value * servings[meal][ndbno];
-            fat += nutrient[2].value * servings[meal][ndbno];
-            carbs += nutrient[3].value *servings[meal][ndbno];
-          } else {
-            calories += nutrient[1].value * servings[meal][ndbno];
-            protein += nutrient[2].value * servings[meal][ndbno];
-            fat += nutrient[3].value * servings[meal][ndbno];
-            carbs += nutrient[4].value * servings[meal][ndbno];
-          }
+        //initialize nutrition report for each item
+        data.foods.forEach(item => {
+          reports[item.food.desc.ndbno] = item.food;
         })
 
+        //calculate total calories/macronutrients
         this.setState({
-          calories: Math.round(calories),
-          protein: Math.round(protein),
-          fat: Math.round(fat),
-          carbs: Math.round(carbs)
-        })
-
+          reports
+        },function(){this.CalculateNutritionInfo()})
       })
   }
 
+  CalculateNutritionInfo = () => {
+    let meals = ["Breakfast", "Lunch", "Dinner", "Snacks"]
+    let reports = this.state.reports;
+    let calories = 0;
+    let protein = 0;
+    let fat = 0;
+    let carbs = 0;
 
+    meals.forEach(meal => {
+      this.state[meal].forEach( item => {
+        let nutrient_index = reports[item.ndbno].nutrients[0].nutrient_id === "208" ? 0 : 1;
+        calories += item.servings * reports[item.ndbno].nutrients[nutrient_index].value;
+        protein += item.servings * reports[item.ndbno].nutrients[nutrient_index + 1].value;
+        fat += item.servings * reports[item.ndbno].nutrients[nutrient_index + 2].value;
+        carbs += item.servings * reports[item.ndbno].nutrients[nutrient_index + 3].value;
+      })
+    })
+    this.setState({
+      calories: Math.round(calories),
+      protein: Math.round(protein),
+      fat: Math.round(fat),
+      carbs: Math.round(carbs)
+    })
+  }
 
-  ShowDeleteBar = (meal, ndbno, servings, id) => {
+  UpdateServings = (e, meal, ndbno) => {
+    let serving = e.target.value;
+    let currentMeal = this.state[meal];
+
+    if (isNaN(serving)) {
+      e.target.value = 1;
+      serving = 1;
+      alert('Please enter valid numbers only!')
+   }
+
+   for(let i = 0; i < currentMeal.length; i++){
+     if(currentMeal[i].ndbno === ndbno){
+       currentMeal[i].servings = serving;
+       break;
+     }
+   }
+
+   this.setState({
+     currentMeal
+   }, function(){this.CalculateNutritionInfo()})
+  }
+
+  SaveServing = (meal, ndbno, id) => {
+    let servings = document.getElementById('textarea' + id).value;
+
+    if(servings !== ''){
+      let requestObject = {
+        "meal": meal,
+        "ndbno" : ndbno,
+        "servings" : servings
+      }
+
+      fetch('/updateServings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+      })
+      .catch(err => console.error(err))
+    }
+  }
+
+  ShowDeleteBar = (meal, ndbno, id) => {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -145,8 +208,7 @@ class Nutrition extends Component {
     let item = [{
       "date": today,
       "meal": meal,
-      "ndbno": ndbno,
-      "servings": servings
+      "ndbno": ndbno
     }]
 
     let duplicate = false;
@@ -195,13 +257,14 @@ class Nutrition extends Component {
       },
       body: JSON.stringify(requestObject)
     })
-
-    this.setState( {
-      delete: false,
-      deleteItems: []
-    },
-    this.FetchFood()
-  )
+    .then(res => {
+      this.setState({
+        delete: false,
+        deleteItems: []
+      },
+      this.FetchFood()
+     )
+   })
  }
 
   RemoveDeleteBar = () => {
@@ -213,77 +276,8 @@ class Nutrition extends Component {
     let deleteButtons = document.getElementsByClassName('NutritionDeleteBtn');
     [...deleteButtons].forEach(item => {
       item.src = BlackDeleteBtn;
-    })
- }
-
- ShowUpdateBar = (meal, ndbno, id) => {
-   let today = new Date();
-   let dd = String(today.getDate()).padStart(2, '0');
-   let mm = String(today.getMonth() + 1).padStart(2, '0');
-   let yyyy = today.getFullYear();
-   today = mm + '/' + (dd) + '/' + yyyy;
-
-   let servings = document.getElementById('textarea' + id).value;
-   let duplicate = false;
-
-   let item = [{
-     "date": today,
-     "meal": meal,
-     "ndbno": ndbno,
-     "servings": servings
-   }]
-
-   this.state.updateItems.forEach( updatedItem => {
-     if(updatedItem.ndbno === item[0].ndbno && updatedItem.meal === item[0].meal){
-       duplicate = true;
-     }
    })
-
-   if(duplicate){
-     let newState = this.state.updateItems.filter(updatedItem => {
-       return (updatedItem.ndbno !== item[0].ndbno || updatedItem.meal !== item[0].meal)
-     })
-
-     this.setState({
-       updateItems: newState.concat(item)
-     })
-   }
-   else{
-    this.setState(previousState => ({
-      update: true,
-      updateItems: previousState.updateItems.concat(item)
-    }))
-   }
  }
-
- RemoveUpdateBar = () => {
-   this.setState( {
-     update: false,
-     updateItems: []
-   })
-}
-
- UpdateItems = () => {
-   let requestObject = {
-     update: this.state.updateItems
-   }
-
-   fetch("/updateServings", {
-     method: 'PUT',
-     headers: {
-       'Content-Type': 'application/json'
-     },
-     body: JSON.stringify(requestObject)
-   })
-
-   this.setState({
-     update: false,
-     updateItems: []
-   },
-   this.FetchFood()
- )
- }
-
 
   StoreFoodEntry = () => {
     let today = new Date();
@@ -310,46 +304,24 @@ class Nutrition extends Component {
   }
 
   render() {
+    const meals = ["Breakfast", "Lunch", "Dinner", "Snacks"].map(meal =>
+      <Meals
+       key={meal}
+       meal={meal}
+       FoodAdded={this.state[meal]}
+       currentMeal={this.props.currentMeal}
+       report={this.state.reports}
+       updateServings={this.UpdateServings}
+       saveServing={this.SaveServing}
+       showDelete={this.ShowDeleteBar}
+      />
+    )
     return (
           <div id="NutritionContainer">
             <NutritionView calories={this.state.calories} protein={this.state.protein} fat={this.state.fat} carbs={this.state.carbs}/>
             <NVBtns/>
 
-            <Meals name="Breakfast"
-              displayFood={this.FetchFood}
-              FoodAdded={this.state.Breakfast}
-              currentMeal={this.props.currentMeal}
-              updateCalories={this.FetchFood}
-              showDelete={this.ShowDeleteBar}
-              showUpdate={this.ShowUpdateBar}
-              />
-
-            <Meals name="Lunch"
-              displayFood={this.FetchFood}
-              FoodAdded={this.state.Lunch}
-              currentMeal={this.props.currentMeal}
-              updateCalories={this.FetchFood}
-              showDelete={this.ShowDeleteBar}
-              showUpdate={this.ShowUpdateBar}
-              />
-
-            <Meals name="Dinner"
-              displayFood={this.FetchFood}
-              FoodAdded={this.state.Dinner}
-              currentMeal={this.props.currentMeal}
-              updateCalories={this.FetchFood}
-              showDelete={this.ShowDeleteBar}
-              showUpdate={this.ShowUpdateBar}
-              />
-
-            <Meals name="Snacks"
-              displayFood={this.FetchFood}
-              FoodAdded={this.state.Snacks}
-              currentMeal={this.props.currentMeal}
-              updateCalories={this.FetchFood}
-              showDelete={this.ShowDeleteBar}
-              showUpdate={this.ShowUpdateBar}
-              />
+            {meals}
 
             <div id="CompleteFoodEntryBtn" onClick={this.StoreFoodEntry}>
               <p>Complete Food Entry</p>
@@ -361,16 +333,6 @@ class Nutrition extends Component {
                 <p onClick={this.DeleteItems} className="BarOptns">Yes</p>
                 <p>/</p>
                 <p onClick={this.RemoveDeleteBar} className="BarOptns">No</p>
-              </div>
-              : null
-            }
-
-            {this.state.update ?
-              <div id="UpdateBar" className="UpdateDeleteBars">
-                <p>Update servings for {this.state.updateItems.length} item(s)?</p>
-                <p onClick={this.UpdateItems} className="BarOptns">Yes</p>
-                <p>/</p>
-                <p onClick={this.RemoveUpdateBar} className="BarOptns">No</p>
               </div>
               : null
             }

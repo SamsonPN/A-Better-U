@@ -75,13 +75,21 @@ class AddExerciseView extends Component {
     if (checkbox.style.backgroundColor === "" || checkbox.style.backgroundColor === "white"){
       checkbox.style.backgroundColor = '#1F0CAD';
 
-      newState = [{"name": name, "muscle": muscle, "type": type}];
+      newState = [{
+        "name": name,
+        "muscle": muscle,
+        "type": type,
+        "sets": [{
+          'Type': '',
+          'Weight': '',
+          'Reps': ''
+        }]
+      }];
+
       this.setState(previousState => ( {
         addItems: previousState.addItems.concat(newState),
         add: true
-      }), function() {
-        console.log(this.state.addItems);
-      })
+      }))
     }
 
     else {

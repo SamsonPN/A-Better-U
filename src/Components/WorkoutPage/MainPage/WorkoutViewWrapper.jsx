@@ -9,7 +9,7 @@ class WorkoutViewWrapper extends Component {
     return (
       <div id="WoWrapper">
         <DateDropdown/>
-        <RoutineDropdown/>
+        <RoutineDropdown routines={this.props.routines} showRoutine={this.props.showRoutine}/>
         <ViewDropdown/>
       </div>
     );
