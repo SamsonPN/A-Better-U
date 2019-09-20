@@ -23,14 +23,6 @@ class CurrentRoutineItems extends Component {
     })
   }
 
-  // SaveValue = (e, index) => {
-  //   let newState = this.state.sets;
-  //   newState[index][e.target.placeholder] = e.target.value
-  //   this.setState({
-  //     sets: newState
-  //   })
-  // }
-
   render() {
     const AddSets = this.props.sets.map( (item,i) =>
       <SetsReps key={item + i} index={i} sets={item} delete={this.props.DeleteSet} save={this.props.save} exercise={this.props.index}/>

@@ -24,15 +24,8 @@ NEXT GOAL ONCE DONE WITH MINOR IMPLEMENTATIONS:
 class App extends Component {
   state = {
     today: "01%2F01%2F2019",
-    currentMeal: 'Breakfast'
-    // Breakfast : [],
-    // Lunch: [],
-    // Dinner: [],
-    // Snacks: [],
-    // calories: 0,
-    // protein: 0,
-    // fat: 0,
-    // carbs: 0
+    currentMeal: 'Breakfast',
+    routineName: 'Routine Name'
   }
 
   componentDidMount(){
@@ -41,14 +34,14 @@ class App extends Component {
     let mm = String(today.getMonth() + 1).padStart(2, '0');
     let yyyy = today.getFullYear();
     today = mm + '%2F' + (dd) + '%2F' + yyyy;
-
-    // this.setState({ today: today }, function(){
-    //   this.FetchFood()
-    // })
   }
 
-  currentMeal = (name) => {
-    this.setState({ currentMeal: name})
+  currentMeal = (currentMeal) => {
+    this.setState( { currentMeal } );
+  }
+
+  RoutineOption = (routineName) => {
+    this.setState( { routineName } );
   }
 
 
@@ -59,12 +52,16 @@ class App extends Component {
             <Route exact path="/workout" render={props => (
               <React.Fragment>
                 <Header/>
-                <Workout/>
+                <Workout routineOption={this.RoutineOption}/>
               </React.Fragment>
              )} />
 
-           <Route exact path="/workout/routineview" component={RoutineView}/>
-           <Route exact path="/workout/addroutine" component={AddExerciseView}/>
+           <Route exact path="/workout/routineview" render={props => (
+               <RoutineView routineName={this.state.routineName}/>
+             )}/>
+           <Route exact path="/workout/addroutine" render={props => (
+               <AddExerciseView routineName={this.state.routineName}/>
+             )}/>
 
            {/*<NutritionProvider value={{
                FetchFood: this.FetchFood,

@@ -20,7 +20,10 @@ class CurrentRoutine extends Component {
         {this.props.currentRoutine.length === 0 ?
           <p className="EmptyRoutineMsg">Please add a routine or choose one from the dropdown above</p>
           :
-          null
+          <div id="CurrentRoutineTitle">
+            <p>Routine: {this.props.routineName}</p>
+            <p>Date: {this.props.routineDate}</p>
+          </div>
         }
         {exercises}
       </div>

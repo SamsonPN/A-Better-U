@@ -5,7 +5,7 @@ class WorkoutViewDropdown extends Component {
   render() {
     return (
       <div className="WoDropdownDiv">
-        <div className="WoViews">View</div>
+        <div className="WoViews">Daily</div>
         <ul className="WoViewsDropdown">
           <a className="WoDropdownItem" href="#!">Weekly</a>
           <a className="WoDropdownItem" href="#!">Monthly</a>

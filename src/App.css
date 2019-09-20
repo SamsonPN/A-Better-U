@@ -81,7 +81,6 @@ Workout Page
 #WoWrapper{
   display: flex;
   justify-content: space-around;
-  align-items: center;
 
   margin-top: 2vh;
   width: 100%;
@@ -158,6 +157,21 @@ Workout Page
   align-items: flex-start;
   margin-top: 3vh;
   font-family: 'Nunito',sans-serif;
+}
+
+#CurrentRoutineTitle{
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  margin-bottom: 1vh;
+}
+
+#CurrentRoutineTitle > p{
+  font-family: 'Nunito',sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 3em;
+  color: #1F0CAD;
 }
 
 .CurrentRoutineItems{

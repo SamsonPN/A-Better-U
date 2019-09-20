@@ -14,7 +14,7 @@ class RoutineView extends Component {
   }
 
   componentDidMount(){
-    let name = this.props.name || 'Routine Name';
+    let name = this.props.routineName;
     fetch(`/getRoutineExercises/${name}`)
       .then(res => res.json())
       .then(data => {
@@ -22,7 +22,7 @@ class RoutineView extends Component {
           this.setState({
             exercises: data.exercises
           }, function(){
-            let finished = this.state.exercises.length === 0 ? true : false;
+            let finished = this.state.exercises.length === 0 || this.props.routineName !== 'Routine Name' ? true : false;
             this.setState({
               finished
             })
@@ -53,8 +53,20 @@ class RoutineView extends Component {
     this.setState({
       exercises
     }, function(){
-      console.log(this.state.finished)
+      let requestObject = {
+        "name" : this.props.routineName,
+        "exercise": name,
+        "type" : type
+      }
+      fetch('/removeRoutineExercise', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+      })
     })
+
   }
 
   StoreRoutineName = () => {
@@ -65,7 +77,7 @@ class RoutineView extends Component {
     }
     else {
       let requestObject = {
-        "oldName": 'Routine Name',
+        "oldName": this.props.routineName,
         "newName": name,
         "exercises": this.state.exercises
       }
@@ -85,7 +97,7 @@ class RoutineView extends Component {
     return (
       <div id="RoutineView">
           <RoutineHeader
-            RoutineName={this.props.name || 'Routine Name'}
+            RoutineName={this.props.routineName || 'Routine Name'}
             store={this.StoreRoutineName}
             redirect={this.AllowRedirect}
             finished={this.state.finished}

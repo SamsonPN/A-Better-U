@@ -5,14 +5,6 @@ import {default as Meals} from './NutritionMealDividers.jsx';
 import BlackDeleteBtn from '../../../assets/delete-food-button.svg';
 import RedDeleteBtn from '../../../assets/red-delete-food-button.svg';
 
-/*
-try to consolidate all changes at once and then input them into the server later. right now,
-it should just update the nutrition page's state, and once you click "Complete Today's Entry",
-then you can put them into the server
-
-IT IS TOO FUCKING SLOW. REFACTOR IT TOMORROW IMMEDIATELY!!!
-*/
-
 class Nutrition extends Component {
   state = {
     reports: {},

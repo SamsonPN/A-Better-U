@@ -111,8 +111,9 @@ class AddExerciseView extends Component {
   }
 
   StoreExercises = () => {
+    let name = this.props.routineName;
     let requestObject = {
-      "name": "Routine Name",
+      "name": name,
       "exercises": this.state.addItems
     }
 

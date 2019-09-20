@@ -226,6 +226,17 @@ app.get('/getRoutines', (req, res) => {
     .catch(err => console.error(err))
 })
 
+app.get('/getWorkouts', (req, res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('workouts');
+
+  collection.find()
+    .sort( { "date" : 1 } )
+    .toArray()
+    .then(result => res.json(result))
+    .catch(err => console.error(err))
+})
+
 //inserts exercises into the routine collection
 app.post('/insertRoutineExercises', (req,res) => {
   let db = req.app.locals.db;
@@ -237,7 +248,7 @@ app.post('/insertRoutineExercises', (req,res) => {
    {upsert: true}
    )
     .catch(err => console.error(`Failed to insert item: ${err}`))
-  res.end()
+  res.end();
 })
 
 app.post('/saveWorkout', (req, res) => {
@@ -249,7 +260,7 @@ app.post('/saveWorkout', (req, res) => {
     {$set: {"exercises": req.body.exercises}},
     {upsert: true}
   )
-  res.end()
+  res.end();
 })
 
 app.put('/updateRoutine', (req,res) => {
@@ -261,15 +272,34 @@ app.put('/updateRoutine', (req,res) => {
     {$set: { "name" : req.body.newName, "exercises": req.body.exercises } }
   )
     .catch(err => console.error(err))
-  res.end()
+  res.end();
 })
 
+app.put('/removeRoutineExercise', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+
+  collection.updateOne(
+    { "name" : req.body.name},
+    {$pull: {"exercises" : {"name" : req.body.exercise, "type" : req.body.type}}}
+  )
+    .catch(err => console.error(err))
+  res.end();
+})
 
 app.delete('/deleteRoutine/:name', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('routines');
-
   collection.deleteOne( { "name": req.params.name } )
     .catch(err => console.error(err))
-  res.end()
+  res.end();
+})
+
+app.delete('/deleteWorkout/:name/:date', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('workouts');
+
+  collection.deleteOne( { "name": req.params.name, "date" : req.params.date } )
+    .catch(err => console.error(err))
+  res.end();
 })
