@@ -32,16 +32,22 @@ class RoutineView extends Component {
   }
 
   AllowRedirect = (e) => {
-    if(e.target.value !== 'Routine Name' && e.target.value !== ''){
-      this.setState({
-        finished: true
-      })
+    let finished;
+    //when the user clicks on Add Routine but doesn't add anything
+    if(this.state.exercises.length === 0){
+      finished = true;
     }
+    //when the user adds exercises and actually changes the name
+    else if(e.target.value !== 'Routine Name' && e.target.value !== ''){
+        finished = true;
+    }
+    //when the user adds exercises but name is still 'Routine Name'
     else if (e.target.value === 'Routine Name'){
-      this.setState({
-        finished: false
-      })
+      finished = false;
     }
+    this.setState({
+      finished
+    }, function(){console.log(this.state.finished)})
   }
 
   DeleteExercise = (name, type) => {
@@ -53,6 +59,9 @@ class RoutineView extends Component {
     this.setState({
       exercises
     }, function(){
+      if(this.state.exercises.length === 0){
+        this.setState({ finished : true })
+      }
       let requestObject = {
         "name" : this.props.routineName,
         "exercise": name,
@@ -66,16 +75,17 @@ class RoutineView extends Component {
         body: JSON.stringify(requestObject)
       })
     })
-
   }
 
   StoreRoutineName = () => {
     let name = document.getElementById('RoutineName').value;
 
+    //if user added exercises but no name, alert and disable redirect
     if (name === 'Routine Name' && this.state.exercises.length !== 0){
       alert("Please enter a name for your routine!")
     }
-    else {
+    // if user has entered exercises and name, store values and allow redirect
+    else if (this.state.exercises.length !== 0){
       let requestObject = {
         "oldName": this.props.routineName,
         "newName": name,
@@ -89,6 +99,14 @@ class RoutineView extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestObject)
+      })
+    }
+    // if user deleted all exercises and made no changes to name, delete previous made routine
+    // and allow redirect
+    else if (this.state.exercises.length === 0 && name === 'Routine Name'){
+      fetch(`/deleteRoutine/${name}`,{
+        method: 'DELETE',
+        mode: 'same-origin'
       })
     }
   }

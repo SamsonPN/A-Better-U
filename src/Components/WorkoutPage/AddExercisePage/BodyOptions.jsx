@@ -26,7 +26,7 @@ export default BodyOptions;
 class BodyOptionItem extends Component {
   render() {
     return (
-      <div className="AeOptionItem" id={this.props.name} onClick={this.props.ShowValue.bind(this, this.props.name)}>{this.props.name}</div>
+      <div className="AeOptionItem" id={this.props.name} onClick={() => this.props.ShowValue(this.props.name)}>{this.props.name}</div>
     );
   }
 }

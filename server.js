@@ -169,31 +169,15 @@ app.get('/getExerciseTypes', (req,res) => {
     .then(result => res.json(result))
 })
 
-app.get('/getExerciseByCategory/:muscle/:type', (req,res) => {
+app.get('/getExerciseByCategory', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('exerciseList');
 
-  if (req.params.muscle !== "Muscles" && req.params.type !== "Exercise Type"){
-  collection.find( { "muscle" : req.params.muscle, "type": req.params.type} )
+  collection.find( req.query )
     .sort( { "name": 1} )
     .toArray()
     .then(items => {res.json(items)})
     .catch( err => console.error(err))
-  }
-  else if (req. params.muscle === "Muscles") {
-    collection.find( { "type": req.params.type} )
-      .sort( { "name": 1} )
-      .toArray()
-      .then(items => {res.json(items)})
-      .catch( err => console.error(err))
-    }
-  else {
-    collection.find( { "muscle" : req.params.muscle} )
-      .sort( { "name": 1} )
-      .toArray()
-      .then(items => {res.json(items)})
-      .catch( err => console.error(err))
-    }
 })
 
 app.get('/getExerciseBySearch/:search', (req, res) => {
@@ -230,7 +214,7 @@ app.get('/getWorkouts', (req, res) => {
   let db = req.app.locals.db;
   let collection = db.collection('workouts');
 
-  collection.find()
+  collection.find(req.query)
     .sort( { "date" : 1 } )
     .toArray()
     .then(result => res.json(result))

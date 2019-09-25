@@ -24,12 +24,18 @@ class CurrentRoutineItems extends Component {
   }
 
   render() {
-    const AddSets = this.props.sets.map( (item,i) =>
-      <SetsReps key={item + i} index={i} sets={item} delete={this.props.DeleteSet} save={this.props.save} exercise={this.props.index}/>
-    )
-    const {name, type} = this.props;
+    const {AddSet, DeleteSet, index, name, save, sets, tab, type} = this.props;
     const {toggle} = this.state;
-
+    const AddSets = sets.map( (item,i) =>
+      <SetsReps
+        key={item + i}
+        index={i}
+        sets={item}
+        delete={DeleteSet}
+        save={save}
+        exercise={index}
+        tab={tab}/>
+    )
     return (
       <div className="CurrentRoutineItems">
         <div className="CurrentRoutineItemHeader">
@@ -39,9 +45,12 @@ class CurrentRoutineItems extends Component {
 
         <div className="CollapsibleCurrentRoutine">
           {AddSets}
-          <div className="CurrentRoutineAddSet">
-            <p onClick={this.props.AddSet.bind(this, this.props.index)}>Add Set</p>
-          </div>
+          {tab !== 'Date' ?
+            <div className="CurrentRoutineAddSet">
+              <p onClick={() => (tab !== 'Date' ? AddSet(index) : null)}>Add Set</p>
+            </div>
+            : null
+          }
         </div>
 
       </div>

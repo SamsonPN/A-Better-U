@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import WoWrapper from './WorkoutViewWrapper.jsx';
+import WoWrapper from './WorkoutDropdownWrapper.jsx';
 import CurrentRoutine from './CurrentRoutine.jsx';
 import AddRoutineBtn from '../../../assets/add-routine.svg';
 import SaveBtn from '../../../assets/save-button.svg';
@@ -10,36 +10,33 @@ import {Link} from 'react-router-dom';
 class Workout extends Component {
   state = {
     workouts: [],
+    saved: [],
     routines: [],
     currentRoutine: {},
-    tab: 'Routine'
+    tab: 'Routine',
+    date: new Date()
   }
 
   componentDidMount(){
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '/' + dd + '/' + yyyy;
-
     fetch('/getRoutines')
       .then(res => res.json())
       .then(data => {
         this.setState({
-          routines: data,
-          today: today
+          routines: data
        })
     })
 
-    this.GetWorkouts();
+    this.GetWorkouts("saved");
   }
 
-  GetWorkouts = () => {
-    fetch('/getWorkouts')
+  GetWorkouts = (stateItem, date) => {
+    let dateParam = date === undefined ? '' : `?date=${'0'+date.toLocaleDateString()}`;
+
+    fetch('/getWorkouts' + dateParam)
       .then(res => res.json())
       .then(data =>{
         this.setState({
-          workouts: data
+          [stateItem]: data
         })
       })
   }
@@ -68,42 +65,45 @@ class Workout extends Component {
     })
   }
 
-  SaveValue = (e, exercise, index) => {
+  SaveSetValues = (e, exercise, index) => {
     let currentRoutine = this.state.currentRoutine;
     let field = e.target.placeholder;
-    currentRoutine.exercises[exercise].sets[index][field] = e.target.value;
 
+    currentRoutine.exercises[exercise].sets[index][field] = e.target.value;
     this.setState({
       currentRoutine
     })
   }
 
   ShowRoutine = (name, exercises, date, tab) => {
-    let currentRoutine = {
-      "name": name,
-      "date" : date,
-      "exercises": exercises
+    if(tab === 'Views'){
+      this.setState({
+        tab,
+        viewOnly: true
+      })
     }
-
-    this.setState({
-      currentRoutine,
-      tab
-    })
+    else{
+      let currentRoutine = {
+        "name": name,
+        "date" : date,
+        "exercises": exercises
+      }
+      this.setState({
+        currentRoutine,
+        tab
+      })
+    }
   }
 
   SaveWorkout = () => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '/' + dd + '/' + yyyy;
+    let date = '0' + this.state.date.toLocaleDateString("en-US");
     let confirm = window.confirm('Save this workout?')
     let currentRoutine = this.state.currentRoutine;
 
     if(confirm){
       let requestObject = {
         "name": currentRoutine.name,
-        "date": today,
+        "date": date,
         "exercises": currentRoutine.exercises
       }
 
@@ -114,8 +114,8 @@ class Workout extends Component {
         },
         body: JSON.stringify(requestObject)
       })
-      alert(`Workout saved on ${today}`);
-      this.GetWorkouts();
+      alert(`Workout saved for ${date}`);
+      this.GetWorkouts("saved");
     }
   }
 
@@ -154,25 +154,57 @@ class Workout extends Component {
     }
   }
 
+  ChangeDate = (e) => {
+    let date = e;
+    this.setState({
+      date,
+      tab: 'Date'
+    }, function(){this.GetWorkouts('workouts', this.state.date)})
+  }
+
   render() {
-    const {currentRoutine, routines, tab, workouts} = this.state;
+    const {currentRoutine, routines, tab, workouts, saved} = this.state;
     const RoutineOption = this.props.routineOption;
+    const workoutViews = workouts.length !== 0 ? workouts.map( workout =>
+      <CurrentRoutine
+        key={workout.date+ workout.name}
+        routineName={workout.name}
+        routineDate={workout.date}
+        currentRoutine={workout.exercises || []}
+        AddSet={this.AddSet}
+        DeleteSet={this.DeleteSet}
+        save={this.SaveSetValues}
+        tab={tab}
+      />
+    )
+    : <p className="EmptyRoutineMsg">No workouts saved. Please choose or add a routine to get started!</p>
 
     return (
       <div id="WoContainer">
         <WoWrapper
           routines={routines}
           showRoutine={this.ShowRoutine}
-          workouts={workouts}
+          workouts={saved}
+          calendarDate={this.state.date}
+          changeDate={this.ChangeDate}
+          ToggleDatePicker={this.ToggleDatePicker}
+          showDate={this.state.showDatePicker}
           />
-        <CurrentRoutine
-          routineName={currentRoutine.name}
-          routineDate={currentRoutine.date || this.state.today}
-          currentRoutine={currentRoutine.exercises || []}
-          AddSet={this.AddSet}
-          DeleteSet={this.DeleteSet}
-          save={this.SaveValue}
+
+        {this.state.tab === 'Date' ?
+          workoutViews
+          :
+          <CurrentRoutine
+            key={currentRoutine.date + currentRoutine.name}
+            routineName={currentRoutine.name}
+            routineDate={currentRoutine.date}
+            currentRoutine={currentRoutine.exercises || []}
+            AddSet={this.AddSet}
+            DeleteSet={this.DeleteSet}
+            save={this.SaveSetValues}
+            tab={tab}
           />
+        }
 
         <div id="WoIconWrapper">
           <Link to="/workout/routineview"
@@ -180,38 +212,39 @@ class Workout extends Component {
             <img
               className="WoBtns"
               src={AddRoutineBtn}
-              alt="No button uploaded"
+              alt="Add Routine Button"
               title="Add a routine"
               />
           </Link>
 
-          {Object.keys(currentRoutine).length !== 0 ?
-          <React.Fragment>
-            <img
-              className="WoBtns"
-              src={SaveBtn}
-              alt="Save Button"
-              onClick={this.SaveWorkout}
-              title="Save this workout"
-            />
-            <Link to ="/workout/routineview"
-              onClick={() => RoutineOption(currentRoutine)}>
+          {Object.keys(currentRoutine).length !== 0 || workouts.length !== 0 ?
+            <React.Fragment>
               <img
                 className="WoBtns"
-                src={EditBtn}
-                alt="Edit Button"
-                title="Edit this routine"
+                src={SaveBtn}
+                alt="Save Button"
+                onClick={this.SaveWorkout}
+                title="Save this workout"
               />
-            </Link>
-            <img
-              className="WoBtns"
-              src={DeleteBtn}
-              alt="Delete Button"
-              onClick={tab === 'Routine' ? this.DeleteRoutine : this.DeleteWorkout}
-              title="Delete this routine"
-            />
-          </React.Fragment>
-          : null
+              <Link to ="/workout/routineview"
+                onClick={() => RoutineOption(currentRoutine.name)}>
+                <img
+                  className="WoBtns"
+                  src={EditBtn}
+                  alt="Edit Button"
+                  title="Edit this routine"
+                />
+              </Link>
+              <img
+                className="WoBtns"
+                src={DeleteBtn}
+                alt="Delete Button"
+                onClick={tab === 'Routine' ? this.DeleteRoutine : this.DeleteWorkout}
+                title="Delete this routine"
+              />
+            </React.Fragment>
+            :
+            null
           }
         </div>
       </div>

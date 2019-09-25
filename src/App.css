@@ -74,7 +74,7 @@ Workout Page
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 100vw;
+  width: 100vw;
   min-height: 85vh;
 }
 
@@ -91,7 +91,6 @@ Workout Page
   position: relative;
   display: inline-block;
   height: 100%;
-  cursor:pointer;
 }
 
 .WoDropdownDiv:hover .WoViews{
@@ -110,6 +109,7 @@ Workout Page
   font-weight: 600;
   text-align: center;
   color: black;
+  cursor: pointer;
 }
 
 .WoViews:hover{
@@ -122,10 +122,8 @@ Workout Page
   max-height: 25vh;
   overflow: auto;
   visibility: hidden;
-  text-decoration: none;
   display:flex;
   flex-direction: column;
-
   background-color: #1F0CAD;
 }
 
@@ -138,7 +136,6 @@ Workout Page
   font-size: 1.15em;
   font-weight: 200;
   color: white;
-
   border-top: 1px solid white;
   text-decoration: none;
   text-align: center;
@@ -149,7 +146,7 @@ Workout Page
 }
 
 #CurrentRoutine{
-  min-width: 96.8vw;
+  width: 96.8vw;
   min-height: 75vh;
 
   display: flex;
@@ -160,10 +157,15 @@ Workout Page
 }
 
 #CurrentRoutineTitle{
+  width: 90.1vw;
+  min-height: 10vh;
   display: flex;
-  flex-direction: column;
-  width: auto;
+  align-items: center;
   margin-bottom: 1vh;
+  border: 1px solid #1F0CAD;
+  padding: 1vh;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 #CurrentRoutineTitle > p{
@@ -172,6 +174,10 @@ Workout Page
   font-style: italic;
   font-size: 3em;
   color: #1F0CAD;
+}
+
+#CurrentRoutineTitle > p:first-of-type{
+  margin-right: 3vh;
 }
 
 .CurrentRoutineItems{
@@ -197,14 +203,18 @@ Workout Page
 .CurrentRoutineItemHeader{
   width: 98.5%;
   height: 9vh;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 
   font-size: 3em;
-  font-weight: 600;
+  font-weight: 200;
   color: #1F0CAD;
+
 }
 
 .CurrentRoutineItemHeader > img{
@@ -222,6 +232,10 @@ Workout Page
   align-items: center;
 }
 
+.CurrentRoutineSetsReps:last-of-type{
+  margin-bottom: 3vh;
+}
+
 .CurrentRoutineSetsReps > p{
   height: 10vh;
   line-height: 1.9;
@@ -234,7 +248,9 @@ Workout Page
   resize: none;
   border: none;
   outline: none;
-  overflow: hidden;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   width: 12vw;
   height: 10vh;
@@ -329,7 +345,9 @@ Routine View Page
   height: 70%;
   resize: none;
   border: none;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
  #RoutineName:focus, #RoutineName{
@@ -420,12 +438,13 @@ Routine View Page
 
 .EmptyRoutineMsg{
   position: absolute;
-  left: 20.75vw;
-  top: 47vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: pre;
+  font-family: 'Nunito',sans-serif;
   font-size: 2em;
-  z-index: -1;
 }
-
 
 /*
 
@@ -693,7 +712,9 @@ NUTRITION PAGE STUFF
 
   font-family: 'Nunito',sans-serif;
   font-size: 1em;
+  text-align: center;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .NVButtons:hover{
@@ -705,6 +726,7 @@ NUTRITION PAGE STUFF
   width: 85vw;
   border: 1px solid black;
   margin-bottom: 3vh;
+  box-shadow: 7px 7px 7px #707070;
 }
 
 .MealItemCollapsible{
@@ -1196,9 +1218,7 @@ Macro Calculator for Nutrition Page
 }
 
 #macroValueSpecifier,
-#macroCarbsWrapper,
-#macroFatWrapper,
-#macroProteinWrapper{
+.macroWrapper{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1218,9 +1238,7 @@ Macro Calculator for Nutrition Page
 }
 
 #macroValueSpecifier > p,
-#macroCarbsWrapper > p,
-#macroFatWrapper > p,
-#macroProteinWrapper > p{
+.macroWrapper > p{
   font-family: 'Nunito',sans-serif;
   font-size: 2em;
   font-weight: 200;

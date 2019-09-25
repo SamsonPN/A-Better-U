@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route  } from 'react-router-dom';
 // import { NutritionProvider } from './ReactContext';
 import './App.css';
+import Login from './Login.jsx';
 
 import Header from './Components/Header/Header.jsx';
 import Workout from './Components/WorkoutPage/MainPage/Workout.jsx';
@@ -23,17 +24,11 @@ NEXT GOAL ONCE DONE WITH MINOR IMPLEMENTATIONS:
 
 class App extends Component {
   state = {
-    today: "01%2F01%2F2019",
+    today: new Date(),
+    workoutDate: new Date(),
+    nutritionDate: new Date(),
     currentMeal: 'Breakfast',
     routineName: 'Routine Name'
-  }
-
-  componentDidMount(){
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '%2F' + (dd) + '%2F' + yyyy;
   }
 
   currentMeal = (currentMeal) => {
@@ -44,11 +39,19 @@ class App extends Component {
     this.setState( { routineName } );
   }
 
+  ChangeWorkoutDate = (workoutDate) => {
+    this.setState( {workoutDate} );
+  }
+
+  ChangeNutritionDate = (nutritionDate, FetchFood) => {
+    this.setState( {nutritionDate}, function(){FetchFood()} );
+  }
 
   render() {
     return (
       <Router>
           <div id="App">
+            <Route exact path="/login" component={Login}/>
             <Route exact path="/workout" render={props => (
               <React.Fragment>
                 <Header/>
@@ -74,7 +77,10 @@ class App extends Component {
              <Route exact path="/nutrition" render={props => (
                <React.Fragment>
                  <Header/>
-                 <Nutrition currentMeal={this.currentMeal}/>
+                 <Nutrition
+                   currentMeal={this.currentMeal}
+                   date={this.state.nutritionDate}
+                   changeNutritionDate={this.ChangeNutritionDate}/>
                </React.Fragment>
              )} />
 

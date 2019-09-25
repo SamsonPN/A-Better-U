@@ -132,7 +132,7 @@ class BMRCalculator extends Component {
             of calories that you expend while at rest.
             Using this rate, we will be able to estimate your calorie
             needs and adjust them according to your fitness goals.
-            Please press Calculate first to register your BMR to our servers.
+            <b>Please press Calculate first to register your BMR to our servers.</b>
           </p>
         </div>
         <hr/>

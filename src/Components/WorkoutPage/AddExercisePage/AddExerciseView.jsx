@@ -43,9 +43,11 @@ class AddExerciseView extends Component {
   }
 
   SearchByCategory = () => {
-    let muscle = document.getElementsByClassName('AeViews')[0].textContent;
-    let type = document.getElementsByClassName('AeViews')[1].textContent;
-    let uri = encodeURI(`/getExerciseByCategory/${muscle}/${type}`);
+    let bodyPart = document.getElementsByClassName('AeViews')[0].textContent;
+    let eType = document.getElementsByClassName('AeViews')[1].textContent;
+    let muscles = bodyPart === 'Muscles' ? '' : `muscle=${bodyPart}&`
+    let type = eType === 'Exercise Type' ? '' : `type=${eType}`
+    let uri = encodeURI('/getExerciseByCategory?' + muscles + type);
 
     fetch(uri)
       .then(res => res.json())
@@ -111,9 +113,8 @@ class AddExerciseView extends Component {
   }
 
   StoreExercises = () => {
-    let name = this.props.routineName;
     let requestObject = {
-      "name": name,
+      "name": this.props.routineName,
       "exercises": this.state.addItems
     }
 

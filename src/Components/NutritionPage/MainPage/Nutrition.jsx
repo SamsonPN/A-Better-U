@@ -50,17 +50,15 @@ class Nutrition extends Component {
   }
 
   FetchFood = () => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '%2F' + (dd) + '%2F' + yyyy;
+    let date = '0' + this.props.date.toLocaleDateString("en-US");
+    console.log(date)
+    let regex = /\//g
+    date = date.replace(regex, '%2F');
 
-    let uri = `/getFood/${today}`;
+    let uri = `/getFood/${date}`;
     fetch(uri)
     .then(response => response.json())
     .then(data => {
-
       this.FillFoodData(data);
       this.GetNDBNO(data);
 
@@ -296,13 +294,15 @@ class Nutrition extends Component {
   }
 
   render() {
+    const {changeNutritionDate, currentMeal, date} = this.props;
+    const {calories, deleteItems, protein, fat, carbs, reports} = this.state;
     const meals = ["Breakfast", "Lunch", "Dinner", "Snacks"].map(meal =>
       <Meals
        key={meal}
        meal={meal}
        FoodAdded={this.state[meal]}
-       currentMeal={this.props.currentMeal}
-       report={this.state.reports}
+       currentMeal={currentMeal}
+       report={reports}
        updateServings={this.UpdateServings}
        saveServing={this.SaveServing}
        showDelete={this.ShowDeleteBar}
@@ -310,8 +310,11 @@ class Nutrition extends Component {
     )
     return (
           <div id="NutritionContainer">
-            <NutritionView calories={this.state.calories} protein={this.state.protein} fat={this.state.fat} carbs={this.state.carbs}/>
-            <NVBtns/>
+            <NutritionView calories={calories} protein={protein} fat={fat} carbs={carbs}/>
+            <NVBtns
+              date={date}
+              changeNutritionDate={changeNutritionDate}
+              FetchFood={this.FetchFood}/>
 
             {meals}
 
@@ -321,7 +324,7 @@ class Nutrition extends Component {
 
             {this.state.delete ?
               <div id="DeleteBar" className="UpdateDeleteBars">
-                <p>Delete {this.state.deleteItems.length} item(s)?</p>
+                <p>Delete {deleteItems.length} item(s)?</p>
                 <p onClick={this.DeleteItems} className="BarOptns">Yes</p>
                 <p>/</p>
                 <p onClick={this.RemoveDeleteBar} className="BarOptns">No</p>

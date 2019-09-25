@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 class NutritionView extends Component {
   state = {
-    CalorieGoal: '####',
-    ProteinGoal: '###',
-    FatGoal: '###',
-    CarbsGoal: '###'
+    CalorieGoal: '0',
+    ProteinGoal: '0',
+    FatGoal: '0',
+    CarbsGoal: '0'
   }
 
   componentDidMount(){
@@ -14,11 +14,16 @@ class NutritionView extends Component {
       .then(data =>
         this.setState({
           CalorieGoal: data.CalorieGoal,
-          ProteinGoal: data.ProteinGoal,
-          FatGoal: data.FatGoal,
-          CarbsGoal: data.CarbsGoal
+          ProteinGoal: this.CalculateMacros('Protein',data.ProteinGoal, data.CalorieGoal),
+          FatGoal: this.CalculateMacros('Fat',data.FatGoal, data.CalorieGoal),
+          CarbsGoal: this.CalculateMacros('Carbs', data.CarbsGoal, data.CalorieGoal)
         })
       )
+  }
+
+  CalculateMacros = (macro, goal, calories) => {
+    let multiplier = macro === 'Fat' ? 9 : 4;
+    return Math.round( ( (goal / 100) * calories ) / multiplier );
   }
 
   render() {

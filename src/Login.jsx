@@ -8,7 +8,7 @@ class Login extends Component {
   render() {
     return (
       <div id="LoginPage">
-        <img src={LoginImg} alt="Login background"/>
+        <img id="LoginImg" src={LoginImg} alt="Login background"/>
 
         <div id="LoginInfo">
           <div id="SiteNameSlogan">

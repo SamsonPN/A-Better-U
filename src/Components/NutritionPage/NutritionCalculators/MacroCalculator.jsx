@@ -16,7 +16,7 @@ class MacroCalculator extends Component {
         this.setState({
           CalorieGoal: data.CalorieGoal
         })
-      })
+     })
   }
 
   PreventEnter = (e) => {
@@ -25,7 +25,7 @@ class MacroCalculator extends Component {
     }
   }
 
-  CalculateMacros = () => {
+  ShowMacros = () => {
     let textareas = document.getElementsByClassName('macroPercentBox');
     let ProteinGoal;
     let FatGoal;
@@ -33,10 +33,10 @@ class MacroCalculator extends Component {
 
     [...textareas].forEach( item => {
       let value = parseInt(item.value,10)
-      if(item.id === 'carbsPercent'){
+      if(item.id === 'CarbsPercent'){
         CarbsGoal = value;
       }
-      else if(item.id === 'fatPercent'){
+      else if(item.id === 'FatPercent'){
         FatGoal = value;
       }
       else {
@@ -52,11 +52,17 @@ class MacroCalculator extends Component {
     }
     else{
       this.setState({
-        ProteinGoal: Math.round( ( (ProteinGoal / 100) * this.state.CalorieGoal ) / 4 ),
-        FatGoal: Math.round( ( (FatGoal / 100) * this.state.CalorieGoal) / 9 ),
-        CarbsGoal: Math.round( ((CarbsGoal / 100) * this.state.CalorieGoal) / 4)
+        ProteinGoal,//: this.CalculateMacros(ProteinGoal, 4),
+        FatGoal, //this.CalculateMacros(FatGoal, 9),
+        CarbsGoal//: this.CalculateMacros(CarbsGoal, 4)
       })
     }
+  }
+
+  CalculateMacros = (macro) => {
+    let goal = this.state[macro + "Goal"]
+    let multiplier = macro === 'Fat' ? 9 : 4;
+    return Math.round( ( (goal / 100) * this.state.CalorieGoal ) / multiplier );
   }
 
   StoreMacros= () => {
@@ -80,7 +86,16 @@ class MacroCalculator extends Component {
   }
 
   render() {
-    const text = `Recommended percentage of total calories for each macronutrient:\n\nTotal Calories: ${this.state.CalorieGoal}\nCarbs: 45-65%\nFat: 20-35%\nProtein: 10-35%`
+    const text = `Recommended percentage of total calories for each macronutrient:
+    Total Calories: ${this.state.CalorieGoal}\nCarbs: 45-65%\nFat: 20-35%\nProtein: 10-35%\n`;
+
+    const macros = ["Carbs", "Fat", "Protein"].map( macro =>
+      <div className="macroWrapper">
+        <textarea className="macroPercentBox" id={macro + "Percent"} onKeyPress={this.PreventEnter} macro={macro}></textarea>
+        <p>{macro}</p>
+        <p>{this.CalculateMacros(macro)}g</p>
+      </div>
+    )
 
     return (
       <div id="MacroCalculator">
@@ -91,6 +106,7 @@ class MacroCalculator extends Component {
 
         <div id="macroInfoDiv">
           {text}
+          <p><b>Do remember to press Calculate before finishing to update your goals!</b></p>
         </div>
 
         <div id="macroBoxWrapper">
@@ -100,29 +116,11 @@ class MacroCalculator extends Component {
             <p>Grams</p>
           </div>
 
-          <div id="macroCarbsWrapper">
-            <textarea className="macroPercentBox" id="carbsPercent" onKeyPress={this.PreventEnter}></textarea>
-            <p>Carbs</p>
-            <p>{this.state.CarbsGoal}g</p>
-          </div>
-
-          <div id="macroFatWrapper">
-            <textarea className="macroPercentBox" id="fatPercent" onKeyPress={this.PreventEnter}></textarea>
-            <p>Fat</p>
-            <p>{this.state.FatGoal}g</p>
-          </div>
-
-          <div id="macroProteinWrapper">
-            <textarea className="macroPercentBox" id="proteinPercent" onKeyPress={this.PreventEnter}></textarea>
-            <p>Protein</p>
-            <p>{this.state.ProteinGoal}g</p>
-          </div>
-
-
+        {macros}
         </div>
 
         <div id="MacroButtonWrapper">
-          <button className="macroButton" onClick={this.CalculateMacros}>Calculate</button>
+          <button className="macroButton" onClick={this.ShowMacros}>Calculate</button>
           <Link to="/nutrition"><button className="macroButton" onClick={this.StoreMacros}>Finish</button></Link>
         </div>
 
