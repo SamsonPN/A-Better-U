@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Chart from './NutritionTotalsChart'
+import Key from '../../../API/API_Key'
 
 class NutritionTotalsPage extends Component {
   state = {
@@ -70,7 +71,7 @@ class NutritionTotalsPage extends Component {
   }
 
   FetchReports = () => {
-    let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${this.state.ndbno_list}&type=b&format=json&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`);
+    let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${this.state.ndbno_list}&type=b&format=json&api_key=${Key}`);
     fetch(uri,{
       mode: 'cors'
     })

@@ -4,6 +4,7 @@ import AddFoodItemList from './AddFoodItemList.jsx';
 import Heart from '../../../assets/heart.svg';
 import BlueHeart from '../../../assets/filled-in-heart.svg';
 import {Link} from 'react-router-dom';
+import Key from '../../../API/API_Key'
 
 class AddFoodView extends Component {
   state = {
@@ -11,11 +12,14 @@ class AddFoodView extends Component {
     FoodAdded: [],
     FavoriteFoods: []
   }
+  componentDidMount(){
+    console.log(Key)
+  }
   onEnter = (e) => {
     let search = document.getElementById('AddFoodSearch').value;
     if(e.key === 'Enter' && search !== ''){
       e.preventDefault();
-      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`)
+      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=${Key}`)
       fetch(uri)
         .then(response => response.json())
         .then(data => {

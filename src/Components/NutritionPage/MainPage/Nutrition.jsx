@@ -4,6 +4,7 @@ import NVBtns from './NutritionViewButtons.jsx';
 import Meals from './NutritionMealDividers.jsx';
 import BlackDeleteBtn from '../../../assets/delete-food-button.svg';
 import RedDeleteBtn from '../../../assets/red-delete-food-button.svg';
+import Key from '../../../API/API_Key'
 
 class Nutrition extends Component {
   state = {
@@ -79,7 +80,7 @@ class Nutrition extends Component {
   }
 
   FetchReports = () => {
-    let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${this.state.ndbno_list}&type=b&format=json&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`);
+    let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${this.state.ndbno_list}&type=b&format=json&api_key=${Key}`);
     fetch(uri,{
       mode: 'cors'
     })
