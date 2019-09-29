@@ -14,6 +14,16 @@ class RoutineView extends Component {
   }
 
   componentDidMount(){
+    let {date, routineName, tab} = this.props;
+    if(tab === 'Saved'){
+      this.GetWorkout(date, routineName)
+    }
+    else {
+      this.GetRoutine()
+    }
+  }
+
+  GetRoutine = () => {
     let name = this.props.routineName;
     fetch(`/getRoutineExercises/${name}`)
       .then(res => res.json())
@@ -29,6 +39,20 @@ class RoutineView extends Component {
           })
         }
      })
+  }
+
+  GetWorkout = (date, routineName) => {
+    let dateParam = `?date=${'0'+date.toLocaleDateString()}`;
+    let nameParam = `&name=${routineName}`;
+
+    fetch('/getWorkouts' + dateParam + nameParam)
+      .then(res => res.json())
+      .then(data =>{
+        console.log(data)
+        this.setState({
+          exercises: data[0].exercises
+        })
+      })
   }
 
   AllowRedirect = (e) => {
@@ -47,11 +71,13 @@ class RoutineView extends Component {
     }
     this.setState({
       finished
-    }, function(){console.log(this.state.finished)})
+    })
   }
 
   DeleteExercise = (name, type) => {
-    let exercises = this.state.exercises;
+    let {exercises} = this.state;
+    let {date, routineName, tab} = this.props;
+
     exercises = exercises.filter( item => {
       return item.name !== name || item.type !== type;
     })
@@ -59,25 +85,47 @@ class RoutineView extends Component {
     this.setState({
       exercises
     }, function(){
-      if(this.state.exercises.length === 0){
+      if(exercises.length === 0){
         this.setState({ finished : true })
       }
       let requestObject = {
-        "name" : this.props.routineName,
+        "name" : routineName,
         "exercise": name,
         "type" : type
       }
-      fetch('/removeRoutineExercise', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestObject)
-      })
+      if(tab === 'Saved'){
+        let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+        requestObject["date"] = date.toLocaleDateString('en-US', options);
+        this.RemoveWorkoutExercise(requestObject);
+      }
+      else {
+        this.RemoveRoutineExercise(requestObject);
+      }
+    })
+  }
+
+  RemoveRoutineExercise = (requestObject) => {
+    fetch('/removeRoutineExercise', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+  }
+
+  RemoveWorkoutExercise = (requestObject) => {
+    fetch('/removeWorkoutExercise', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
     })
   }
 
   StoreRoutineName = () => {
+    let {date, tab} = this.props;
     let name = document.getElementById('RoutineName').value;
 
     //if user added exercises but no name, alert and disable redirect
@@ -92,23 +140,46 @@ class RoutineView extends Component {
         "exercises": this.state.exercises
       }
 
-      fetch('/updateRoutine', {
-        method: 'PUT',
-        mode: 'same-origin',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestObject)
-      })
+      if(tab === 'Saved'){
+        let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+        requestObject["date"] = date.toLocaleDateString('en-US', options);
+        this.UpdateWorkout(requestObject);
+      }
+      else{
+        this.UpdateRoutine(requestObject);
+      }
+
     }
     // if user deleted all exercises and made no changes to name, delete previous made routine
     // and allow redirect
-    else if (this.state.exercises.length === 0 && name === 'Routine Name'){
+    else if (this.state.exercises.length === 0 && name === 'Routine Name' && tab !== 'Saved'){
       fetch(`/deleteRoutine/${name}`,{
         method: 'DELETE',
         mode: 'same-origin'
       })
     }
+  }
+
+  UpdateRoutine = (requestObject) => {
+    fetch('/updateRoutine', {
+      method: 'PUT',
+      mode: 'same-origin',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+  }
+
+  UpdateWorkout = (requestObject) => {
+    fetch('/updateWorkouts', {
+      method: 'PUT',
+      mode: 'same-origin',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
   }
 
   render() {

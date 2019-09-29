@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {default as Modal} from './NutritionItemModal.jsx';
+import Modal from './NutritionItemModal.jsx';
 import DeleteBtn from '../../../assets/delete-food-button.svg';
 
 class NutritionMealItems extends Component {
@@ -22,7 +22,8 @@ class NutritionMealItems extends Component {
   render() {
     const id = this.props.meal + this.props.name;
     const {name, meal, ndbno, report, servings} = this.props;
-    const calories =  ( (( (report || {})[ndbno] || {}).nutrients || [] )[0] || {}).value;
+    let report_index = ( (( (report || {})[ndbno] || {}).nutrients || [] )[0] || {}).name !== 'Water' ? 0 : 1;
+    const calories =  ( (( (report || {})[ndbno] || {}).nutrients || [] )[report_index] || {}).value;
 
     return (
       <React.Fragment>

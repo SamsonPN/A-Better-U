@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import {default as MealItems} from './NutritionMealItems.jsx';
+import MealItems from './NutritionMealItems.jsx';
 import AddFood from '../../../assets/add-food.svg';
 import UpArrow from '../../../assets/up-arrow.svg';
 import DownArrow from '../../../assets/down-arrow.svg';

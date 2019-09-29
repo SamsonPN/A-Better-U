@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import NutritionView from './NutritionView.jsx';
-import {default as NVBtns} from './NutritionViewButtons.jsx';
-import {default as Meals} from './NutritionMealDividers.jsx';
+import NVBtns from './NutritionViewButtons.jsx';
+import Meals from './NutritionMealDividers.jsx';
 import BlackDeleteBtn from '../../../assets/delete-food-button.svg';
 import RedDeleteBtn from '../../../assets/red-delete-food-button.svg';
 
@@ -50,9 +50,9 @@ class Nutrition extends Component {
   }
 
   FetchFood = () => {
-    let date = '0' + this.props.date.toLocaleDateString("en-US");
-    console.log(date)
-    let regex = /\//g
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+    let date = this.props.date.toLocaleDateString("en-US", options);
+    let regex = /\//g;
     date = date.replace(regex, '%2F');
 
     let uri = `/getFood/${date}`;
@@ -78,27 +78,6 @@ class Nutrition extends Component {
     })
   }
 
-  DetermineMeal = (servings, i) => {
-    let meal;
-    let BC = servings["Breakfast_Count"];
-    let DC = servings["Dinner_Count"] + BC;
-    let LC = servings["Lunch_Count"] + DC;
-
-    if( i < BC ){
-      meal = "Breakfast";
-    }
-    else if ( BC <= i && i < DC ) {
-        meal = "Dinner";
-      }
-    else if ( DC <= i  && i < LC ) {
-        meal="Lunch";
-      }
-    else {
-      meal="Snacks";
-    }
-    return meal
-  }
-
   FetchReports = () => {
     let uri = encodeURI(`https://api.nal.usda.gov/ndb/V2/reports?${this.state.ndbno_list}&type=b&format=json&api_key=oam5ywiHfTUD7jRzZoDtJj9Ei8bMu04nAx3D4mGT`);
     fetch(uri,{
@@ -116,8 +95,8 @@ class Nutrition extends Component {
         //calculate total calories/macronutrients
         this.setState({
           reports
-        },function(){this.CalculateNutritionInfo()})
-      })
+        },function(){ this.CalculateNutritionInfo();})
+     })
   }
 
   CalculateNutritionInfo = () => {
@@ -131,17 +110,17 @@ class Nutrition extends Component {
     meals.forEach(meal => {
       this.state[meal].forEach( item => {
         let nutrient_index = reports[item.ndbno].nutrients[0].nutrient_id === "208" ? 0 : 1;
-        calories += item.servings * reports[item.ndbno].nutrients[nutrient_index].value;
-        protein += item.servings * reports[item.ndbno].nutrients[nutrient_index + 1].value;
-        fat += item.servings * reports[item.ndbno].nutrients[nutrient_index + 2].value;
-        carbs += item.servings * reports[item.ndbno].nutrients[nutrient_index + 3].value;
+        calories += Math.round(item.servings * reports[item.ndbno].nutrients[nutrient_index].value);
+        protein += Math.round(item.servings * reports[item.ndbno].nutrients[nutrient_index + 1].value);
+        fat += Math.round(item.servings * reports[item.ndbno].nutrients[nutrient_index + 2].value);
+        carbs += Math.round(item.servings * reports[item.ndbno].nutrients[nutrient_index + 3].value);
       })
     })
     this.setState({
-      calories: Math.round(calories),
-      protein: Math.round(protein),
-      fat: Math.round(fat),
-      carbs: Math.round(carbs)
+      calories,
+      protein,
+      fat,
+      carbs
     })
   }
 
@@ -168,10 +147,13 @@ class Nutrition extends Component {
   }
 
   SaveServing = (meal, ndbno, id) => {
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+    let date = this.props.date.toLocaleDateString('en-US', options);
     let servings = document.getElementById('textarea' + id).value;
 
     if(servings !== ''){
       let requestObject = {
+        "date" : date,
         "meal": meal,
         "ndbno" : ndbno,
         "servings" : servings
@@ -189,14 +171,11 @@ class Nutrition extends Component {
   }
 
   ShowDeleteBar = (meal, ndbno, id) => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '/' + (dd) + '/' + yyyy;
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+    let date = this.props.date.toLocaleDateString("en-US", options);
 
     let item = [{
-      "date": today,
+      "date": date,
       "meal": meal,
       "ndbno": ndbno
     }]
@@ -269,30 +248,6 @@ class Nutrition extends Component {
    })
  }
 
-  StoreFoodEntry = () => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-    today = mm + '/' + (dd) + '/' + yyyy;
-
-    let requestObject = {
-      "date": today,
-      "calories": this.state.calories,
-      "protein": this.state.protein,
-      "fat": this.state.fat,
-      "carbs": this.state.carbs
-    }
-
-    fetch('/storeFoodEntry', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestObject)
-    })
-  }
-
   render() {
     const {changeNutritionDate, currentMeal, date} = this.props;
     const {calories, deleteItems, protein, fat, carbs, reports} = this.state;
@@ -314,13 +269,10 @@ class Nutrition extends Component {
             <NVBtns
               date={date}
               changeNutritionDate={changeNutritionDate}
-              FetchFood={this.FetchFood}/>
+              FetchFood={this.FetchFood}
+            />
 
             {meals}
-
-            <div id="CompleteFoodEntryBtn" onClick={this.StoreFoodEntry}>
-              <p>Complete Food Entry</p>
-            </div>
 
             {this.state.delete ?
               <div id="DeleteBar" className="UpdateDeleteBars">

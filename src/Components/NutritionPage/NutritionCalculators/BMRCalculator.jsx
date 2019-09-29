@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Dropdown, GoalDropdown} from './BMRDropdown.jsx';
-import {default as Modal} from './BMRModal.jsx';
+import Modal from './BMRModal.jsx';
 import {Link} from 'react-router-dom';
 
 class BMRCalculator extends Component {

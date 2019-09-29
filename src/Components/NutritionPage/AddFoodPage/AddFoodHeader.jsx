@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {default as SortBtns} from './AddFoodSortButtons.jsx'
+import SortBtns from './AddFoodSortButtons.jsx'
 
 //might remove this component and put it into AddFoodView
 

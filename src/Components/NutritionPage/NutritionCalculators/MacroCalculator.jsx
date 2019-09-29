@@ -52,9 +52,9 @@ class MacroCalculator extends Component {
     }
     else{
       this.setState({
-        ProteinGoal,//: this.CalculateMacros(ProteinGoal, 4),
-        FatGoal, //this.CalculateMacros(FatGoal, 9),
-        CarbsGoal//: this.CalculateMacros(CarbsGoal, 4)
+        ProteinGoal,
+        FatGoal,
+        CarbsGoal
       })
     }
   }
@@ -90,7 +90,7 @@ class MacroCalculator extends Component {
     Total Calories: ${this.state.CalorieGoal}\nCarbs: 45-65%\nFat: 20-35%\nProtein: 10-35%\n`;
 
     const macros = ["Carbs", "Fat", "Protein"].map( macro =>
-      <div className="macroWrapper">
+      <div className="macroWrapper" key={macro}>
         <textarea className="macroPercentBox" id={macro + "Percent"} onKeyPress={this.PreventEnter} macro={macro}></textarea>
         <p>{macro}</p>
         <p>{this.CalculateMacros(macro)}g</p>

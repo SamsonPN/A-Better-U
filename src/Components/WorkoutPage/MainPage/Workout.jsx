@@ -13,8 +13,7 @@ class Workout extends Component {
     saved: [],
     routines: [],
     currentRoutine: {},
-    tab: 'Routine',
-    date: new Date()
+    tab: 'Routine'
   }
 
   componentDidMount(){
@@ -76,13 +75,6 @@ class Workout extends Component {
   }
 
   ShowRoutine = (name, exercises, date, tab) => {
-    if(tab === 'Views'){
-      this.setState({
-        tab,
-        viewOnly: true
-      })
-    }
-    else{
       let currentRoutine = {
         "name": name,
         "date" : date,
@@ -91,12 +83,16 @@ class Workout extends Component {
       this.setState({
         currentRoutine,
         tab
-      })
-    }
-  }
+     })
+     if(tab !== 'Routine'){
+       this.props.ChangeWorkoutDate(new Date(date));
+     }
+   }
 
   SaveWorkout = () => {
-    let date = '0' + this.state.date.toLocaleDateString("en-US");
+    let {workoutDate} = this.props;
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+    let date = workoutDate.toLocaleDateString("en-US", options);
     let confirm = window.confirm('Save this workout?')
     let currentRoutine = this.state.currentRoutine;
 
@@ -146,8 +142,8 @@ class Workout extends Component {
         method: 'DELETE'
       })
       this.setState(prevState => ({
-        routines: prevState.routines.filter(item => {return item.name !== name}),
-        currentRoutine: {}
+        currentRoutine: {},
+        workouts: []
       }), function(){
         this.GetWorkouts();
       })
@@ -155,16 +151,17 @@ class Workout extends Component {
   }
 
   ChangeDate = (e) => {
+    let {ChangeWorkoutDate} = this.props;
     let date = e;
+    ChangeWorkoutDate(date, this.GetWorkouts)
     this.setState({
-      date,
       tab: 'Date'
-    }, function(){this.GetWorkouts('workouts', this.state.date)})
+    })
   }
 
   render() {
-    const {currentRoutine, routines, tab, workouts, saved} = this.state;
-    const RoutineOption = this.props.routineOption;
+    const {currentRoutine, routines, saved, tab, workouts} = this.state;
+    const {routineOption, workoutDate} = this.props;
     const workoutViews = workouts.length !== 0 ? workouts.map( workout =>
       <CurrentRoutine
         key={workout.date+ workout.name}
@@ -185,7 +182,7 @@ class Workout extends Component {
           routines={routines}
           showRoutine={this.ShowRoutine}
           workouts={saved}
-          calendarDate={this.state.date}
+          calendarDate={workoutDate}
           changeDate={this.ChangeDate}
           ToggleDatePicker={this.ToggleDatePicker}
           showDate={this.state.showDatePicker}
@@ -208,7 +205,7 @@ class Workout extends Component {
 
         <div id="WoIconWrapper">
           <Link to="/workout/routineview"
-            onClick={() => RoutineOption("Routine Name")}>
+            onClick={() => routineOption("Routine Name", tab)}>
             <img
               className="WoBtns"
               src={AddRoutineBtn}
@@ -217,7 +214,7 @@ class Workout extends Component {
               />
           </Link>
 
-          {Object.keys(currentRoutine).length !== 0 || workouts.length !== 0 ?
+          {Object.keys(currentRoutine).length !== 0 && tab !== 'Date' ?
             <React.Fragment>
               <img
                 className="WoBtns"
@@ -227,7 +224,7 @@ class Workout extends Component {
                 title="Save this workout"
               />
               <Link to ="/workout/routineview"
-                onClick={() => RoutineOption(currentRoutine.name)}>
+                onClick={() => routineOption(currentRoutine.name, tab)}>
                 <img
                   className="WoBtns"
                   src={EditBtn}

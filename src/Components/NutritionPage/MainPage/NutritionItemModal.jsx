@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import {default as ModalItems} from './NutritionModalItems.jsx';
 
 class NutritionItemModal extends Component {
-  PreventClick = (e) => {
-    e.stopPropagation()
-  }
-
   PreventInvalidInput = (e) => {
     if(e.key === 'Enter'){
       e.preventDefault()
@@ -17,9 +12,8 @@ class NutritionItemModal extends Component {
   }
 
   render() {
-
     const nutrition_info = this.props.report.nutrients.map(item =>
-      <ModalItems key={item.nutrient_id} name={item.name} value={Math.round(item.value * this.props.servings)} unit={item.unit}/>
+      <NutritionModalItems key={item.nutrient_id} name={item.name} value={Math.round(item.value * this.props.servings)} unit={item.unit}/>
     )
     const {meal, name, ndbno, report, servings} = this.props;
     const id = meal + name;
@@ -27,15 +21,18 @@ class NutritionItemModal extends Component {
 
     return (
       <div className="NutritionItemModal" id={id} onClick={() => this.props.showModal(this.props.saveServing(meal, ndbno, id))}>
-        <div className="NutritionModalContent" onClick={this.PreventClick}>
+        <div className="NutritionModalContent" onClick={(e) => e.stopPropagation()}>
 
           <div className="NutritionModalHeader">
             <div>
               <p>{name}</p>
+              {nutrients !== undefined ?
               <p>
                 Serving Size: {nutrients.qty + ' ' + nutrients.label + ' '}
                 ({nutrients.eqv + nutrients.eunit})
               </p>
+              : null
+              }
 
              <div className="ModalServingDiv">
                 <p>Servings: </p>
@@ -60,7 +57,18 @@ class NutritionItemModal extends Component {
       </div>
     );
   }
-
 }
 
 export default NutritionItemModal;
+
+
+class NutritionModalItems extends Component {
+  render() {
+    return (
+      <div className="NutritionModalItems">
+        <p>{this.props.name}</p>
+        <p>{this.props.value} {this.props.unit}</p>
+      </div>
+    );
+  }
+}

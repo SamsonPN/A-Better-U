@@ -17,11 +17,11 @@ class NutritionViewButtons extends Component {
             className="NVButtons"
             withPortal
             utcOffset/>
-          <button className="NVButtons">Total Nutrients</button>
+          <Link to="/nutrition/totals"><button className="NVButtons">Nutrient Totals</button></Link>
         </div>
         <div className="NVInnerWrapper">
           <Link to="/nutrition/bmrcalculator"><button className="NVButtons">Determine Calorie Goal</button></Link>
-          <Link to="/nutrition/macrocalculator"><button className="NVButtons">Dermine Macro Goal</button></Link>
+          <Link to="/nutrition/macrocalculator"><button className="NVButtons">Determine Macro Goal</button></Link>
         </div>
       </div>
     );

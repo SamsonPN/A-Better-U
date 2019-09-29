@@ -887,7 +887,7 @@ NUTRITION PAGE STUFF
   box-sizing: border-box;
   padding: 1vh;
   width: 100%;
-  height: 30%;
+  min-height: 20%;
   background-color: #1F0CAD;
   color: white;
   font-weight: 500;
@@ -895,7 +895,7 @@ NUTRITION PAGE STUFF
 
 .NutritionModalHeader > div{
   height: 100%;
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -904,9 +904,9 @@ NUTRITION PAGE STUFF
 .ModalServingDiv{
   display: flex;
   justify-content: flex-start;
-  width: 30%;
-  height: 30%;
-  line-height: 1.25;
+  width: 100%;
+  height: auto;
+  line-height: 1.5;
 }
 
 .NutritionModalTextArea{
@@ -915,13 +915,14 @@ NUTRITION PAGE STUFF
   outline: none;
 
   height: 70%;
-  width: 30%;
+  width: 10%;
   box-sizing: border-box;
   font-size: 1em;
   color: white;
   text-align: center;
   background-color: #1F0CAD;
   border-bottom: 1px solid white;
+  line-height: 0.75;
 }
 
 .NutritionModalBody{
@@ -943,28 +944,6 @@ NUTRITION PAGE STUFF
   margin-top: 0.5%;
   margin-bottom: 0.5%;
 }
-
-#CompleteFoodEntryBtn{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 7vh;
-  width: 85.1vw;
-
-  background-color: #1F0CAD;
-  color: white;
-  font-family: 'Nunito', sans-serif;
-  font-size: 2em;
-  font-weight: 200;
-  margin-bottom: 3vh;
-  cursor: pointer;
-}
-
-#CompleteFoodEntryBtn:hover{
-  opacity: 0.85;
-}
-
 
 
 /*
@@ -1266,6 +1245,64 @@ Macro Calculator for Nutrition Page
 .macroButton:hover{
   color: #ffffff;
   background-color: #1F0CAD;
+}
+
+/*
+
+TOTAL NUTRIENTS PAGE
+
+*/
+#NutritionTotals{
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Nunito',sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#NutritionTotals > h1{
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: #1F0CAD;
+  font-weight: 200;
+  font-size: 3em;
+}
+
+#NutritionTotalsContentWrapper{
+  height: 90%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+#NutritionTotalsList{
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.NutritionTotalRows{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.NutritionTotalRows:nth-child(odd){
+  background-color: #1F0CAD;
+  color: white;
+}
+
+.NutritionChart{
+  width: 70%;
 }
 
 /*

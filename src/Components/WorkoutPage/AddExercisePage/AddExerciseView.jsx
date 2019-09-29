@@ -2,9 +2,11 @@
 Component for Add Exercise page where users can search for and select exercises for their routine
 */
 import React, { Component } from 'react';
-import RoutineFooter from '../RoutinePage/RoutineFooter.jsx';
-import AddExerciseHeader from './AddExerciseHeader.jsx';
-import {default as EList} from './AddExerciseList.jsx';
+import RoutineFooter from '../RoutinePage/RoutineFooter';
+import AddExerciseHeader from './AddExerciseHeader';
+import {default as EList} from './AddExerciseList';
+import BlueHeart from '../../../assets/filled-in-heart.svg';
+import Heart from '../../../assets/heart.svg';
 
 class AddExerciseView extends Component {
   state = {
@@ -12,7 +14,10 @@ class AddExerciseView extends Component {
     muscles: [],
     types: [],
     add: false,
-    addItems: []
+    addItems: [],
+    favorite: false,
+    favItems: [],
+    showFavorite: false
   }
 
   componentDidMount(){
@@ -24,6 +29,48 @@ class AddExerciseView extends Component {
           types: data.EType
         })
       })
+  }
+
+  GetFavorites = () => {
+    let uri = '/getFavorites?favFoods=0';
+    fetch(uri)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          exercises: data.favExercises,
+          showFavorite: true
+        }, function(){
+          let AddExerciseFavorite = document.getElementsByClassName('AddExerciseFavorite');
+          [...AddExerciseFavorite].forEach( item => {
+            item.src = BlueHeart;
+          })
+        })
+      })
+      .catch(err => console.error(err))
+  }
+
+  DeleteFromFavorite = (name, type, muscle) => {
+    let newState = this.state.exercises.filter( item => {
+      return item.name !== name || item.muscle !== muscle || item.type !== type
+    })
+    let requestObject = {
+      "user": "1",
+      "name" : name,
+      "type" : type
+    }
+
+    this.setState({
+      exercises: newState
+    })
+
+    fetch('/deleteFavoriteExercises', {
+      method: 'PUT',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+      .catch(err => console.error(err))
   }
 
   SearchExercise = (e) => {
@@ -58,16 +105,24 @@ class AddExerciseView extends Component {
       })
   }
 
-  RemoveBar = () => {
+  RemoveBar = (option, optionItems) => {
     this.setState( {
-      add: false,
-      addItems: []
+      [option]: false,
+      [optionItems]: [],
     })
 
-    let AddExerciseCheckBox = document.getElementsByClassName('AddExerciseCheckBox');
-    [...AddExerciseCheckBox].forEach( item => {
-      item.style.backgroundColor = 'white';
-    })
+    if(option === 'add'){
+      let AddExerciseCheckBox = document.getElementsByClassName('AddExerciseCheckBox');
+      [...AddExerciseCheckBox].forEach( item => {
+        item.style.backgroundColor = 'white';
+      })
+    }
+    else{
+      let AddExerciseFavorite = document.getElementsByClassName('AddExerciseFavorite');
+      [...AddExerciseFavorite].forEach( item => {
+        item.src = Heart;
+      })
+    }
   }
 
   AddExercise = (name, type, muscle) => {
@@ -112,12 +167,67 @@ class AddExerciseView extends Component {
     }
   }
 
-  StoreExercises = () => {
-    let requestObject = {
-      "name": this.props.routineName,
-      "exercises": this.state.addItems
+  FavoriteExercise = (name, type, muscle, e) => {
+    let newState;
+    let img = e.target;
+
+    if(this.state.showFavorite){
+      this.DeleteFromFavorite(name, type, muscle)
+    }
+    else if(img.src.indexOf('filled-in-heart') === -1){
+      img.src = BlueHeart;
+      newState = [{
+        "name": name,
+        "muscle": muscle,
+        "type": type,
+        "sets": [{
+          'Type': '',
+          'Weight': '',
+          'Reps': ''
+        }]
+      }];
+      this.setState(prevState => ({
+        favItems: prevState.favItems.concat(newState),
+        favorite: true
+      }), function(){console.log(this.state.favItems)})
+    }
+    else{
+      img.src = Heart;
+      newState = this.state.favItems.filter( item => {
+        return item.name !== name || item.muscle !== muscle || item.type !== type
+      })
+      this.setState({
+        favItems: newState
+      }, function(){
+        console.log(this.state.favItems)
+        if(this.state.favItems.length === 0){
+          this.setState({
+            favorite: false
+          })
+        }
+      })
     }
 
+  }
+
+  StoreExercises = () => {
+    let {date, routineName, tab} = this.props;
+    let requestObject = {
+      "name": routineName,
+      "exercises": this.state.addItems
+    }
+    if(tab === 'Saved'){
+      let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+      requestObject["date"] = date.toLocaleDateString("en-US", options);
+      this.InsertWorkoutExercises(requestObject)
+    }
+    else{
+      this.InsertRoutineExercises(requestObject)
+    }
+    this.RemoveBar('add', 'addItems');
+  }
+
+  InsertRoutineExercises = (requestObject) => {
     fetch('/insertRoutineExercises', {
       method: 'POST',
       mode: 'same-origin',
@@ -127,33 +237,74 @@ class AddExerciseView extends Component {
       body: JSON.stringify(requestObject)
     })
       .catch(err => console.log(err))
-    this.RemoveBar();
+  }
+
+  InsertWorkoutExercises = (requestObject) => {
+    fetch('/insertWorkoutExercises', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+    .catch(err => console.log(err))
+  }
+
+  StoreFavorites = () => {
+    let requestObject = {
+      "user" : "1",
+      "favExercises" : this.state.favItems
+    }
+
+    fetch('/insertFavoriteExercises', {
+      method: 'POST',
+      headers:{
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+    this.RemoveBar('favorite', 'favItems')
   }
 
   render() {
+    const {add, addItems, exercises, favorite, favItems, muscles, types} = this.state;
     return (
       <div id="AddExerciseView">
         <AddExerciseHeader
           search={this.SearchExercise}
-          muscles={this.state.muscles}
-          types={this.state.types}
+          muscles={muscles}
+          types={types}
           searchCategory={this.SearchByCategory}
+          getFavorites={this.GetFavorites}
           />
 
         <EList
-          exercises={this.state.exercises}
+          exercises={exercises}
           AddExercise={this.AddExercise}
+          FavoriteExercise={this.FavoriteExercise}
           />
 
-          {this.state.add ?
+          {add ?
             <div id="AddExerciseConfirmation" className="UpdateDeleteBars">
-              <p>Add {this.state.addItems.length} exercise(s)?</p>
+              <p>Add {addItems.length} exercise(s)?</p>
               <p onClick={this.StoreExercises}className="BarOptns">Yes</p>
               <p>/</p>
-              <p onClick={this.RemoveBar} className="BarOptns">No</p>
+              <p onClick={() => this.RemoveBar('add', addItems)} className="BarOptns">No</p>
             </div>
             : null
           }
+
+          {favorite ?
+            <div id="AddExerciseConfirmation" className="UpdateDeleteBars">
+              <p>Favorite {favItems.length} exercise(s)?</p>
+              <p onClick={this.StoreFavorites}className="BarOptns">Yes</p>
+              <p>/</p>
+              <p onClick={() => this.RemoveBar('favorite', favItems)} className="BarOptns">No</p>
+            </div>
+            : null
+          }
+
+
         <RoutineFooter/>
       </div>
     );

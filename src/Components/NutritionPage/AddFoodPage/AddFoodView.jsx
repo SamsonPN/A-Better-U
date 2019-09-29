@@ -65,16 +65,14 @@ class AddFoodView extends Component {
     }
 
     StoreData = () => {
-      let FoodAdded = this.state.FoodAdded;
-      let today = new Date();
-      let dd = String(today.getDate()).padStart(2, '0');
-      let mm = String(today.getMonth() + 1).padStart(2, '0');
-      let yyyy = today.getFullYear();
-      today = mm + '/' + dd + '/' + yyyy;
+      let {FoodAdded} = this.state;
+      let {currentMeal} = this.props;
+      let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+      let date = this.props.date.toLocaleDateString("en-US", options);
 
       let requestObject = {
-        "date": today,
-        "meal": this.props.currentMeal,
+        "date": date,
+        "meal": currentMeal,
         "FoodAdded": FoodAdded
       }
 

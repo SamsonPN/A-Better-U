@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {default as FoodItem} from './AddFoodItem.jsx';
+import FoodItem from './AddFoodItem.jsx';
 
 class AddFoodItemList extends Component {
   render() {

@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route  } from 'react-router-dom';
 // import { NutritionProvider } from './ReactContext';
 import './App.css';
-import Login from './Login.jsx';
+import Login from './Login';
 
 import Header from './Components/Header/Header.jsx';
-import Workout from './Components/WorkoutPage/MainPage/Workout.jsx';
-import RoutineView from './Components/WorkoutPage/RoutinePage/RoutineView.jsx';
-import AddExerciseView from './Components/WorkoutPage/AddExercisePage/AddExerciseView.jsx';
-import Nutrition from './Components/NutritionPage/MainPage/Nutrition.jsx';
-import AddFoodView from './Components/NutritionPage/AddFoodPage/AddFoodView.jsx';
-import BMRCalculator from './Components/NutritionPage/NutritionCalculators/BMRCalculator.jsx';
-import MacroCalculator from './Components/NutritionPage/NutritionCalculators/MacroCalculator.jsx';
-import Story from './Components/StoryPage/StoryPage.jsx';
+import Workout from './Components/WorkoutPage/MainPage/Workout';
+import RoutineView from './Components/WorkoutPage/RoutinePage/RoutineView';
+import AddExerciseView from './Components/WorkoutPage/AddExercisePage/AddExerciseView';
+import Nutrition from './Components/NutritionPage/MainPage/Nutrition';
+import Totals from './Components/NutritionPage/MainPage/NutritionTotalsPage';
+import AddFoodView from './Components/NutritionPage/AddFoodPage/AddFoodView';
+import BMRCalculator from './Components/NutritionPage/NutritionCalculators/BMRCalculator';
+import MacroCalculator from './Components/NutritionPage/NutritionCalculators/MacroCalculator';
+import Story from './Components/StoryPage/StoryPage';
 
 /*
 NEXT GOAL ONCE DONE WITH MINOR IMPLEMENTATIONS:
@@ -28,26 +29,32 @@ class App extends Component {
     workoutDate: new Date(),
     nutritionDate: new Date(),
     currentMeal: 'Breakfast',
-    routineName: 'Routine Name'
+    routineName: 'Routine Name',
+    tab: 'Routine'
   }
-
   currentMeal = (currentMeal) => {
     this.setState( { currentMeal } );
   }
 
-  RoutineOption = (routineName) => {
-    this.setState( { routineName } );
+  RoutineOption = (routineName, tab) => {
+    this.setState( { routineName, tab } );
   }
 
-  ChangeWorkoutDate = (workoutDate) => {
-    this.setState( {workoutDate} );
+  ChangeWorkoutDate = (workoutDate, GetWorkouts) => {
+    this.setState( {workoutDate}, function(){
+      if(GetWorkouts){
+      GetWorkouts('workouts', this.state.workoutDate)
+    }
+    });
   }
 
   ChangeNutritionDate = (nutritionDate, FetchFood) => {
     this.setState( {nutritionDate}, function(){FetchFood()} );
   }
 
+
   render() {
+    const {nutritionDate, routineName, tab, workoutDate} = this.state;
     return (
       <Router>
           <div id="App">
@@ -55,15 +62,24 @@ class App extends Component {
             <Route exact path="/workout" render={props => (
               <React.Fragment>
                 <Header/>
-                <Workout routineOption={this.RoutineOption}/>
+                <Workout
+                  ChangeWorkoutDate={this.ChangeWorkoutDate}
+                  routineOption={this.RoutineOption}
+                  workoutDate={workoutDate}/>
               </React.Fragment>
              )} />
 
            <Route exact path="/workout/routineview" render={props => (
-               <RoutineView routineName={this.state.routineName}/>
+               <RoutineView
+                 date={workoutDate}
+                 routineName={routineName}
+                 tab={tab}/>
              )}/>
            <Route exact path="/workout/addroutine" render={props => (
-               <AddExerciseView routineName={this.state.routineName}/>
+               <AddExerciseView
+                 date={workoutDate}
+                 routineName={routineName}
+                 tab={tab}/>
              )}/>
 
            {/*<NutritionProvider value={{
@@ -79,17 +95,22 @@ class App extends Component {
                  <Header/>
                  <Nutrition
                    currentMeal={this.currentMeal}
-                   date={this.state.nutritionDate}
-                   changeNutritionDate={this.ChangeNutritionDate}/>
+                   date={nutritionDate}
+                   changeNutritionDate={this.ChangeNutritionDate}
+                   transferNutritionInfo={this.TransferNutritionInfo}/>
                </React.Fragment>
              )} />
 
            <Route exact path={"/nutrition/addfood"} render={props =>(
-                 <AddFoodView currentMeal={this.state.currentMeal} />
+                 <AddFoodView currentMeal={this.state.currentMeal} date={nutritionDate}/>
                )}/>
 
            <Route exact path="/nutrition/bmrcalculator" component={BMRCalculator}/>
            <Route exact path="/nutrition/macrocalculator" component={MacroCalculator}/>
+           <Route exact path="/nutrition/totals" render={props => (
+               <Totals date={this.state.nutritionDate} />
+             )}/>
+
            {/*</NutritionProvider>*/}
 
           <Route exact path="/" render={props => (

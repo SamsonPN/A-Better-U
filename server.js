@@ -27,8 +27,7 @@ client.connect((err)=> {
   {"date": today, "type" : "foods", "meal": "Breakfast", "FoodAdded":[] },
   {"date": today, "type" : "foods", "meal": "Lunch", "FoodAdded":[] },
   {"date": today, "type" : "foods", "meal": "Dinner", "FoodAdded":[] },
-  {"date": today, "type" : "foods", "meal": "Snacks", "FoodAdded":[] },
-  {"date": today, "type" : "totals", "calories": 0, "protein": 0, "fat": 0, "carbs": 0}
+  {"date": today, "type" : "foods", "meal": "Snacks", "FoodAdded":[] }
   ])
     .catch(err => console.log(err))
 
@@ -89,7 +88,7 @@ app.put('/updateServings', (req, res) => {
   let collection = db.collection('nutrition');
 
   collection.updateOne(
-    {"date" : app.locals.date, "meal": req.body.meal, "FoodAdded.ndbno" : req.body.ndbno},
+    {"date" : req.body.date, "meal": req.body.meal, "FoodAdded.ndbno" : req.body.ndbno},
     {$set: {"FoodAdded.$.servings" : req.body.servings}}
   )
    .catch(err => console.error(err))
@@ -121,22 +120,6 @@ app.put('/updateGoals', (req,res) => {
       "CarbsGoal": req.body.CarbsGoal
     }})
   }
-  res.end()
-})
-
-// stores the user's food entry values today like amount of calories, protein, fat, carbs, consumed
-app.put('/storeFoodEntry', (req, res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('nutrition');
-
-  collection.updateOne( { "date": req.body.date, "type": "totals"}, { $set: {
-      "calories": req.body.calories,
-      "protein": req.body.protein,
-      "fat": req.body.fat,
-      "carbs": req.body.carbs
-    }
-  })
-    .catch(err => console.error(err))
   res.end()
 })
 
@@ -221,7 +204,7 @@ app.get('/getWorkouts', (req, res) => {
     .catch(err => console.error(err))
 })
 
-//inserts exercises into the routine collection
+//inserts exercises into the routine collection (doesn't need a date)
 app.post('/insertRoutineExercises', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('routines');
@@ -232,6 +215,41 @@ app.post('/insertRoutineExercises', (req,res) => {
    {upsert: true}
    )
     .catch(err => console.error(`Failed to insert item: ${err}`))
+  res.end();
+})
+
+//updates the routine in the routineView page
+app.put('/updateRoutine', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+
+  collection.updateOne(
+    { "name": req.body.oldName },
+    {$set: { "name" : req.body.newName, "exercises": req.body.exercises } }
+  )
+    .catch(err => console.error(err))
+  res.end();
+})
+
+//removes the exercises in the RoutineView page
+app.put('/removeRoutineExercise', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+
+  collection.updateOne(
+    { "name" : req.body.name},
+    {$pull: {"exercises" : {"name" : req.body.exercise, "type" : req.body.type}}}
+  )
+    .catch(err => console.error(err))
+  res.end();
+})
+
+//deletes the entire routine from routine tab
+app.delete('/deleteRoutine/:name', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('routines');
+  collection.deleteOne( { "name": req.params.name } )
+    .catch(err => console.error(err))
   res.end();
 })
 
@@ -247,34 +265,38 @@ app.post('/saveWorkout', (req, res) => {
   res.end();
 })
 
-app.put('/updateRoutine', (req,res) => {
+app.post('/insertWorkoutExercises', (req,res) => {
   let db = req.app.locals.db;
-  let collection = db.collection('routines');
+  let collection = db.collection('workouts');
 
   collection.updateOne(
-    { "name": req.body.oldName },
+   { "name" : req.body.name, "date": req.body.date } ,
+   { $addToSet: {"exercises": { $each: req.body.exercises } } }
+   )
+    .catch(err => console.error(`Failed to insert item: ${err}`))
+  res.end();
+})
+
+app.put('/updateWorkouts', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('workouts');
+
+  collection.updateOne(
+    { "name": req.body.oldName, "date" : req.body.date },
     {$set: { "name" : req.body.newName, "exercises": req.body.exercises } }
   )
     .catch(err => console.error(err))
   res.end();
 })
 
-app.put('/removeRoutineExercise', (req,res) => {
+app.put('/removeWorkoutExercise', (req,res) => {
   let db = req.app.locals.db;
-  let collection = db.collection('routines');
+  let collection = db.collection('workouts');
 
   collection.updateOne(
-    { "name" : req.body.name},
+    { "name" : req.body.name, "date" : req.body.date},
     {$pull: {"exercises" : {"name" : req.body.exercise, "type" : req.body.type}}}
   )
-    .catch(err => console.error(err))
-  res.end();
-})
-
-app.delete('/deleteRoutine/:name', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
-  collection.deleteOne( { "name": req.params.name } )
     .catch(err => console.error(err))
   res.end();
 })
@@ -284,6 +306,65 @@ app.delete('/deleteWorkout/:name/:date', (req,res) => {
   let collection = db.collection('workouts');
 
   collection.deleteOne( { "name": req.params.name, "date" : req.params.date } )
+    .catch(err => console.error(err))
+  res.end();
+})
+
+/*
+
+DEALING WITH FAVORITING STUFF!!!
+
+*/
+
+//get favorites!
+app.get('/getFavorites', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('users');
+
+  collection.findOne(
+    { "user" : "1"},
+    req.query
+  )
+    .then(result => res.json(result))
+    .catch(err => console.error(err))
+})
+
+// insert Favorites
+app.post('/insertFavoriteExercises', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('users');
+
+  collection.updateOne(
+    { "user" : req.body.user },
+    { $addToSet: {"favExercises" : { $each: req.body.favExercises } } },
+    { upsert: true }
+  )
+    .catch(err => console.error(err))
+  res.end();
+})
+
+app.post('/insertFavoriteFoods', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('users');
+
+  collection.updateOne(
+    { "user" : req.body.user },
+    { $set: {"favFoods" : { $each: req.body.favFoods } } },
+    { upsert: true }
+  )
+    .catch(err => console.error(err))
+  res.end();
+})
+
+app.put('/deleteFavoriteExercises', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('users');
+  console.log(req.body)
+
+  collection.updateOne(
+    { "user" : req.body.user },
+    { $pull: { "favExercises" : { "name" : req.body.name, "type" : req.body.type } } }
+  )
     .catch(err => console.error(err))
   res.end();
 })
