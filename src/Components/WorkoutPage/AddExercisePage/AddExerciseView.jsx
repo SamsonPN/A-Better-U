@@ -82,8 +82,14 @@ class AddExerciseView extends Component {
       fetch(uri)
         .then(res => res.json())
         .then(data => {
+          let showFavorite;
+          if(this.state.showFavorite){
+            showFavorite = false;
+            this.ClearSelections()
+          }
           this.setState({
-            exercises: data
+            exercises: data,
+            showFavorite
           })
         })
     }
@@ -99,8 +105,14 @@ class AddExerciseView extends Component {
     fetch(uri)
       .then(res => res.json())
       .then(data => {
+        let showFavorite;
+        if(this.state.showFavorite){
+          showFavorite = false;
+          this.ClearSelections()
+        }
         this.setState( {
-          exercises: data
+          exercises: data,
+          showFavorite
         })
       })
   }
@@ -110,7 +122,10 @@ class AddExerciseView extends Component {
       [option]: false,
       [optionItems]: [],
     })
+    this.ClearSelections(option)
+  }
 
+  ClearSelections = (option) => {
     if(option === 'add'){
       let AddExerciseCheckBox = document.getElementsByClassName('AddExerciseCheckBox');
       [...AddExerciseCheckBox].forEach( item => {
