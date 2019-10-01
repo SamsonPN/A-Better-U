@@ -18,7 +18,7 @@ class AddFoodHeader extends Component {
           placeholder="Search for a food item">
         </textarea>
 
-        <SortBtns/>
+        <SortBtns GetFavorites={this.props.GetFavorites}/>
       </div>
     );
   }

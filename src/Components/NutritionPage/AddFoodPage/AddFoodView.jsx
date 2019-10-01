@@ -10,11 +10,11 @@ class AddFoodView extends Component {
   state = {
     FoodSearch: [],
     FoodAdded: [],
-    FavoriteFoods: []
+    favorite: false,
+    favItems: [],
+    showFavorite: false
   }
-  componentDidMount(){
-    console.log(Key)
-  }
+
   onEnter = (e) => {
     let search = document.getElementById('AddFoodSearch').value;
     if(e.key === 'Enter' && search !== ''){
@@ -27,19 +27,39 @@ class AddFoodView extends Component {
             alert("We are unable to find the food you were searching for. Please enter another item!")
           }
           else{
-            this.setState({ FoodSearch: data.list.item })
+            this.setState({
+              FoodSearch: data.list.item
+            }, function(){
+              this.HeartColor(false)
+            })
           }
         })
       }
     }
 
-    AddFood = (name, offset,ndbno) => {
-      let checkbox = document.getElementsByClassName('AddFoodCheckBox')[offset];
+    GetFavorites = () => {
+      let uri = '/getFavorites?favExercises=0';
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          this.setState({
+            FoodSearch: data.favFoods,
+            showFavorite: true
+          },function(){
+            this.HeartColor(true)
+          })
+        })
+        .catch(err => console.error(err))
+    }
+
+    AddFood = (name, ndbno, e) => {
+      let checkbox = document.getElementById(name+ndbno);
+      let newState;
 
       if (checkbox.style.backgroundColor === "" || checkbox.style.backgroundColor === "white"){
         checkbox.style.backgroundColor = '#1F0CAD';
+        newState = [{"name": name, "ndbno": ndbno, "servings" : 1}];
 
-        let newState = [{"name": name, "ndbno": ndbno, "servings" : 1}];
         this.setState(previousState => ( {
           FoodAdded: previousState.FoodAdded.concat(newState)
         } ))
@@ -47,7 +67,7 @@ class AddFoodView extends Component {
 
       else {
         checkbox.style.backgroundColor = "white";
-        let newState = this.state.FoodAdded.filter((item) => {
+        newState = this.state.FoodAdded.filter((item) => {
           return item.name !== name
         })
 
@@ -58,17 +78,89 @@ class AddFoodView extends Component {
       }
     }
 
-    FavoriteFood = (name, offset, ndbno) => {
-      let favoriteBox = document.getElementsByClassName('AddFoodFavorite')[offset];
-      if(favoriteBox.src === `http://localhost:3000${Heart}`){
-        favoriteBox.src = BlueHeart;
+    FavoriteFood = (name, ndbno, e) => {
+      let img = e.target;
+      let newState;
+      if(this.state.showFavorite){
+        this.DeleteFromFavorite(name, ndbno)
+      }
+      else if(img.src.indexOf('filled-in-heart') === -1){
+        img.src = BlueHeart;
+        newState = {
+          "name" : name,
+          "ndbno" : ndbno
+        }
+        this.setState(prevState => ({
+          favItems: prevState.favItems.concat(newState),
+          favorite: true
+        }))
       }
       else{
-        favoriteBox.src = Heart;
+        img.src = Heart;
+        newState = this.state.favItems.filter( item => {
+          return item.name !== name || item.ndbno !== ndbno
+        })
+        this.setState({
+          favItems: newState
+        }, function(){
+          if(this.state.favItems.length === 0){
+            this.setState({
+              favorite: false
+            })
+          }
+        })
       }
     }
 
-    StoreData = () => {
+    StoreFavorites = () => {
+      let {favItems} = this.state;
+      alert(`${favItems.length} favorited!`);
+
+      let requestObject = {
+        "user" : "1",
+        "favFoods" : favItems
+      }
+
+      fetch('/insertFavoriteFoods', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+      })
+
+      this.setState({
+        favorite: false,
+        favItems: []
+      })
+      this.HeartColor(false)
+    }
+
+    DeleteFromFavorite = (name, ndbno) => {
+      let newState = this.state.FoodSearch.filter( item => {
+        return item.name !== name || item.ndbno !== ndbno
+      })
+      let requestObject = {
+        "user": "1",
+        "name" : name,
+        "ndbno" : ndbno
+      }
+
+      this.setState({
+        FoodSearch: newState
+      })
+
+      fetch('/deleteFavoriteFoods', {
+        method: 'PUT',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+      })
+        .catch(err => console.error(err))
+    }
+
+    StoreFood = () => {
       let {FoodAdded} = this.state;
       let {currentMeal} = this.props;
       let options = {month: "2-digit", day: "2-digit", year: "numeric"}
@@ -93,20 +185,36 @@ class AddFoodView extends Component {
       }
     }
 
+    HeartColor = (fill) => {
+      let AddFoodFavorite = document.getElementsByClassName('AddFoodFavorite');
+      [...AddFoodFavorite].forEach( item => {
+        item.src = fill === true ? BlueHeart : Heart;
+      })
+    }
+
   render() {
+    const {currentMeal} = this.props;
+    const {favItems, favorite, FoodAdded, FoodSearch} = this.state;
     return (
       <div id="AddFoodView">
-        <AddFoodHeader onEnter={this.onEnter} currentMeal={this.props.currentMeal}/>
+        <AddFoodHeader
+          onEnter={this.onEnter}
+          currentMeal={currentMeal}
+          GetFavorites={this.GetFavorites}/>
 
-        <AddFoodItemList search={this.state.FoodSearch}
+        <AddFoodItemList search={FoodSearch}
           AddFood={this.AddFood}
           FavoriteFood={this.FavoriteFood}/>
 
-        <Link to="/nutrition">
-          <div id="AddFoodCounter" onClick={this.StoreData}>
-            <p onClick={this.props.update} >Add {this.state.FoodAdded.length} items</p>
-          </div>
-        </Link>
+
+        <div id="AddFoodCounter">
+        {favorite ?
+          <p id="FavoriteFoodMsg" onClick={this.StoreFavorites}>Favorite {favItems.length} items</p>
+        :
+        <Link to="/nutrition" onClick={this.StoreFood}>
+          <p>Add {FoodAdded.length} items</p>
+        </Link>}
+        </div>
       </div>
     );
   }

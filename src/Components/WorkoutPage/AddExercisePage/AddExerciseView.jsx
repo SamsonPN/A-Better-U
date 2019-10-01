@@ -204,7 +204,7 @@ class AddExerciseView extends Component {
       this.setState(prevState => ({
         favItems: prevState.favItems.concat(newState),
         favorite: true
-      }), function(){console.log(this.state.favItems)})
+      }))
     }
     else{
       img.src = Heart;
@@ -214,7 +214,6 @@ class AddExerciseView extends Component {
       this.setState({
         favItems: newState
       }, function(){
-        console.log(this.state.favItems)
         if(this.state.favItems.length === 0){
           this.setState({
             favorite: false

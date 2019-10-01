@@ -346,10 +346,11 @@ app.post('/insertFavoriteExercises', (req,res) => {
 app.post('/insertFavoriteFoods', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('users');
+  console.log(req.body)
 
   collection.updateOne(
     { "user" : req.body.user },
-    { $set: {"favFoods" : { $each: req.body.favFoods } } },
+    { $addToSet: {"favFoods" : { $each: req.body.favFoods } } },
     { upsert: true }
   )
     .catch(err => console.error(err))
@@ -359,11 +360,22 @@ app.post('/insertFavoriteFoods', (req,res) => {
 app.put('/deleteFavoriteExercises', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('users');
-  console.log(req.body)
 
   collection.updateOne(
     { "user" : req.body.user },
     { $pull: { "favExercises" : { "name" : req.body.name, "type" : req.body.type } } }
+  )
+    .catch(err => console.error(err))
+  res.end();
+})
+
+app.put('/deleteFavoriteFoods', (req,res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('users');
+
+  collection.updateOne(
+    { "user" : req.body.user },
+    { $pull: { "favFoods" : { "name" : req.body.name, "ndbno" : req.body.ndbno } } }
   )
     .catch(err => console.error(err))
   res.end();

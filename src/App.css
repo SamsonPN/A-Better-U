@@ -1382,6 +1382,11 @@ Add Food Page
   font-size: 2em;
 }
 
+#FavoriteFoodMsg{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 #AddFoodItemList{
   height: 68vh;
   width: 100vw;

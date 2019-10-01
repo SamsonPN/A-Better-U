@@ -7,7 +7,7 @@ class AddFoodSortButtons extends Component {
       <div id="AddFoodButtonWrapper">
         <button className="SortBtns">Recent</button>
         <button className="SortBtns">Recipes</button>
-        <button className="SortBtns">Favorites</button>
+        <button className="SortBtns" onClick={this.props.GetFavorites}>Favorites</button>
       </div>
     );
   }
