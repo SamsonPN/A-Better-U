@@ -1,11 +1,18 @@
 const express = require('express');
 const app = express();
 const port = 9000;
+const path = require('path');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const GridFs = require('gridfs-stream');
 
-const MongoClient = require('mongodb').MongoClient;
+const Mongo = require('mongodb');
+const MongoClient = Mongo.MongoClient;
 const url = 'mongodb://localhost:27017';
 const dbName = 'a-better-u'; //name of the database to be used
-const client = new MongoClient(url, { useNewUrlParser: true })
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
+let gfs;
 
 client.connect((err)=> {
   console.log('Successfully connected to the server')
@@ -21,6 +28,8 @@ client.connect((err)=> {
   today = mm + '/' + dd + '/' + yyyy;
   app.locals.date = today;
 
+  gfs = GridFs(db, Mongo);
+  gfs.collection('storyMedia');
 
   //initiates collection with documents for each meal for each day
   collection.insertMany( [
@@ -380,3 +389,137 @@ app.put('/deleteFavoriteFoods', (req,res) => {
     .catch(err => console.error(err))
   res.end();
 })
+
+/*
+
+Story Media Uploads
+
+*/
+const storage = new GridFsStorage({
+  url: url + dbName,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'storyMedia' //should match the collection name that you gave it!!!
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+
+const upload = multer({ storage });
+
+// @route GET /
+// @desc: Loads form
+app.get('/', (req, res) => {
+  gfs.files.find().toArray((err, files) => {
+    // Check if files
+    if(!files || files.length === 0){
+      //if there are no files
+      res.render('index', {files: false});
+    }
+    else {
+      files.map(file => {
+        if(file.contentType === 'image/jpeg' || file.contentType === 'image/svg+xml' || file.contentType === 'video/quicktime'){
+          file.isImage = true;
+        }
+        else {
+          file.isImage = false;
+        }
+      });
+      res.render('index', {files: files});
+    }
+  });
+});
+
+// @route GET /files
+// @desc Display all files in JSON
+// gonna use GridFsStream for this
+// returns an array of files
+app.get('/files', (req, res) => {
+  gfs.files.find().toArray((err, files) => {
+    // Check if files
+    if(!files || files.length === 0){
+      return res.status(404).json({
+        err: 'No files exist'
+      });
+    }
+
+    // Files exist
+    return res.json(files);
+  });
+});
+
+// @route POST /upload
+// @desc Uploads file to DB
+app.post('/upload', upload.single('file'), (req, res) => {
+  //res.json({file: req.file});
+  res.redirect('/'); //just redirects us back
+});
+
+// @route GET /files/:filename
+// @desc Display single file object
+// gonna use GridFsStream for this
+// returns an array of files
+app.get('/files/:filename', (req, res) => {
+  //gets filename from the url
+  gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+    if(!file || file.length === 0){
+      return res.status(404).json({
+        err: 'No file exists'
+      });
+    }
+
+    //File exists
+    return res.json(file);
+  });
+});
+
+//need to use readStream to show the files
+//@route GET /image/:filename
+// @desc Display image
+app.get('/image/:filename', (req, res) => {
+  //gets filename from the url
+  gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+    if(!file || file.length === 0){
+      return res.status(404).json({
+        err: 'No file exists'
+      });
+    }
+  // check if image
+  if(file.contentType === 'image/jpeg' || file.contentType === 'image/svg+xml' || file.contentType === 'video/quicktime') {
+    // Read output to browser
+    const readstream = gfs.createReadStream(file.filename);
+    readstream.pipe(res);
+  }
+  else {
+    res.status(404).json({
+      err: 'Not an image'
+    })
+  }
+
+  });
+});
+
+//@route DELETE /files/:id
+// @desc Delete file
+app.delete('/files/:id', (req,res) => {
+  //root refers to the collections
+  // SHOULD ALSO MATCH THE COLLECTION NAME!!!!
+  gfs.remove({_id: req.params.id, root: 'storyMedia'}, (err, gridStore) => {
+    if(err){
+      return res.status(404).json({
+        err: err
+      });
+    }
+
+    res.redirect('/')
+  })
+});

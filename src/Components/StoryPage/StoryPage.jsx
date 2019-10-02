@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-import StorySubmission from './StorySubmission.jsx';
-import UserStories from './UserStories.jsx';
-// import UserContext from '../../UserContext.js'
+import SubmissionForm from './StorySubmissionForm';
+import StoriesList from './StoriesList';
 
 class Story extends Component {
-  // static contextType = UserContext;
-
-  componentDidMount(){
-    // const user = this.context.user;
-    // console.log(user);
-  }
-
   render() {
     return (
       <div id="Story">
-        <StorySubmission/>
-        <UserStories/>
+        <SubmissionForm/>
+        <StoriesList/>
       </div>
     );
   }

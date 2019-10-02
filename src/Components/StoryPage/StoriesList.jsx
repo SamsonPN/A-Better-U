@@ -5,7 +5,7 @@ class UserStories extends Component {
 
   render() {
     return (
-      <div id="UserStories">
+      <div id="StoriesList">
         <Stories/>
         <Stories/>
         <Stories/>

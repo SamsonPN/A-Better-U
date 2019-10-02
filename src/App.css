@@ -1468,17 +1468,17 @@ STORY PAGE STUFF
   align-items: center;
 }
 
-#StorySubmitMediaWrapper{
+/* #StorySubmitMediaWrapper{
   width: 21vw;
   height: 7vh;
 
   display: flex;
   justify-content: space-between;
-}
+} */
 
 .StorySubmitMediaBtns{
   height: 7vh;
-  width: 10vw;
+  width: 20vw;
   border: 1px solid #1F0CAD;
   font-size: 0.85em;
 }
@@ -1502,7 +1502,7 @@ STORY PAGE STUFF
   cursor: pointer;
 }
 
-#UserStories{
+#StoriesList{
   min-width: 100vw;
   min-height: 60vw;
 
