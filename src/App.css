@@ -1489,6 +1489,38 @@ STORY PAGE STUFF
   cursor: pointer;
 }
 
+.inputFile{
+  height: 0.1px;
+  width: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+#StoryMediaLabel{
+  font-family: 'Nunito',sans-serif;
+  height: 7vh;
+  width: auto;
+  padding: 2px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  cursor: pointer;
+}
+
+#StoryMediaLabel:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+#StoryMediaLabel:active{
+  color: red;
+}
+
+
 #StorySubmitBtn{
   height: 7vh;
   width: 8vw;

@@ -9,9 +9,10 @@ const GridFs = require('gridfs-stream');
 
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://localhost:27017/';
 const dbName = 'a-better-u'; //name of the database to be used
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const ObjectID = Mongo.ObjectID;
 let gfs;
 
 client.connect((err)=> {
@@ -462,7 +463,10 @@ app.get('/files', (req, res) => {
 app.post('/upload', upload.single('file'), (req, res) => {
   //res.json({file: req.file});
   res.redirect('/'); //just redirects us back
+  console.log(req.file)
 });
+//5d9583e1eb90fe107c9517b5
+//5d9583e1eb90fe107c9517b5
 
 // @route GET /files/:filename
 // @desc Display single file object
@@ -470,7 +474,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
 // returns an array of files
 app.get('/files/:filename', (req, res) => {
   //gets filename from the url
-  gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+  //gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+  gfs.files.findOne({_id: ObjectID(req.params.filename)}, (err, file) => {
     if(!file || file.length === 0){
       return res.status(404).json({
         err: 'No file exists'
@@ -487,7 +492,7 @@ app.get('/files/:filename', (req, res) => {
 // @desc Display image
 app.get('/image/:filename', (req, res) => {
   //gets filename from the url
-  gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+  gfs.files.findOne({_id: ObjectID(req.params.filename)}, (err, file) => {
     if(!file || file.length === 0){
       return res.status(404).json({
         err: 'No file exists'
