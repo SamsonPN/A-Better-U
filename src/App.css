@@ -1468,27 +1468,6 @@ STORY PAGE STUFF
   align-items: center;
 }
 
-/* #StorySubmitMediaWrapper{
-  width: 21vw;
-  height: 7vh;
-
-  display: flex;
-  justify-content: space-between;
-} */
-
-.StorySubmitMediaBtns{
-  height: 7vh;
-  width: 20vw;
-  border: 1px solid #1F0CAD;
-  font-size: 0.85em;
-}
-
-.StorySubmitMediaBtns:hover{
-  background-color: #1F0CAD;
-  color: white;
-  cursor: pointer;
-}
-
 .inputFile{
   height: 0.1px;
   width: 0.1px;
@@ -1499,15 +1478,17 @@ STORY PAGE STUFF
 }
 
 #StoryMediaLabel{
-  font-family: 'Nunito',sans-serif;
   height: 7vh;
-  width: auto;
-  padding: 2px;
-  box-sizing: border-box;
+  width: 20vw;
+  white-space: nowrap;
+  overflow: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid #1F0CAD;
+  padding: 2px;
+  box-sizing: border-box;
+  font-family: 'Nunito',sans-serif;
   cursor: pointer;
 }
 
@@ -1519,7 +1500,6 @@ STORY PAGE STUFF
 #StoryMediaLabel:active{
   color: red;
 }
-
 
 #StorySubmitBtn{
   height: 7vh;
@@ -1545,7 +1525,7 @@ STORY PAGE STUFF
 
 #Stories{
   width: 84.8vw;
-  min-height: 30vw;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1557,7 +1537,7 @@ STORY PAGE STUFF
 
 .StoriesDateDiv{
   width: 100%;
-  height: 5vh;
+  height: 5%;
 
   display: flex;
   align-items: center;
@@ -1571,17 +1551,20 @@ STORY PAGE STUFF
 .StoriesTextDiv{
   margin: 2vh;
   width: 98%;
-  height: 15vh;
+  min-height: 5vh;
   overflow: auto;
+  font-size: 1.25em;
 }
 
 .StoriesMediaDiv{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 75%;
+  max-height: 80%;
+  margin-bottom: 1%;
 }
 
 .StoriesMediaDiv > img{
-  max-width: 100%;
+  max-width: 75%;
 }

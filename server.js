@@ -391,11 +391,25 @@ app.put('/deleteFavoriteFoods', (req,res) => {
   res.end();
 })
 
+
 /*
 
 Story Media Uploads
 
 */
+app.get('/getStories', (req,res) => {
+  let db = app.locals.db;
+  let collection = db.collection('stories');
+
+  collection.find()
+    .sort( { "date": -1, "_id" : -1} )
+    .toArray()
+    .then(items => { res.json(items) } )
+    .catch( err => console.error(err))
+})
+
+
+
 const storage = new GridFsStorage({
   url: url + dbName,
   file: (req, file) => {
@@ -460,22 +474,45 @@ app.get('/files', (req, res) => {
 
 // @route POST /upload
 // @desc Uploads file to DB
-app.post('/upload', upload.single('file'), (req, res) => {
-  //res.json({file: req.file});
-  res.redirect('/'); //just redirects us back
-  console.log(req.file)
-});
-//5d9583e1eb90fe107c9517b5
-//5d9583e1eb90fe107c9517b5
+app.post('/uploadStories', upload.single('file'), (req, res) => {
+  let db = app.locals.db;
+  let collection = db.collection('stories');
+  let text = req.query.text || "";
+  let today = app.locals.date;
 
+  collection.insertOne({
+    "user" : "1",
+    "text" : text,
+    "file_id" : req.file.file_id,
+    "file_type" : req.file.contentType,
+    "date" : today
+  })
+    .catch(err => console.error(err))
+  res.end()
+});
+
+app.post('/uploadText', (req, res) => {
+  let db = app.locals.db;
+  let collection = db.collection('stories');
+  let today = app.locals.date;
+
+  collection.insertOne({
+    "user" : "1", "text" : req.body.text, "file_id" : false, "file_type" : false, "date" : today
+  })
+    .catch(err => console.error(err))
+  res.end()
+})
+
+
+//MIGHT NOT NEED THIS!!!
 // @route GET /files/:filename
 // @desc Display single file object
 // gonna use GridFsStream for this
 // returns an array of files
-app.get('/files/:filename', (req, res) => {
+app.get('/files/:id', (req, res) => {
   //gets filename from the url
   //gfs.files.findOne({filename: req.params.filename}, (err, file) => {
-  gfs.files.findOne({_id: ObjectID(req.params.filename)}, (err, file) => {
+  gfs.files.findOne({_id: ObjectID(req.params.id)}, (err, file) => {
     if(!file || file.length === 0){
       return res.status(404).json({
         err: 'No file exists'
@@ -490,26 +527,16 @@ app.get('/files/:filename', (req, res) => {
 //need to use readStream to show the files
 //@route GET /image/:filename
 // @desc Display image
-app.get('/image/:filename', (req, res) => {
+app.get('/image/:id', (req, res) => {
   //gets filename from the url
-  gfs.files.findOne({_id: ObjectID(req.params.filename)}, (err, file) => {
+  gfs.files.findOne({_id: ObjectID(req.params.id)}, (err, file) => {
     if(!file || file.length === 0){
       return res.status(404).json({
         err: 'No file exists'
       });
     }
-  // check if image
-  if(file.contentType === 'image/jpeg' || file.contentType === 'image/svg+xml' || file.contentType === 'video/quicktime') {
-    // Read output to browser
     const readstream = gfs.createReadStream(file.filename);
     readstream.pipe(res);
-  }
-  else {
-    res.status(404).json({
-      err: 'Not an image'
-    })
-  }
-
   });
 });
 

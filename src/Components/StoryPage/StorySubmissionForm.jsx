@@ -7,7 +7,7 @@ class StorySubmission extends Component {
     return (
       <div id="StorySubmission">
         <textarea id="StorySubmitText" placeholder="Your Story starts today"></textarea>
-        <StorySubmissionButtons/>
+        <StorySubmissionButtons submit={this.props.submit}/>
       </div>
     );
   }
