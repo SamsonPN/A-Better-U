@@ -483,7 +483,7 @@ app.post('/uploadStories', upload.single('file'), (req, res) => {
   collection.insertOne({
     "user" : "1",
     "text" : text,
-    "file_id" : req.file.file_id,
+    "file_id" : req.file.id,
     "file_type" : req.file.contentType,
     "date" : today
   })
@@ -527,7 +527,7 @@ app.get('/files/:id', (req, res) => {
 //need to use readStream to show the files
 //@route GET /image/:filename
 // @desc Display image
-app.get('/image/:id', (req, res) => {
+app.get('/media/:id', (req, res) => {
   //gets filename from the url
   gfs.files.findOne({_id: ObjectID(req.params.id)}, (err, file) => {
     if(!file || file.length === 0){
@@ -551,7 +551,24 @@ app.delete('/files/:id', (req,res) => {
         err: err
       });
     }
-
-    res.redirect('/')
   })
 });
+
+app.delete('/deleteStory', (req, res) => {
+  let db = app.locals.db;
+  let collection = db.collection('stories');
+
+  collection.deleteOne( { "_id" : ObjectID(req.query.story_id) } )
+    .catch(err => console.error(err))
+
+  if(req.query.file_id){
+    gfs.remove({_id: ObjectID(req.query.file_id), root: 'storyMedia'}, (err, gridStore) => {
+      if(err){
+        return res.status(404).json({
+          err: err
+        });
+      }
+    })
+  }
+  res.end()
+})

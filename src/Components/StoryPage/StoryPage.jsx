@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import SubmissionForm from './StorySubmissionForm';
 import StoriesList from './StoriesList';
+import StoryModal from './StoryModal';
 
 class Story extends Component {
   state = {
-    stories: []
+    stories: [],
+    toggleModal: false
   }
   componentDidMount(){
     this.GetStories()
@@ -14,7 +16,6 @@ class Story extends Component {
     fetch('/getStories')
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         this.setState({
           stories: data
         })
@@ -59,6 +60,35 @@ class Story extends Component {
     }
   }
 
+  DeleteStory = (story_id, file_id) => {
+    let confirm = window.confirm('Do you want to delete this story?');
+
+    if(confirm){
+      let storyParam = `?story_id=${story_id}`;
+      let fileParam = file_id ? `&file_id=${file_id}` : "";
+      let uri = '/deleteStory' + storyParam + fileParam;
+
+      fetch(uri, {
+        method: "DELETE",
+        headers: {
+          'Content-Type' : 'application/json'
+        }
+      })
+      .then(res => {
+        this.GetStories()
+      })
+    }
+  }
+
+  ToggleModal = () => {
+    this.setState(prevState => ({
+      toggleModal: !prevState.toggleModal
+    }), function(){
+      let modalToggle = this.state.toggleModal;
+      document.body.style.overflow = modalToggle ? 'hidden' : 'auto';
+    })
+  }
+
   ClearSubmissionForm = () => {
     document.getElementById('file').value = [];
     document.getElementById('StoryMediaLabel').textContent = "Photo / Video";
@@ -66,10 +96,15 @@ class Story extends Component {
   }
 
   render() {
+    const {showStoryModal, stories} = this.state;
     return (
       <div id="Story">
         <SubmissionForm submit={this.SubmitStory}/>
-        <StoriesList stories={this.state.stories}/>
+        <StoriesList stories={stories} deleteStory={this.DeleteStory} toggleModal={this.ToggleModal}/>
+        {showStoryModal ?
+          <StoryModal edit={this.EditStory}/>
+          : null
+        }
       </div>
     );
   }

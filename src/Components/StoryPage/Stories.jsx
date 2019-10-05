@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
 class Stories extends Component {
-
   render() {
-    const {date, file, text} = this.props;
-    const image = `image/${file}`;
+    const {date, deleteStory, edit, id, story, text, type} = this.props;
+    const media = `media/${id}`;
+    const tag = (type || "").includes("image") ? <img src={media} alt="None shown"/> : <video width="500px" controls src={media}></video>;
+
     return (
       <React.Fragment>
-        <div id="Stories">
+        <div className="Stories">
           <div className="StoriesDateDiv">
             <p>{date}</p>
           </div>
@@ -19,16 +20,16 @@ class Stories extends Component {
             : null
           }
 
-          {file ?
+          {id ?
             <div className="StoriesMediaDiv">
-              <img src={image} alt="Media here"/>
+              {tag}
             </div>
             : null
           }
         </div>
-        <div>
-          <button>Edit</button>
-          <button>Delete</button>
+        <div className="StoriesButtonWrapper">
+          <button onClick={() => edit()}>Edit</button>
+          <button onClick={() => deleteStory(story, id)}>Delete</button>
         </div>
       </React.Fragment>
     );

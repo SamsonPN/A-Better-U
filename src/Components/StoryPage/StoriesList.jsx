@@ -7,8 +7,12 @@ class UserStories extends Component {
       <Stories
         key={story._id}
         date={story.date}
-        file={story.file_id}
+        deleteStory={this.props.deleteStory}
+        id={story.file_id}
         text={story.text}
+        story={story._id}
+        toggleModal={this.props.toggleModal}
+        type={story.file_type}
         user={story.user}
         />
     )

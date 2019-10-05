@@ -1435,26 +1435,26 @@ STORY PAGE STUFF
 */
 
 #Story{
-  min-width: 100vw;
-  min-height: 85vh;
+  width: 100vw;
+  height: auto;
 }
 
 #StorySubmission{
-  min-width: 100vw;
+  width: 100vw;
   height: 40vh;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 #StorySubmitText, #StorySubmitText:focus{
   resize: none;
   border: 1px solid #1F0CAD;
   height: 25vh;
-  width: 84.8vw;
-
+  width: 85vw;
+  box-sizing: border-box;
   font-family: 'Nunito',sans-serif;
   font-size: 2em;
   font-weight: 200;
@@ -1515,23 +1515,24 @@ STORY PAGE STUFF
 }
 
 #StoriesList{
-  min-width: 100vw;
-  min-height: 60vw;
-
+  width: 100%;
+  /* height: 60%; */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#Stories{
-  width: 84.8vw;
-  min-height: 10vh;
+.Stories{
+  width: 85%;
+  box-sizing: border-box;
+  /* height: 10%; */
+  flex: 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
 
   border: 1px solid #1F0CAD;
-  margin-bottom: 3vh;
   font-family: 'Nunito',sans-serif;
 }
 
@@ -1560,11 +1561,56 @@ STORY PAGE STUFF
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 75%;
+  width: 100%;
   max-height: 80%;
   margin-bottom: 1%;
 }
 
 .StoriesMediaDiv > img{
-  max-width: 75%;
+  max-width: 100%;
+}
+
+.StoriesButtonWrapper{
+  width: 85%;
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+}
+
+.StoriesButtonWrapper > button{
+  width: 15vw;
+  height: 5vh;
+  background-color: white;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.StoriesButtonWrapper > button:first-child{
+  margin-right: 2vw;
+}
+
+.StoriesButtonWrapper > button:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+#StoryModal{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+}
+
+#StoryModalContent{
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: blue;
 }
