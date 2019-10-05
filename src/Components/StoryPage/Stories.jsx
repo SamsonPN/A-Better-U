@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Stories extends Component {
   render() {
-    const {date, deleteStory, edit, id, story, text, type} = this.props;
+    const {date, deleteStory, toggleModal, id, story, text, type} = this.props;
     const media = `media/${id}`;
     const tag = (type || "").includes("image") ? <img src={media} alt="None shown"/> : <video width="500px" controls src={media}></video>;
 
@@ -28,7 +28,7 @@ class Stories extends Component {
           }
         </div>
         <div className="StoriesButtonWrapper">
-          <button onClick={() => edit()}>Edit</button>
+          <button onClick={() => toggleModal(story, id, text)}>Edit</button>
           <button onClick={() => deleteStory(story, id)}>Delete</button>
         </div>
       </React.Fragment>

@@ -474,10 +474,10 @@ app.get('/files', (req, res) => {
 
 // @route POST /upload
 // @desc Uploads file to DB
-app.post('/uploadStories', upload.single('file'), (req, res) => {
+app.post('/uploadStoriesWithFile', upload.single('file'), (req, res) => {
   let db = app.locals.db;
   let collection = db.collection('stories');
-  let text = req.query.text || "";
+  let text = req.body.text || "";
   let today = app.locals.date;
 
   collection.insertOne({
@@ -491,7 +491,7 @@ app.post('/uploadStories', upload.single('file'), (req, res) => {
   res.end()
 });
 
-app.post('/uploadText', (req, res) => {
+app.post('/uploadStoriesWithoutFile', (req, res) => {
   let db = app.locals.db;
   let collection = db.collection('stories');
   let today = app.locals.date;
@@ -503,6 +503,37 @@ app.post('/uploadText', (req, res) => {
   res.end()
 })
 
+app.put('/editStoriesWithFile', upload.single('file'), (req, res) => {
+  let db = app.locals.db;
+  let collection = db.collection('stories');
+
+  collection.updateOne(
+    { "_id" : ObjectID(req.body._id) },
+    {$set: {"text" : req.body.text, "file_id" : ObjectID(req.file.id), "file_type" : req.file.contentType} }
+  )
+    .catch(err => console.error(err))
+
+  gfs.remove({_id: req.body.oldFile, root: 'storyMedia'}, (err, gridStore) => {
+    if(err){
+      return res.status(404).json({
+        err: err
+      });
+    }
+  })
+  res.end()
+});
+
+app.put('/editStoriesWithoutFile', (req, res) => {
+  let db = app.locals.db;
+  let collection = db.collection('stories');
+
+  collection.updateOne(
+    {"_id" : ObjectID(req.body._id)},
+    {$set: {"text" : req.body.text}}
+  )
+    .catch(err => console.error(err))
+  res.end()
+})
 
 //MIGHT NOT NEED THIS!!!
 // @route GET /files/:filename

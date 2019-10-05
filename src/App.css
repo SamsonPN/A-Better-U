@@ -1477,7 +1477,7 @@ STORY PAGE STUFF
   z-index: -1;
 }
 
-#StoryMediaLabel{
+.inputLabel{
   height: 7vh;
   width: 20vw;
   white-space: nowrap;
@@ -1492,12 +1492,12 @@ STORY PAGE STUFF
   cursor: pointer;
 }
 
-#StoryMediaLabel:hover{
+.inputLabel:hover{
   background-color: #1F0CAD;
   color: white;
 }
 
-#StoryMediaLabel:active{
+.inputLabel:active{
   color: red;
 }
 
@@ -1606,11 +1606,70 @@ STORY PAGE STUFF
 }
 
 #StoryModalContent{
+  font-family: 'Nunito', sans-serif;
   width: 50%;
   height: 50%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  background-color: white;
+}
+
+#StoryModalHeader{
+  width: 100%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px 0px;
+  box-sizing: border-box;
+  align-items: center;
+  background-color: #1F0CAD;
+  color: white;
+  font-size: 2em;
+}
+
+#StoryModalHeader > p:nth-child(even){
+  cursor: pointer;
+}
+#StoryModalText, #StoryModalText:focus{
+  outline: none;
+  resize: none;
+  border: none;
+  height: 50%;
+  width: 100%;
+  margin-bottom: 10px;
+  padding-left: 3px;
+  box-sizing: border-box;
+  font-weight: 200;
+  font-size: 2em;
+}
+
+#StoryModalBtnWrapper{
+  width: 100%;
+  height: 35%;
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: blue;
+  border-top: 1px solid #1F0CAD;
+  box-sizing: border-box;
+}
+
+#StoryModalBtnWrapper > label{
+  margin-right: 2.5%;
+}
+
+#StoryModalBtnWrapper > button{
+  height: 7vh;
+  width: 20vw;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  margin-left: 2.5%;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#StoryModalBtnWrapper > button:hover{
+  background-color: #1F0CAD;
+  color: white;
+  cursor: pointer;
 }
