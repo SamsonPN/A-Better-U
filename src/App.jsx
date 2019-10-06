@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route  } from 'react-router-dom';
-// import { NutritionProvider } from './ReactContext';
 import './App.css';
 import Login from './Login';
-
 import Header from './Components/Header/Header.jsx';
 import Workout from './Components/WorkoutPage/MainPage/Workout';
 import RoutineView from './Components/WorkoutPage/RoutinePage/RoutineView';
@@ -14,6 +12,8 @@ import AddFoodView from './Components/NutritionPage/AddFoodPage/AddFoodView';
 import BMRCalculator from './Components/NutritionPage/NutritionCalculators/BMRCalculator';
 import MacroCalculator from './Components/NutritionPage/NutritionCalculators/MacroCalculator';
 import Story from './Components/StoryPage/StoryPage';
+import {StoryProvider} from './StoryContext';
+
 
 /*
 NEXT GOAL ONCE DONE WITH MINOR IMPLEMENTATIONS:
@@ -116,7 +116,9 @@ class App extends Component {
           <Route exact path="/" render={props => (
             <React.Fragment>
               <Header/>
-              <Story/>
+              <StoryProvider>
+                <Story/>
+              </StoryProvider>
             </React.Fragment>
            )} />
           </div>

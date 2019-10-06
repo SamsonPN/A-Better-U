@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import {StoryContext} from '../../StoryContext';
 
 class Stories extends Component {
+  static contextType = StoryContext;
   render() {
-    const {date, deleteStory, toggleModal, id, story, text, type} = this.props;
+    const {DeleteStory, ToggleModal} = this.context;
+    const {date, id, story, text, type} = this.props;
     const media = `media/${id}`;
     const tag = (type || "").includes("image") ? <img src={media} alt="None shown"/> : <video width="500px" controls src={media}></video>;
 
@@ -28,8 +31,8 @@ class Stories extends Component {
           }
         </div>
         <div className="StoriesButtonWrapper">
-          <button onClick={() => toggleModal(story, id, text)}>Edit</button>
-          <button onClick={() => deleteStory(story, id)}>Delete</button>
+          <button onClick={() => ToggleModal(story, id, text)}>Edit</button>
+          <button onClick={() => DeleteStory(story, id)}>Delete</button>
         </div>
       </React.Fragment>
     );
