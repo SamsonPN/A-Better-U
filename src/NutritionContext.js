@@ -6,27 +6,15 @@ import RedDeleteBtn from './assets/red-delete-food-button.svg';
 export const NutritionContext = React.createContext();
 
 export class NutritionProvider extends Component {
-  FillFoodData = (data) => {
-    data.forEach(item =>{
-      this.setState( { [item.meal] : item.FoodAdded })
-    })
-  }
 
-  GetNDBNO = (data) => {
-    let ndbno_list = "";
-
-    data.forEach(item => {
-      item.FoodAdded.forEach( item => {
-        let ndbno = "ndbno=" + item.ndbno + "&";
-        if (ndbno_list.indexOf(ndbno) === -1){
-        ndbno_list += ndbno
-        }
-      })
+  GetNDBNO = (meal, ndbno_list) => {
+    meal.forEach( item => {
+      let ndbno = "ndbno=" + item.ndbno + "&";
+      if (ndbno_list.indexOf(ndbno) === -1){
+      ndbno_list += ndbno
+      }
     })
-
-    this.setState({
-      ndbno_list
-    })
+    return ndbno_list
   }
 
   FetchFood = () => {
@@ -40,20 +28,36 @@ export class NutritionProvider extends Component {
     fetch(uri)
     .then(response => response.json())
     .then(data => {
-      this.FillFoodData(data);
-      this.GetNDBNO(data);
+      if(data){
+        let ndbno_list = "";
+        for(let meal in data){
+          ndbno_list = this.GetNDBNO(data[meal], ndbno_list);
+        }
 
-      if(this.state.ndbno_list !== ''){
-        this.FetchReports()
-      }
-      else {
-        //when deleting all items from nutrition
-        //this will ensure that the values are updated properly
         this.setState({
-          calories: 0,
-          protein: 0,
-          fat: 0,
-          carbs: 0
+          "Breakfast": data.Breakfast,
+          "Lunch": data.Lunch,
+          "Dinner": data.Dinner,
+          "Snacks": data.Snacks,
+          ndbno_list
+        })
+
+        if(this.state.ndbno_list !== ''){
+          this.FetchReports()
+        } else {
+          //when deleting all items from nutrition
+          //this will ensure that the values are updated properly
+          this.setState({
+            calories: 0,
+            protein: 0,
+            fat: 0,
+            carbs: 0
+          })
+        }
+      } else{
+        //if there is no document in db, initialize it
+        fetch('/createNutritionDocument', {
+          method: 'POST',
         })
       }
     })

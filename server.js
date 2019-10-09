@@ -17,41 +17,16 @@ let gfs;
 
 client.connect((err)=> {
   console.log('Successfully connected to the server')
-
   const db = client.db(dbName);
-  const collection = db.collection('nutrition');
   app.locals.db = db;
 
-  let today = new Date();
-  let dd = String(today.getDate()).padStart(2, '0');
-  let mm = String(today.getMonth() + 1).padStart(2, '0');
-  let yyyy = today.getFullYear();
-  today = mm + '/' + dd + '/' + yyyy;
+  let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+  let date = new Date();
+  let today = date.toLocaleDateString("en-US", options);
   app.locals.date = today;
 
   gfs = GridFs(db, Mongo);
   gfs.collection('storyMedia');
-
-  //initiates collection with documents for each meal for each day
-  collection.insertMany( [
-  {"date": today, "type" : "foods", "meal": "Breakfast", "FoodAdded":[] },
-  {"date": today, "type" : "foods", "meal": "Lunch", "FoodAdded":[] },
-  {"date": today, "type" : "foods", "meal": "Dinner", "FoodAdded":[] },
-  {"date": today, "type" : "foods", "meal": "Snacks", "FoodAdded":[] }
-  ])
-    .catch(err => console.log(err))
-
-  const goals = db.collection('nutritionGoals')
-
-  goals.insertOne({
-    "type" : "goals", "CalorieGoal": 0, "ProteinGoal": 0, "FatGoal": 0, "CarbsGoal": 0
-  })
-    .catch(err => console.log(err))
-
-  //ensures that no duplicates are added into the collection
-  collection.createIndex( { "date": 1, "meal": 1 }, {unique: true} );
-  goals.createIndex( { "type": 1 }, {unique: true} );
-
 })
 
 
@@ -68,13 +43,29 @@ Nutrition Operations
 */
 
 // inserts all recorded food items into the database
+app.post('/createNutritionDocument', (req, res) => {
+  let today = req.app.locals.date;
+  let db = req.app.locals.db;
+  let collection = db.collection('nutrition');
+
+  collection.insertOne({
+    date : today,
+    Breakfast: [],
+    Lunch: [],
+    Dinner: [],
+    Snacks: []
+  })
+  res.end()
+})
+
 app.post('/insertFood', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
 
   collection.updateOne(
-    { "date" : req.body.date, "meal" : req.body.meal, "type" : "foods" } ,
-    { $addToSet: {"FoodAdded": { $each: req.body.FoodAdded } } } )
+    { date : req.body.date},
+    { $addToSet: { [req.body.meal]: { $each: req.body.FoodAdded } } }
+  )
     .catch(err => console.error(`Failed to insert item: ${err}`))
   res.end()
 })
@@ -85,32 +76,37 @@ app.get('/getFood/:date', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
 
-  collection.find( { "date": req.params.date, "type": "foods" } )
-  .toArray()
-  .then(items => {
-    res.json(items)
-  })
+  collection.findOne(
+    { date: req.params.date },
+    { projection : { _id: 0, type: 0, date: 0 } }
+  )
+  .then(result => res.json(result))
   .catch(err => console.error(`Failed to find documents ${err}`))
 })
 
 app.put('/updateServings', (req, res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
+  //req.body.meal
+  //req.body.ndbno
+  //req.body.servings
 
   collection.updateOne(
-    {"date" : req.body.date, "meal": req.body.meal, "FoodAdded.ndbno" : req.body.ndbno},
-    {$set: {"FoodAdded.$.servings" : req.body.servings}}
+    { date : req.body.date, [req.body.meal + ".ndbno"] : req.body.ndbno },
+    { $set: { [req.body.meal + ".$.servings"] : req.body.servings } }
   )
    .catch(err => console.error(err))
   res.end()
 })
 
-// returns the user's calorie/macronutrient goals as JSON
+// will probably delete this and put it into user and call it once!
 app.get('/getGoals', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutritionGoals');
 
-  collection.findOne( {"type" : "goals"}, { "projection" :{ "_id": 0, "type": 0} } )
+  collection.findOne(
+    { "type" : "goals" },
+    { "projection" : { "_id": 0, "type": 0} } )
     .then(result => res.json(result))
 })
 
@@ -137,13 +133,13 @@ app.put('/updateGoals', (req,res) => {
 app.delete('/deleteFood', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutrition');
-
+  //item.meal
+  //item.ndbno
   req.body.delete.forEach(item =>
     collection.updateOne(
-        {"date" : item.date, "meal" : item.meal },
-        { $pull: { "FoodAdded": {"ndbno": item.ndbno} } }
+        { "date" : item.date },
+        { $pull: { [item.meal]: {"ndbno": item.ndbno} } }
       )
-    .then(result => console.log(`Items modified: ${result.result.nModified}`))
     .catch(err => console.error(error))
   )
   res.end()
