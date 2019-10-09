@@ -4,19 +4,20 @@ import MealItems from './NutritionMealItems.jsx';
 import AddFood from '../../../assets/add-food.svg';
 import UpArrow from '../../../assets/up-arrow.svg';
 import DownArrow from '../../../assets/down-arrow.svg';
+import {AddFoodContext} from '../../../AddFoodContext';
 
 class NutritionMealDividers extends Component {
   state = {
     collapseDiv: false
   }
 
-  CollapseMealDiv = () => {
+  CollapseMealDiv = (e) => {
+    let arrowImg = e.target;
     let collapsible = document.getElementById('Collapse' + this.props.meal);
-    let arrowImg = document.getElementById(this.props.meal + 'img');
 
     this.setState(prevState => ({
       collapseDiv: !prevState.collapseDiv
-    }), () => {
+    }), function(){
       if(this.state.collapseDiv){
         collapsible.style.display = 'none';
         arrowImg.src = DownArrow;
@@ -29,40 +30,48 @@ class NutritionMealDividers extends Component {
   }
 
   render() {
-    const meal_Items = this.props.FoodAdded.map((item) =>
+    const {FoodAdded, meal} = this.props;
+    const meal_Items = FoodAdded.map((item) =>
         <MealItems
           key={item.name}
+          meal={meal}
           name={item.name}
           ndbno={item.ndbno}
-          meal={this.props.meal}
-          report={this.props.report}
           servings={item.servings}
-          updateServings={this.props.updateServings}
-          saveServing={this.props.saveServing}
-          showDelete={this.props.showDelete}
-          />
+        />
     );
 
     return (
-        <div className="NutritionMealDividers">
-
-          <div className="MealNameWrapper">
-            <p className="MealName">{this.props.meal}</p>
-            <img className="NutritionDownArrowImg" src={UpArrow} alt="Down arrow" onClick={this.CollapseMealDiv} id={this.props.meal+"img"}/>
-          </div>
-
-          <div className="MealItemCollapsible" id={"Collapse" + this.props.meal}>
-            <div className="MealItemsWrapper">
-              {meal_Items}
+      <AddFoodContext.Consumer>
+        { ({ SetCurrentMeal }) => (
+          <div className="NutritionMealDividers">
+            <div className="MealNameWrapper">
+              <p className="MealName">{meal}</p>
+              <img
+                className="NutritionDownArrowImg"
+                src={UpArrow}
+                alt="Arrows"
+                onClick={(e) => this.CollapseMealDiv(e)}
+                />
             </div>
-            <Link className="AddFoodImgWrapper" to="/nutrition/addfood">
-              <div >
-                <img className="AddFoodImg" src={AddFood} alt="Add Food" title="Add Food" onClick={this.props.currentMeal.bind(this, this.props.meal )}/>
+            <div className="MealItemCollapsible" id={"Collapse" + meal}>
+              <div className="MealItemsWrapper">
+                {meal_Items}
               </div>
-            </Link>
-          </div>
-
-       </div>
+              <Link className="AddFoodImgWrapper" to="/nutrition/addfood">
+                <div >
+                  <img
+                    className="AddFoodImg"
+                    src={AddFood}
+                    alt="Add Food"
+                    title="Add Food"
+                    onClick={() => SetCurrentMeal(meal)}/>
+                </div>
+              </Link>
+            </div>
+         </div>
+        )}
+      </AddFoodContext.Consumer>
     );
   }
 

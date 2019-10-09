@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {NutritionContext} from '../../../NutritionContext';
 
 class NutritionView extends Component {
   state = {
@@ -7,18 +8,26 @@ class NutritionView extends Component {
     FatGoal: '0',
     CarbsGoal: '0'
   }
+  static contextType = NutritionContext;
 
   componentDidMount(){
     fetch('/getGoals')
       .then(res => res.json())
-      .then(data =>
+      .then(data => {
+        let Goals = {};
+        for(let macro in data){
+          if( !macro.includes("Calorie") ) {
+            let goal = macro.replace("Goal", "");
+            Goals[macro] = this.CalculateMacros(goal, data[macro], data.CalorieGoal);
+          }
+        }
         this.setState({
           CalorieGoal: data.CalorieGoal,
-          ProteinGoal: this.CalculateMacros('Protein',data.ProteinGoal, data.CalorieGoal),
-          FatGoal: this.CalculateMacros('Fat',data.FatGoal, data.CalorieGoal),
-          CarbsGoal: this.CalculateMacros('Carbs', data.CarbsGoal, data.CalorieGoal)
+          ProteinGoal: Goals.ProteinGoal,
+          FatGoal: Goals.CalorieGoal,
+          CarbsGoal: Goals.CarbsGoal
         })
-      )
+      })
   }
 
   CalculateMacros = (macro, goal, calories) => {
@@ -27,18 +36,20 @@ class NutritionView extends Component {
   }
 
   render() {
+    const {calories, protein, fat, carbs} = this.context;
+    const {CalorieGoal, ProteinGoal, FatGoal, CarbsGoal} = this.state;
     return (
       <div id="NutritionView">
         <p id="CaloriesToday">Calories Today:
-          <span id="CaloriesConsumed"> {this.props.calories} </span>
+          <span id="CaloriesConsumed"> {calories} </span>
           /
-          <span id="TotalCalories"> {this.state.CalorieGoal}</span>
+          <span id="TotalCalories"> {CalorieGoal}</span>
         </p>
 
         <div id="NutritionViewMacroWrapper">
-          <p className="macros" id="protein">Protein: {this.props.protein} / {this.state.ProteinGoal}g</p>
-          <p className="macros" id="fat">Fat: {this.props.fat} / {this.state.FatGoal}g</p>
-          <p className="macros" id="carbs">Carbs: {this.props.carbs} / {this.state.CarbsGoal}g</p>
+          <p className="macros" id="protein">Protein: {protein} / {ProteinGoal}g</p>
+          <p className="macros" id="fat">Fat: {fat} / {FatGoal}g</p>
+          <p className="macros" id="carbs">Carbs: {carbs} / {CarbsGoal}g</p>
         </div>
       </div>
     );

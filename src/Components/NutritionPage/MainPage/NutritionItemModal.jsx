@@ -1,60 +1,63 @@
 import React, { Component } from 'react';
+import {NutritionContext} from '../../../NutritionContext';
 
 class NutritionItemModal extends Component {
+  static contextType = NutritionContext;
+
   PreventInvalidInput = (e) => {
     if(e.key === 'Enter'){
       e.preventDefault()
     }
-    else if (e.key === '-'){
-      e.preventDefault()
-      alert('No negatives allowed ;)')
-    }
   }
 
   render() {
-    const nutrition_info = this.props.report.nutrients.map(item =>
-      <NutritionModalItems key={item.nutrient_id} name={item.name} value={Math.round(item.value * this.props.servings)} unit={item.unit}/>
+    const {meal, name, ndbno, servings, showModal} = this.props;
+    const {reports} = this.context;
+    const nutrition_info = reports[ndbno].nutrients.map(item =>
+      <NutritionModalItems
+        key={item.nutrient_id}
+        name={item.name}
+        value={Math.round(item.value * this.props.servings)}
+        unit={item.unit}
+      />
     )
-    const {meal, name, ndbno, report, servings} = this.props;
-    const id = meal + name;
-    const nutrients = report.nutrients[0].measures[0];
+    const nutrients = reports[ndbno].nutrients[0].measures[0];
 
     return (
-      <div className="NutritionItemModal" id={id} onClick={() => this.props.showModal(this.props.saveServing(meal, ndbno, id))}>
-        <div className="NutritionModalContent" onClick={(e) => e.stopPropagation()}>
-
-          <div className="NutritionModalHeader">
-            <div>
-              <p>{name}</p>
-              {nutrients !== undefined ?
-              <p>
-                Serving Size: {nutrients.qty + ' ' + nutrients.label + ' '}
-                ({nutrients.eqv + nutrients.eunit})
-              </p>
-              : null
-              }
-
-             <div className="ModalServingDiv">
-                <p>Servings: </p>
-                <textarea
-                  id={'textarea' + id}
-                  className="NutritionModalTextArea"
-                  defaultValue={servings !== '' ? servings : 0}
-                  onChange={(e) => this.props.updateServings(e, meal, ndbno)}
-                  onKeyPress={this.PreventInvalidInput}>
-                </textarea>
+      <NutritionContext.Consumer>
+        { ({ SaveServing, UpdateServings }) => (
+          <div className="NutritionItemModal" onClick={() => showModal(SaveServing(meal, ndbno, this.inputElement))}>
+            <div className="NutritionModalContent" onClick={(e) => e.stopPropagation()}>
+              <div className="NutritionModalHeader">
+                <div>
+                  <p>{name}</p>
+                  {nutrients !== undefined ?
+                    <p>
+                      Serving Size: {nutrients.qty + ' ' + nutrients.label + ' '}
+                      ({nutrients.eqv + nutrients.eunit})
+                    </p>
+                    : null
+                  }
+                  <div className="ModalServingDiv">
+                     <p>Servings: </p>
+                     <textarea
+                       className="NutritionModalTextArea"
+                       defaultValue={servings !== '' ? servings : 0}
+                       onChange={(e) => UpdateServings(e, meal, ndbno)}
+                       onKeyPress={this.PreventInvalidInput}
+                       ref={element => this.inputElement = element}
+                     >
+                     </textarea>
+                  </div>
+                </div>
               </div>
-
-
+              <div className="NutritionModalBody">
+                {nutrition_info}
+              </div>
             </div>
-
           </div>
-
-          <div className="NutritionModalBody">
-            {nutrition_info}
-          </div>
-        </div>
-      </div>
+        )}
+      </NutritionContext.Consumer>
     );
   }
 }
@@ -64,10 +67,11 @@ export default NutritionItemModal;
 
 class NutritionModalItems extends Component {
   render() {
+    const {name, value, unit} = this.props;
     return (
       <div className="NutritionModalItems">
-        <p>{this.props.name}</p>
-        <p>{this.props.value} {this.props.unit}</p>
+        <p>{name}</p>
+        <p>{value} {unit}</p>
       </div>
     );
   }

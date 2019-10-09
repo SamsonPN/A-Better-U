@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import FoodItem from './AddFoodItem.jsx';
+import {AddFoodContext} from '../../../AddFoodContext';
 
 class AddFoodItemList extends Component {
+  static contextType = AddFoodContext;
   render() {
-    const listItems = this.props.search.map((item) =>
+    const listItems = this.context.FoodSearch.map((item) =>
       <FoodItem
         key={item.name}
         name={item.name}
-        ndbno={item.ndbno}
-        AddFood={this.props.AddFood}
-        FavoriteFood={this.props.FavoriteFood}/>
+        ndbno={item.ndbno}/>
     );
 
     return (

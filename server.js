@@ -110,7 +110,7 @@ app.get('/getGoals', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('nutritionGoals');
 
-  collection.findOne( {"type" : "goals"})
+  collection.findOne( {"type" : "goals"}, { "projection" :{ "_id": 0, "type": 0} } )
     .then(result => res.json(result))
 })
 

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Modal from './NutritionItemModal.jsx';
 import DeleteBtn from '../../../assets/delete-food-button.svg';
+import {NutritionContext} from '../../../NutritionContext';
 
 class NutritionMealItems extends Component {
   state = {
     showModal: false
   }
+  static contextType = NutritionContext;
 
   ShowModal = (e) => {
     this.setState(prevState =>(
@@ -20,42 +22,39 @@ class NutritionMealItems extends Component {
   }
 
   render() {
-    const id = this.props.meal + this.props.name;
-    const {name, meal, ndbno, report, servings} = this.props;
-    let report_index = ( (( (report || {})[ndbno] || {}).nutrients || [] )[0] || {}).name !== 'Water' ? 0 : 1;
-    const calories =  ( (( (report || {})[ndbno] || {}).nutrients || [] )[report_index] || {}).value;
+    const {name, meal, ndbno, servings} = this.props;
+    const {showModal} = this.state;
+    const {reports} = this.context || {};
+    let report_index = ( ((reports[ndbno] || {}).nutrients || [] )[0] || {}).name !== 'Water' ? 0 : 1;
+    const calories =  ( ((reports[ndbno] || {}).nutrients || [] )[report_index] || {}).value || 0;
 
     return (
-      <React.Fragment>
+      <NutritionContext.Consumer>
+        { ({ ShowDeleteBar }) => (
+          <React.Fragment>
+          <div className="NutritionMealItems">
+            <p onClick={this.ShowModal}>{name}</p>
+            <div>
+              <p>{Math.round(calories * servings)}</p>
+              <img
+                className="NutritionDeleteBtn"
+                src={DeleteBtn}
+                alt="Delete Button"
+                onClick={(e) => ShowDeleteBar(e, meal, ndbno)}
+               />
+            </div>
+          </div>
 
-      <div className="NutritionMealItems">
-        <p onClick={this.ShowModal}>{name}</p>
-        <div>
-          <p>{Math.round((calories || 0) * servings)}</p>
-          <img id={"delete"+id}
-            className="NutritionDeleteBtn"
-            src={DeleteBtn}
-            alt="Delete Button"
-            onClick={this.props.showDelete.bind(this, meal, ndbno, id)}
-           />
-        </div>
-      </div>
-
-      {this.state.showModal ?
-        <Modal
-        name={name}
-        meal={meal}
-        report={report[ndbno]}
-        ndbno={ndbno}
-        showModal={this.ShowModal}
-        servings={servings}
-        updateServings={this.props.updateServings}
-        saveServing={this.props.saveServing}
-        />
-        : null
-      }
-
-      </React.Fragment>
+          {showModal ?
+            <Modal
+            {...this.props}
+            showModal={this.ShowModal}
+            />
+            : null
+          }
+          </React.Fragment>
+        )}
+      </NutritionContext.Consumer>
     );
   }
 }

@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import SortBtns from './AddFoodSortButtons.jsx'
+import SortBtns from './AddFoodSortButtons.jsx';
+import {AddFoodContext} from '../../../AddFoodContext';
 
 //might remove this component and put it into AddFoodView
 
 class AddFoodHeader extends Component {
-  clearText = (e) => {
-    document.getElementById('AddFoodSearch').value = "";
-  }
   render() {
     return (
-      <div id="AddFoodHeader">
-        <h1>Add {this.props.currentMeal}</h1>
-
-        <textarea id="AddFoodSearch"
-          onClick={this.clearText}
-          onKeyPress={this.props.onEnter}
-          placeholder="Search for a food item">
-        </textarea>
-
-        <SortBtns GetFavorites={this.props.GetFavorites}/>
-      </div>
+      <AddFoodContext.Consumer>
+        { ({currentMeal, onEnter}) => (
+          <div id="AddFoodHeader">
+            <h1>Add {currentMeal}</h1>
+            <textarea id="AddFoodSearch"
+              onClick={(e) => e.target.value = ""}
+              onKeyPress={(e) => onEnter(e)}
+              placeholder="Search for a food item">
+            </textarea>
+            <SortBtns />
+          </div>
+        )}
+      </AddFoodContext.Consumer>
     );
   }
 
