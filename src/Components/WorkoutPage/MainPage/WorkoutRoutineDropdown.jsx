@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class WorkoutRoutineDropdown extends Component {
+  static contextType = WorkoutContext;
   render() {
-    const routines = this.props.routines.map( (item, i) =>
-      <RoutineDropdownItem key={item.name+i} name={item.name} exercises={item.exercises} showRoutine={this.props.showRoutine}/>
+    const {routines} = this.context;
+    const routineItems = routines.map( (item) =>
+      <RoutineDropdownItem
+        key={item._id}
+        objectID={item._id}
+        name={item.name}
+        exercises={item.exercises}
+      />
     );
 
     return (
       <div className="WoDropdownDiv">
         <div className="WoViews">Routine</div>
         <ul className="WoViewsDropdown">
-          {routines}
+          {routineItems}
         </ul>
       </div>
     );
@@ -22,9 +30,19 @@ export default WorkoutRoutineDropdown;
 
 class RoutineDropdownItem extends Component {
   render() {
-    const {name, exercises, showRoutine} = this.props;
+    const {name} = this.props;
     return (
-      <a className="WoDropdownItem" href='#!' onClick={() => showRoutine(name, exercises, '', 'Routine')}>{name}</a>
+      <WorkoutContext.Consumer>
+        { ({ ShowRoutine }) => (
+          <a
+            className="WoDropdownItem"
+            href='#!'
+            onClick={() => ShowRoutine({...this.props}, 'Routine')}
+          >
+            {name}
+          </a>
+        )}
+      </WorkoutContext.Consumer>
     );
   }
 }

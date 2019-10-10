@@ -193,13 +193,6 @@ Workout Page
   box-shadow: 10px 10px 10px #707070;
 }
 
-.CollapsibleCurrentRoutine{
-  width: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .CurrentRoutineItemHeader{
   width: 98.5%;
   height: 9vh;
@@ -215,13 +208,6 @@ Workout Page
   font-weight: 200;
   color: #1F0CAD;
 
-}
-
-.CurrentRoutineItemHeader > img{
-  margin-top: 0.7vh;
-  width: 7vw;
-  height: 8vh;
-  cursor:pointer;
 }
 
 .CurrentRoutineSetsReps{

@@ -5,16 +5,17 @@ import React, { Component } from 'react';
 import RoutineHeader from './RoutineHeader.jsx';
 import RoutineList from './RoutineList.jsx';
 import RoutineFooter from './RoutineFooter.jsx';
-
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class RoutineView extends Component {
   state = {
     exercises: [],
     finished: true
   }
-
+  static contextType = WorkoutContext;
   componentDidMount(){
-    let {date, routineName, tab} = this.props;
+    let {routineName, tab} = this.props;
+    let {date} = this.context;
     if(tab === 'Saved'){
       this.GetWorkout(date, routineName)
     }
@@ -43,8 +44,9 @@ class RoutineView extends Component {
   }
 
   GetWorkout = (date, routineName) => {
-    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let dateParam = `?date=${date.toLocaleDateString("en-US", options)}`;
+    // let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+    // let dateParam = `?date=${date.toLocaleDateString("en-US", options)}`;
+    let dateParam = `?date=${date}`;
     let nameParam = `&name=${routineName}`;
 
     fetch('/getWorkouts' + dateParam + nameParam)
@@ -78,7 +80,8 @@ class RoutineView extends Component {
 
   DeleteExercise = (name, type) => {
     let {exercises} = this.state;
-    let {date, routineName, tab} = this.props;
+    let {routineName, tab} = this.props;
+    let {date} = this.context;
 
     exercises = exercises.filter( item => {
       return item.name !== name || item.type !== type;
@@ -96,8 +99,9 @@ class RoutineView extends Component {
         "type" : type
       }
       if(tab === 'Saved'){
-        let options = {month: "2-digit", day: "2-digit", year: "numeric"}
-        requestObject["date"] = date.toLocaleDateString('en-US', options);
+        // let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+        // requestObject["date"] = date.toLocaleDateString('en-US', options);
+        requestObject["date"] = date;
         this.RemoveWorkoutExercise(requestObject);
       }
       else {
@@ -127,7 +131,8 @@ class RoutineView extends Component {
   }
 
   StoreRoutineName = () => {
-    let {date, tab} = this.props;
+    let {tab} = this.props;
+    let {date} = this.context;
     let name = document.getElementById('RoutineName').value;
 
     //if user added exercises but no name, alert and disable redirect
@@ -143,8 +148,9 @@ class RoutineView extends Component {
       }
 
       if(tab === 'Saved'){
-        let options = {month: "2-digit", day: "2-digit", year: "numeric"}
-        requestObject["date"] = date.toLocaleDateString('en-US', options);
+        // let options = {month: "2-digit", day: "2-digit", year: "numeric"}
+        // requestObject["date"] = date.toLocaleDateString('en-US', options);
+        requestObject["date"] = date;
         this.UpdateWorkout(requestObject);
       }
       else{

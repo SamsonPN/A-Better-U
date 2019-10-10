@@ -6,7 +6,7 @@ import Header from './Components/Header/Header';
 import {Workout, RoutineView, AddExerciseView} from './Components/WorkoutPage/ExportWorkoutComponents';
 import {Nutrition, Totals, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';
 import Story from './Components/StoryPage/StoryPage';
-import { StoryProvider, NutritionProvider, AddFoodProvider, AddExerciseProvider} from './AppContext/ExportContexts';
+import { StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider} from './AppContext/ExportContexts';
 
 class App extends Component {
   state = {
@@ -16,17 +16,19 @@ class App extends Component {
     tab: 'Routine'
   }
 
+  //used to determine if exercises saved to routine or workout
+  //given to routineview and addroutine
   RoutineOption = (routineName, tab) => {
     this.setState( { routineName, tab } );
   }
 
   ChangeWorkoutDate = (workoutDate, GetWorkouts) => {
-    this.setState( {workoutDate}, function(){
-      if(GetWorkouts){
-      GetWorkouts('workouts', this.state.workoutDate)
-    }
-    });
+  this.setState( {workoutDate}, function(){
+    if(GetWorkouts){
+    GetWorkouts('workouts', this.state.workoutDate)
   }
+  });
+}
 
   render() {
     const {routineName, tab, workoutDate} = this.state;
@@ -36,30 +38,34 @@ class App extends Component {
             <Route exact path="/login" component={Login}/>
 
             {/*WORKOUT ROUTES*/}
+            <WorkoutProvider>
               <Route exact path="/workout" render={props => (
                 <React.Fragment>
                   <Header/>
                   <Workout
                     ChangeWorkoutDate={this.ChangeWorkoutDate}
                     routineOption={this.RoutineOption}
-                    workoutDate={workoutDate}/>
+                    workoutDate={workoutDate}
+                  />
                 </React.Fragment>
                )} />
 
              <Route exact path="/workout/routineview" render={props => (
                  <RoutineView
-                   date={workoutDate}
                    routineName={routineName}
-                   tab={tab}/>
+                   tab={tab}
+                 />
                )}/>
              <AddExerciseProvider>
                <Route exact path="/workout/addroutine" render={props => (
                    <AddExerciseView
                      date={workoutDate}
                      routineName={routineName}
-                     tab={tab}/>
+                     tab={tab}
+                   />
                  )}/>
              </AddExerciseProvider>
+            </WorkoutProvider>
 
            {/*NUTRITION ROUTES*/}
            <NutritionProvider>

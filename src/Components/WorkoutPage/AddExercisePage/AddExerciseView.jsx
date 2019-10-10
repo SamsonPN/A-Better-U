@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import RoutineFooter from '../RoutinePage/RoutineFooter';
 import AddExerciseHeader from './AddExerciseHeader';
 import EList from './AddExerciseList';import Bars from './UpdateDeleteBars';
-import {AddExerciseContext} from '../../../AppContext/ExportContexts';
+import {AddExerciseContext, WorkoutContext} from '../../../AppContext/ExportContexts';
 
 
 class AddExerciseView extends Component {

@@ -210,6 +210,17 @@ app.get('/getWorkouts', (req, res) => {
     .catch(err => console.error(err))
 })
 
+app.get('/getWorkoutById', (req, res) => {
+  let db = req.app.locals.db;
+  let collection = db.collection('workouts');
+
+  collection.findOne(
+   { _id: ObjectID(req.query._id) } )
+    .then(result => res.json(result))
+    .catch(err => console.error(err))
+})
+
+
 //inserts exercises into the routine collection (doesn't need a date)
 app.post('/insertRoutineExercises', (req,res) => {
   let db = req.app.locals.db;
@@ -251,10 +262,12 @@ app.put('/removeRoutineExercise', (req,res) => {
 })
 
 //deletes the entire routine from routine tab
-app.delete('/deleteRoutine/:name', (req,res) => {
+app.delete('/deleteRoutine/:id', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('routines');
-  collection.deleteOne( { "name": req.params.name } )
+  collection.deleteOne(
+    { _id: ObjectID(req.params.id) }
+  )
     .catch(err => console.error(err))
   res.end();
 })

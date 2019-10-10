@@ -1,33 +1,32 @@
 import React, { Component } from 'react';
-import {default as RI} from './CurrentRoutineItems.jsx';
+import RI from './CurrentRoutineItems.jsx';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class CurrentRoutine extends Component {
+  static contextType = WorkoutContext;
   render() {
-    const {AddSet, currentRoutine, DeleteSet,routineDate, routineName, save, tab} = this.props;
-    const exercises = currentRoutine.map( (item, i) =>
+    const {currentRoutine, workoutDate} = this.context;
+    const exercises = currentRoutine.exercises || [];
+    const exerciseItems = exercises.map( (exercise, i) =>
       <RI
-        key={item.name + item.type + item.muscle}
-        name={item.name}
-        type={item.type}
+        key={exercise.name + exercise.type + exercise.muscle}
+        name={exercise.name}
+        type={exercise.type}
         index={i}
-        sets={item.sets}
-        DeleteSet={DeleteSet}
-        AddSet={AddSet}
-        save={save}
-        tab={tab}
+        sets={exercise.sets}
       />
     )
     return (
       <div id="CurrentRoutine">
-        {this.props.currentRoutine.length === 0 ?
+        { exercises.length === 0 ?
           <p className="EmptyRoutineMsg">Please add a routine or choose one from the dropdown above</p>
           :
           <div id="CurrentRoutineTitle">
-              {routineDate !== '' ? <p><span>Date:</span> {routineDate}</p> : null}
-              <p><span>Routine:</span> {routineName}</p>
+              <p><span>Routine:</span> {currentRoutine.name}</p>
+              <p><span>Date:</span> {workoutDate}</p>
           </div>
         }
-        {exercises}
+        {exerciseItems}
       </div>
     );
   }

@@ -1,46 +1,50 @@
 import React, { Component } from 'react';
 import DeleteBtn from '../../../assets/delete-food-button.svg';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class AdditionalSetsReps extends Component {
+  static contextType = WorkoutContext;
 
   InputValidation = (e) => {
-    let input = parseInt(e.key);
     let placeholder = e.target.placeholder;
-    let code = e.charCode;
-
-    if( (code === 13) ||
-        (placeholder !== 'Type' && isNaN(input)) ||
-        (placeholder === 'Type' &&
-              !(code > 64 && code < 91) &&
-              !(code > 96 && code < 123) &&
-                code !== 32)){
+    let input = parseInt(e.key);
+    if(placeholder !== "Type" && e.key !== '.' && isNaN(input)){
       e.preventDefault()
+      alert("Numbers only please!")
     }
   }
 
   render() {
-    let { index, sets, exercise}  = this.props;
-    let setValues = [
+    const {index, sets, exercise}  = this.props;
+    const {DeleteSet, SaveSetValues, tab} = this.context;
+    const setValues = [
       { "placeholder" : "Type", "value": sets.Type},
       { "placeholder": "Weight", "value": sets.Weight},
       { "placeholder": "Reps", "value": sets.Reps}
     ]
-    let setCategories = setValues.map( item =>
+    const setCategories = setValues.map( item =>
       <textarea
         key={item.placeholder}
         className="CurrentRoutineValues"
         placeholder={item.placeholder}
         value={item.value}
-        onChange={ (e) => this.props.save(e, exercise , index)}
+        onChange={ (e) => SaveSetValues(e, exercise , index)}
         onKeyPress={this.InputValidation}
-        disabled={this.props.tab === 'Date' ? true : false}
-        maxLength="10"/>
+        disabled={tab === 'Date' ? true : false}
+        maxLength="10"
+       />
     )
     return (
         <div className="CurrentRoutineSetsReps">
           <p>{index + 1}</p>
+
           {setCategories}
-          <img className="SetDeleteBtn" onClick={this.props.delete.bind(this, exercise, index)} src={DeleteBtn} alt='Delete button'/>
+
+          <img
+            className="SetDeleteBtn"
+            onClick={() => DeleteSet(exercise, index)}
+            src={DeleteBtn} alt='Delete button'
+          />
         </div>
     );
   }

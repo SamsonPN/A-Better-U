@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class WorkoutSavedDropdown extends Component {
+  static contextType = WorkoutContext;
   render() {
-    const workouts = this.props.workouts.map( item =>
-      <DropdownItem key={item.name + item.date} workout={item} showRoutine={this.props.showRoutine}/>
+    const savedWorkouts = this.context.savedWorkouts.map( item =>
+      <DropdownItem
+        key={item._id}
+        objectID={item._id}
+        name={item.name}
+        date={item.date}
+      />
     )
 
     return (
       <div className="WoDropdownDiv">
         <div className="WoViews">Saved</div>
         <ul className="WoViewsDropdown">
-        {workouts}
+        {savedWorkouts}
         </ul>
       </div>
 
@@ -21,9 +28,19 @@ export default WorkoutSavedDropdown;
 
 class DropdownItem extends Component {
   render() {
-    const {name, date, exercises} = this.props.workout;
+    const {date, name, objectID} = this.props;
     return (
-      <a className="WoDropdownItem" href="#!" onClick={() => this.props.showRoutine(name, exercises, date, 'Saved')}>{date} : {name}</a>
+      <WorkoutContext.Consumer>
+        { ({ GetWorkoutById }) => (
+          <a
+            className="WoDropdownItem"
+            href="#!"
+            onClick={() => GetWorkoutById(objectID)}
+          >
+         {date} : {name}
+          </a>
+        )}
+      </WorkoutContext.Consumer>
     );
   }
 }
