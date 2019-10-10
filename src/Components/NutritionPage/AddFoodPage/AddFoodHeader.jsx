@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import SortBtns from './AddFoodSortButtons.jsx';
-import {AddFoodContext} from '../../../AddFoodContext';
+import { AddFoodContext } from '../../../AppContext/ExportContexts';
 
 //might remove this component and put it into AddFoodView
 
 class AddFoodHeader extends Component {
   render() {
+    const currentMeal = this.props.match.params.meal;
     return (
       <AddFoodContext.Consumer>
-        { ({currentMeal, onEnter}) => (
+        { ({onEnter}) => (
           <div id="AddFoodHeader">
             <h1>Add {currentMeal}</h1>
             <textarea id="AddFoodSearch"

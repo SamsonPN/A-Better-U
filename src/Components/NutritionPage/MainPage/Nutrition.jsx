@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import NutritionView from './NutritionView.jsx';
 import NVBtns from './NutritionViewButtons.jsx';
 import Meals from './NutritionMealDividers.jsx';
-import {NutritionContext} from '../../../NutritionContext';
+import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class Nutrition extends Component {
   static contextType = NutritionContext;

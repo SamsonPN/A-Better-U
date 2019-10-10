@@ -24,15 +24,16 @@ class RoutineView extends Component {
   }
 
   GetRoutine = () => {
-    let name = this.props.routineName;
-    fetch(`/getRoutineExercises/${name}`)
+    let {routineName} = this.props;
+    let {exercises} = this.state;
+    fetch(`/getRoutineExercises/${routineName}`)
       .then(res => res.json())
       .then(data => {
         if (data){
           this.setState({
             exercises: data.exercises
           }, function(){
-            let finished = this.state.exercises.length === 0 || this.props.routineName !== 'Routine Name' ? true : false;
+            let finished = exercises.length === 0 || routineName !== 'Routine Name' ? true : false;
             this.setState({
               finished
             })
@@ -42,7 +43,8 @@ class RoutineView extends Component {
   }
 
   GetWorkout = (date, routineName) => {
-    let dateParam = `?date=${'0'+date.toLocaleDateString()}`;
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+    let dateParam = `?date=${date.toLocaleDateString("en-US", options)}`;
     let nameParam = `&name=${routineName}`;
 
     fetch('/getWorkouts' + dateParam + nameParam)

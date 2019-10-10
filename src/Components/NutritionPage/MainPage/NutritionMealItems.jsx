@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Modal from './NutritionItemModal.jsx';
 import DeleteBtn from '../../../assets/delete-food-button.svg';
-import {NutritionContext} from '../../../NutritionContext';
+import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class NutritionMealItems extends Component {
   state = {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FoodItem from './AddFoodItem.jsx';
-import {AddFoodContext} from '../../../AddFoodContext';
+import {AddFoodContext} from '../../../AppContext/ExportContexts';
 
 class AddFoodItemList extends Component {
   static contextType = AddFoodContext;

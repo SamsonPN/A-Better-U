@@ -31,7 +31,7 @@ client.connect((err)=> {
 
 
 app.use(express.json());
-
+app.use('/', express.static(path.join(__dirname, 'build')));
 app.listen(port, function(){
   console.log(`Listening on port ${port}`);
 });
@@ -49,7 +49,7 @@ app.post('/createNutritionDocument', (req, res) => {
   let collection = db.collection('nutrition');
 
   collection.insertOne({
-    date : today,
+    date : req.body.date,
     Breakfast: [],
     Lunch: [],
     Dinner: [],

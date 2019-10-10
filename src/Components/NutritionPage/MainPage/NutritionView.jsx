@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {NutritionContext} from '../../../NutritionContext';
+import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class NutritionView extends Component {
   state = {

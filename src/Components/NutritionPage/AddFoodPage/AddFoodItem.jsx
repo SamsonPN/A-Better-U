@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Heart from '../../../assets/heart.svg';
-import {AddFoodContext} from '../../../AddFoodContext';
+import {AddFoodContext} from '../../../AppContext/ExportContexts';
 
 class AddFoodItem extends Component {
   render() {

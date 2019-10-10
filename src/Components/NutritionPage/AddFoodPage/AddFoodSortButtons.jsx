@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {AddFoodContext} from '../../../AddFoodContext';
+import {AddFoodContext} from '../../../AppContext/ExportContexts';
 
 class AddFoodSortButtons extends Component {
 

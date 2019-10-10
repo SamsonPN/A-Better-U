@@ -29,7 +29,8 @@ class Workout extends Component {
   }
 
   GetWorkouts = (stateItem, date) => {
-    let dateParam = date === undefined ? '' : `?date=${'0'+date.toLocaleDateString()}`;
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+    let dateParam = date === undefined ? '' : `?date=${date.toLocaleDateString("en-US", options)}`;
 
     fetch('/getWorkouts' + dateParam)
       .then(res => res.json())
@@ -75,18 +76,18 @@ class Workout extends Component {
   }
 
   ShowRoutine = (name, exercises, date, tab) => {
-      let currentRoutine = {
-        "name": name,
-        "date" : date,
-        "exercises": exercises
-      }
-      this.setState({
-        currentRoutine,
-        tab
-     })
-     if(tab !== 'Routine'){
-       this.props.ChangeWorkoutDate(new Date(date));
-     }
+    let currentRoutine = {
+      "name": name,
+      "date" : date,
+      "exercises": exercises
+    }
+    this.setState({
+      currentRoutine,
+      tab
+   })
+   if(tab !== 'Routine'){
+     this.props.ChangeWorkoutDate(new Date(date));
+   }
    }
 
   SaveWorkout = () => {

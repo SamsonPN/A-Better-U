@@ -4,7 +4,6 @@ import MealItems from './NutritionMealItems.jsx';
 import AddFood from '../../../assets/add-food.svg';
 import UpArrow from '../../../assets/up-arrow.svg';
 import DownArrow from '../../../assets/down-arrow.svg';
-import {AddFoodContext} from '../../../AddFoodContext';
 
 class NutritionMealDividers extends Component {
   state = {
@@ -42,36 +41,30 @@ class NutritionMealDividers extends Component {
     );
 
     return (
-      <AddFoodContext.Consumer>
-        { ({ SetCurrentMeal }) => (
-          <div className="NutritionMealDividers">
-            <div className="MealNameWrapper">
-              <p className="MealName">{meal}</p>
+      <div className="NutritionMealDividers">
+        <div className="MealNameWrapper">
+          <p className="MealName">{meal}</p>
+          <img
+            className="NutritionDownArrowImg"
+            src={UpArrow}
+            alt="Arrows"
+            onClick={(e) => this.CollapseMealDiv(e)}
+            />
+        </div>
+        <div className="MealItemCollapsible" id={"Collapse" + meal}>
+          <div className="MealItemsWrapper">
+            {meal_Items}
+          </div>
+          <Link className="AddFoodImgWrapper" to={`/nutrition/addfood/${meal}`}>
               <img
-                className="NutritionDownArrowImg"
-                src={UpArrow}
-                alt="Arrows"
-                onClick={(e) => this.CollapseMealDiv(e)}
+                className="AddFoodImg"
+                src={AddFood}
+                alt="Add Food"
+                title="Add Food"
                 />
-            </div>
-            <div className="MealItemCollapsible" id={"Collapse" + meal}>
-              <div className="MealItemsWrapper">
-                {meal_Items}
-              </div>
-              <Link className="AddFoodImgWrapper" to="/nutrition/addfood">
-                <div >
-                  <img
-                    className="AddFoodImg"
-                    src={AddFood}
-                    alt="Add Food"
-                    title="Add Food"
-                    onClick={() => SetCurrentMeal(meal)}/>
-                </div>
-              </Link>
-            </div>
-         </div>
-        )}
-      </AddFoodContext.Consumer>
+          </Link>
+        </div>
+     </div>
     );
   }
 

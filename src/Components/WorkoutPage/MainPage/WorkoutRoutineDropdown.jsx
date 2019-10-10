@@ -22,9 +22,9 @@ export default WorkoutRoutineDropdown;
 
 class RoutineDropdownItem extends Component {
   render() {
-    const {name, exercises} = this.props;
+    const {name, exercises, showRoutine} = this.props;
     return (
-      <a className="WoDropdownItem" href='#!' onClick={() => this.props.showRoutine(name, exercises, '', 'Routine')}>{name}</a>
+      <a className="WoDropdownItem" href='#!' onClick={() => showRoutine(name, exercises, '', 'Routine')}>{name}</a>
     );
   }
 }

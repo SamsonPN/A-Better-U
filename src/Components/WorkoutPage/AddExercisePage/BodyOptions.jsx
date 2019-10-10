@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+import {AddExerciseContext} from '../../../AppContext/ExportContexts';
 
 class BodyOptions extends Component {
-  ShowValue = (id) => {
-    document.getElementsByClassName('AeViews')[0].textContent = document.getElementById(id).textContent;
-    this.props.searchCategory();
+  static contextType = AddExerciseContext;
+  ShowValue = (e) => {
+    this.AeViews.textContent = e.target.textContent;
+    this.context.SearchByCategory();
   }
 
   render() {
-    const muscles = this.props.muscles.map(item =>
+    const muscles = this.context.muscles.map(item =>
       <BodyOptionItem key={item} name={item} ShowValue={this.ShowValue} />
     )
     return (
       <div className="AddExerciseOptions">
-        <div className="AeViews">Muscles</div>
+        <div className="AeViews" ref={element => this.AeViews = element}>Muscles</div>
         <ul className="AeViewsDropdown">
           {muscles}
         </ul>
@@ -25,8 +27,13 @@ export default BodyOptions;
 
 class BodyOptionItem extends Component {
   render() {
+    const {name, ShowValue} = this.props;
     return (
-      <div className="AeOptionItem" id={this.props.name} onClick={() => this.props.ShowValue(this.props.name)}>{this.props.name}</div>
+      <div
+        className="AeOptionItem"
+        onClick={(e) => ShowValue(e)}>
+        {name}
+      </div>
     );
   }
 }

@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
-import Key from './API/API_Key';
-import Heart from './assets/heart.svg';
-import BlueHeart from './assets/filled-in-heart.svg';
+import Key from '../API/API_Key';
+import Heart from '../assets/heart.svg';
+import BlueHeart from '../assets/filled-in-heart.svg';
 
 export const AddFoodContext = React.createContext();
 
 export class AddFoodProvider extends Component {
-  SetCurrentMeal = currentMeal => {
-    this.setState( {
-      currentMeal,
-      FoodAdded: [],
-      FoodSearch: [],
-      showFavorite: false
-     })
-  }
-
   onEnter = e => {
     let search = e.target.value;
     if(e.key === 'Enter' && search !== ''){
@@ -160,11 +151,10 @@ export class AddFoodProvider extends Component {
       .catch(err => console.error(err))
   }
 
-  StoreFood = () => {
-    let {currentMeal, FoodAdded} = this.state;
+  StoreFood = (nutritionDate, currentMeal) => {
+    let {FoodAdded} = this.state;
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let today = new Date()
-    let date = today.toLocaleDateString("en-US", options);
+    let date = nutritionDate.toLocaleDateString("en-US", options);
 
     let requestObject = {
       "date": date,
@@ -193,7 +183,6 @@ export class AddFoodProvider extends Component {
   }
 
   state = {
-    currentMeal: "",
     favItems: [],
     favorite: false,
     FoodAdded: [],
@@ -205,7 +194,6 @@ export class AddFoodProvider extends Component {
     GetFavorites: this.GetFavorites,
     HeartColor: this.HeartColor,
     onEnter: this.onEnter,
-    SetCurrentMeal: this.SetCurrentMeal,
     StoreFavorites: this.StoreFavorites,
     StoreFood: this.StoreFood
   }

@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import Key from './API/API_Key';
-import BlackDeleteBtn from './assets/delete-food-button.svg';
-import RedDeleteBtn from './assets/red-delete-food-button.svg';
+import Key from '../API/API_Key';
+import BlackDeleteBtn from '../assets/delete-food-button.svg';
+import RedDeleteBtn from '../assets/red-delete-food-button.svg';
 
 export const NutritionContext = React.createContext();
 
 export class NutritionProvider extends Component {
+  ChangeNutritionDate = nutritionDate => {
+    this.setState({
+      nutritionDate
+    }, function(){
+      this.FetchFood()
+    })
+  }
 
   GetNDBNO = (meal, ndbno_list) => {
     meal.forEach( item => {
@@ -18,13 +25,12 @@ export class NutritionProvider extends Component {
   }
 
   FetchFood = () => {
-    let today = new Date();
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let date = today.toLocaleDateString("en-US", options);
+    let date = this.state.nutritionDate.toLocaleDateString("en-US", options);
     let regex = /\//g;
-    date = date.replace(regex, '%2F');
+    let dateParam = date.replace(regex, '%2F');
 
-    let uri = `/getFood/${date}`;
+    let uri = `/getFood/${dateParam}`;
     fetch(uri)
     .then(response => response.json())
     .then(data => {
@@ -58,6 +64,10 @@ export class NutritionProvider extends Component {
         //if there is no document in db, initialize it
         fetch('/createNutritionDocument', {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify( { date } )
         })
       }
     })
@@ -137,8 +147,7 @@ export class NutritionProvider extends Component {
 
   SaveServing = (meal, ndbno, inputElement) => {
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let today = new Date();
-    let date = today.toLocaleDateString('en-US', options);
+    let date = this.state.nutritionDate.toLocaleDateString('en-US', options);
     let servings = inputElement.value;
 
     if(servings !== ''){
@@ -163,8 +172,7 @@ export class NutritionProvider extends Component {
   ShowDeleteBar = (e, meal, ndbno) => {
     let {deleteItems} = this.state;
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let today = new Date();
-    let date = today.toLocaleDateString("en-US", options);
+    let date = this.state.nutritionDate.toLocaleDateString("en-US", options);
     let duplicate = false;
     let deleteBtn = e.target;
 
@@ -240,6 +248,7 @@ export class NutritionProvider extends Component {
   }
 
   state = {
+    nutritionDate: new Date(),
     Breakfast : [],
     Lunch: [],
     Dinner: [],
@@ -252,7 +261,7 @@ export class NutritionProvider extends Component {
     carbs: 0,
     deleteItems: [],
     showDelete: false,
-    CalculateNutritionInfo: this.CalculateNutritionInfo,
+    ChangeNutritionDate: this.ChangeNutritionDate,
     DeleteFood: this.DeleteFood,
     FetchFood: this.FetchFood,
     SaveServing: this.SaveServing,

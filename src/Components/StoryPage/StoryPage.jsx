@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SubmissionForm from './StorySubmissionForm';
 import StoriesList from './StoriesList';
 import StoryModal from './StoryModal';
-import {StoryContext} from '../../StoryContext';
+import {StoryContext} from '../../AppContext/ExportContexts';
 
 class Story extends Component {
   render() {
