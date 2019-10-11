@@ -1,19 +1,30 @@
 import React, { Component } from 'react';
-import {default as Li} from './RoutineListItems.jsx';
+import Li from './RoutineListItems';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class RoutineList extends Component {
+  static contextType = WorkoutContext;
   render() {
-    const exercises = this.props.exercises.map( item =>
-      <Li key={item.name + item.type + item.muscle} name={item.name} type={item.type} delete={this.props.delete}/>
+    const {currentRoutine} = this.context;
+    const exercises = currentRoutine.exercises || [];
+    const exerciseItems = exercises.map( item =>
+      <Li
+        key={item.name + item.type + item.muscle}
+        name={item.name}
+        type={item.type}
+        muscle={item.muscle}
+      />
     )
     return (
       <div id="RoutineList">
-        {this.props.exercises.length === 0 ?
-          <p className="EmptyRoutineMsg">Please click on the Exercise tab to add exercises to your routine</p>
-          :
-          null
+        { exercises.length === 0 ?
+          <p className="EmptyRoutineMsg">
+            Please click on the Exercise tab
+            to add exercises to your routine
+          </p>
+          : null
         }
-        {exercises}
+        {exerciseItems}
       </div>
     );
   }

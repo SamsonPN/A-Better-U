@@ -17,11 +17,11 @@ class CurrentRoutine extends Component {
       />
     )
     return (
-      <div id="CurrentRoutine">
+      <div className="CurrentRoutineWorkouts">
         { exercises.length === 0 ?
           <p className="EmptyRoutineMsg">Please add a routine or choose one from the dropdown above</p>
           :
-          <div id="CurrentRoutineTitle">
+          <div className="CurrentRoutineWorkoutsTitle">
               <p><span>Routine:</span> {currentRoutine.name}</p>
               <p><span>Date:</span> {workoutDate}</p>
           </div>

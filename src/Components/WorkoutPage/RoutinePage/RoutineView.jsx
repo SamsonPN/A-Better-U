@@ -14,49 +14,7 @@ class RoutineView extends Component {
   }
   static contextType = WorkoutContext;
   componentDidMount(){
-    let {routineName, tab} = this.props;
-    let {date} = this.context;
-    if(tab === 'Saved'){
-      this.GetWorkout(date, routineName)
-    }
-    else {
-      this.GetRoutine()
-    }
-  }
-
-  GetRoutine = () => {
-    let {routineName} = this.props;
-    let {exercises} = this.state;
-    fetch(`/getRoutineExercises/${routineName}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data){
-          this.setState({
-            exercises: data.exercises
-          }, function(){
-            let finished = exercises.length === 0 || routineName !== 'Routine Name' ? true : false;
-            this.setState({
-              finished
-            })
-          })
-        }
-     })
-  }
-
-  GetWorkout = (date, routineName) => {
-    // let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    // let dateParam = `?date=${date.toLocaleDateString("en-US", options)}`;
-    let dateParam = `?date=${date}`;
-    let nameParam = `&name=${routineName}`;
-
-    fetch('/getWorkouts' + dateParam + nameParam)
-      .then(res => res.json())
-      .then(data =>{
-        console.log(data)
-        this.setState({
-          exercises: data[0].exercises
-        })
-      })
+    console.log(this.context)
   }
 
   AllowRedirect = (e) => {
@@ -78,61 +36,8 @@ class RoutineView extends Component {
     })
   }
 
-  DeleteExercise = (name, type) => {
-    let {exercises} = this.state;
-    let {routineName, tab} = this.props;
-    let {date} = this.context;
-
-    exercises = exercises.filter( item => {
-      return item.name !== name || item.type !== type;
-    })
-
-    this.setState({
-      exercises
-    }, function(){
-      if(exercises.length === 0){
-        this.setState({ finished : true })
-      }
-      let requestObject = {
-        "name" : routineName,
-        "exercise": name,
-        "type" : type
-      }
-      if(tab === 'Saved'){
-        // let options = {month: "2-digit", day: "2-digit", year: "numeric"}
-        // requestObject["date"] = date.toLocaleDateString('en-US', options);
-        requestObject["date"] = date;
-        this.RemoveWorkoutExercise(requestObject);
-      }
-      else {
-        this.RemoveRoutineExercise(requestObject);
-      }
-    })
-  }
-
-  RemoveRoutineExercise = (requestObject) => {
-    fetch('/removeRoutineExercise', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestObject)
-    })
-  }
-
-  RemoveWorkoutExercise = (requestObject) => {
-    fetch('/removeWorkoutExercise', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestObject)
-    })
-  }
-
   StoreRoutineName = () => {
-    let {tab} = this.props;
-    let {date} = this.context;
+    let {date, tab} = this.context;
     let name = document.getElementById('RoutineName').value;
 
     //if user added exercises but no name, alert and disable redirect
@@ -148,8 +53,6 @@ class RoutineView extends Component {
       }
 
       if(tab === 'Saved'){
-        // let options = {month: "2-digit", day: "2-digit", year: "numeric"}
-        // requestObject["date"] = date.toLocaleDateString('en-US', options);
         requestObject["date"] = date;
         this.UpdateWorkout(requestObject);
       }
@@ -199,7 +102,7 @@ class RoutineView extends Component {
             redirect={this.AllowRedirect}
             finished={this.state.finished}
           />
-        <RoutineList exercises={this.state.exercises} delete={this.DeleteExercise}/>
+          <RoutineList />
           <RoutineFooter/>
       </div>
     );

@@ -144,6 +144,7 @@ app.delete('/deleteFood', (req,res) => {
   )
   res.end()
 })
+
 /*
 
 Workout Operations
@@ -248,18 +249,7 @@ app.put('/updateRoutine', (req,res) => {
   res.end();
 })
 
-//removes the exercises in the RoutineView page
-app.put('/removeRoutineExercise', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
 
-  collection.updateOne(
-    { "name" : req.body.name},
-    {$pull: {"exercises" : {"name" : req.body.exercise, "type" : req.body.type}}}
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
 
 //deletes the entire routine from routine tab
 app.delete('/deleteRoutine/:id', (req,res) => {
@@ -308,23 +298,14 @@ app.put('/updateWorkouts', (req,res) => {
   res.end();
 })
 
-app.put('/removeWorkoutExercise', (req,res) => {
+app.delete('/deleteWorkout/:id', (req,res) => {
   let db = req.app.locals.db;
   let collection = db.collection('workouts');
 
-  collection.updateOne(
-    { "name" : req.body.name, "date" : req.body.date},
-    {$pull: {"exercises" : {"name" : req.body.exercise, "type" : req.body.type}}}
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
 
-app.delete('/deleteWorkout/:name/:date', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-  collection.deleteOne( { "name": req.params.name, "date" : req.params.date } )
+  collection.deleteOne(
+     { _id: ObjectID(req.params.id) }
+   )
     .catch(err => console.error(err))
   res.end();
 })
@@ -416,8 +397,6 @@ app.get('/getStories', (req,res) => {
     .then(items => { res.json(items) } )
     .catch( err => console.error(err))
 })
-
-
 
 const storage = new GridFsStorage({
   url: url + dbName,

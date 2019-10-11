@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class RoutineHeader extends Component {
-  PreventEnter = (e) => {
-    if(e.key === 'Enter'){
-      e.preventDefault()
-    }
-  }
+  static contextType = WorkoutContext;
+
   render() {
     return (
-      <div id="RoutineHeader">
-        <div id="RoutineHeaderWrapper">
-          <textarea
-            id="RoutineName"
-            defaultValue={this.props.RoutineName}
-            onKeyPress={this.PreventEnter}
-            onChange={this.props.redirect}
-            maxLength="25">
-          </textarea>
-
-          {this.props.finished ?
-            <Link id="RoutineFinish" to="/workout" onClick={this.props.store}>Finish</Link>
-            :
-            <div id="RoutineFinish" onClick={this.props.store}>Finish</div>
-          }
-        </div>
-      </div>
+      <WorkoutContext.Consumer>
+        { ({ currentRoutine, ChangeRoutineName }) => (
+          <div id="RoutineHeader">
+            <div id="RoutineHeaderWrapper">
+              <textarea
+                id="RoutineName"
+                defaultValue={currentRoutine.name || 'Routine Name'}
+                onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
+                onChange={(e) => ChangeRoutineName(e)}
+                maxLength="25">
+              </textarea>
+              <Link id="RoutineFinish" to="/workout" onClick={this.props.store}>Finish</Link>
+            </div>
+          </div>
+        )}
+      </WorkoutContext.Consumer>
     );
   }
 

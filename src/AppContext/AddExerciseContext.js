@@ -82,6 +82,7 @@ export class AddExerciseProvider extends Component {
   }
 
   AddExercise = (e, exercise) => {
+    console.log(this.state.currentRoutine)
     let {name, type, muscle} = exercise;
     let checkbox = e.target.style;
     let newState;
@@ -227,7 +228,7 @@ export class AddExerciseProvider extends Component {
     GetFavorites: this.GetFavorites,
     RemoveBar: this.RemoveBar,
     SearchExercise: this.SearchExercise,
-    SearchByCategory: this.SearchByCategory
+    SearchByCategory: this.SearchByCategory,
   }
 
   render() {

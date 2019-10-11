@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {AddExerciseContext} from './AddExerciseContext';
 
 export const WorkoutContext = React.createContext();
 
@@ -25,15 +26,47 @@ export class WorkoutProvider extends Component {
     this.setState({
       workoutDate
     }, function(){
-      let uri = `getWorkouts/?date=${workoutDate}`;
-      fetch(uri)
-        .then(res => res.json())
-        .then(data =>{
-          this.setState({
-            workouts: data
-          })
-       })
+      let {tab} = this.state;
+      if (tab !== 'Routine'){
+        this.GetWorkoutsByDate()
+      }
+      else{
+        this.CreateNewRoutine()
+      }
     })
+  }
+
+  ChangeRoutineName = (e) => {
+    let name = e.target.value;
+    let newState = {...this.state.currentRoutine};
+    newState.name = name;
+    this.setState({
+      currentRoutine: newState
+    })
+  }
+
+  CreateNewRoutine = () => {
+    let newRoutine = {
+      name: "Routine Name",
+      exercises: []
+    }
+    this.setState({
+      currentRoutine: newRoutine
+    })
+  }
+
+  GetWorkoutsByDate = () => {
+    let {workoutDate} = this.state;
+    let uri = `getWorkouts/?date=${workoutDate}`;
+    fetch(uri)
+      .then(res => res.json())
+      .then(data =>{
+        this.setState({
+          workouts: data,
+          tab: 'Date',
+          currentRoutine: {}
+        })
+     })
   }
 
   DeleteRoutine = () => {
@@ -61,6 +94,23 @@ export class WorkoutProvider extends Component {
     }))
   }
 
+  DeleteWorkout = () => {
+    let { _id } = this.state.currentRoutine;
+    let confirm = window.confirm(`This workout will no longer show up in the Saved tab. Continue?`)
+    if(confirm){
+      let uri = `/deleteWorkout/${_id}`;
+      fetch(uri , {
+        method: 'DELETE'
+      })
+      this.setState(prevState => ({
+        currentRoutine: {},
+        workouts: []
+      }), function(){
+        this.FillSavedTab();
+      })
+    }
+  }
+
   // fetches and puts all saved workouts into saved tab
   FillSavedTab = () => {
     fetch('/getWorkouts')
@@ -78,9 +128,21 @@ export class WorkoutProvider extends Component {
       .then(res => res.json())
       .then(data =>{
         this.setState({
-          currentRoutine: data
+          currentRoutine: data,
+          tab: 'Saved'
         })
      })
+  }
+
+  RemoveExercise = (exercise) => {
+    let newState = {...this.state.currentRoutine};
+    let {muscle, name, type} = exercise;
+    newState.exercises = newState.exercises.filter( item => {
+      return item.name !== name || item.type !== type || item.muscle !== muscle;
+    })
+    this.setState({
+      currentRoutine: newState
+    })
   }
 
   SaveSetValues = (e, exercise, index) => {
@@ -154,20 +216,27 @@ export class WorkoutProvider extends Component {
     savedWorkouts: [],
     tab: 'Routine',
     AddSet: this.AddSet,
+    ChangeRoutineName: this.ChangeRoutineName,
     ChangeWorkoutDate: this.ChangeWorkoutDate,
     DeleteRoutine: this.DeleteRoutine,
     DeleteSet: this.DeleteSet,
+    DeleteWorkout: this.DeleteWorkout,
     FillSavedTab: this.FillSavedTab,
     GetWorkoutById: this.GetWorkoutById,
+    RemoveExercise: this.RemoveExercise,
     SaveSetValues: this.SaveSetValues,
     SaveWorkout: this.SaveWorkout,
     ShowRoutine: this.ShowRoutine,
   }
   render() {
     return (
-      <WorkoutContext.Provider value={this.state}>
-        {this.props.children}
-      </WorkoutContext.Provider>
+      <AddExerciseContext.Consumer>
+        { context => (
+          <WorkoutContext.Provider value={{ ...context, ...this.state }}>
+            {this.props.children}
+          </WorkoutContext.Provider>
+        )}
+      </AddExerciseContext.Consumer>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {default as SavedDropdown} from './WorkoutSavedDropdown.jsx';
-import {default as RoutineDropdown} from './WorkoutRoutineDropdown.jsx';
+import SavedDropdown from './WorkoutSavedDropdown.jsx';
+import RoutineDropdown from './WorkoutRoutineDropdown.jsx';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {WorkoutContext} from '../../../AppContext/ExportContexts';
@@ -20,9 +20,7 @@ class WorkoutDropdownWrapper extends Component {
               utcOffset
             />
             <RoutineDropdown />
-            <SavedDropdown
-              showRoutine={this.props.showRoutine}
-              />
+            <SavedDropdown />
           </div>
         )}
       </WorkoutContext.Consumer>

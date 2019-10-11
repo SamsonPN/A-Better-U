@@ -38,7 +38,8 @@ class App extends Component {
             <Route exact path="/login" component={Login}/>
 
             {/*WORKOUT ROUTES*/}
-            <WorkoutProvider>
+            <AddExerciseProvider>
+             <WorkoutProvider>
               <Route exact path="/workout" render={props => (
                 <React.Fragment>
                   <Header/>
@@ -56,7 +57,6 @@ class App extends Component {
                    tab={tab}
                  />
                )}/>
-             <AddExerciseProvider>
                <Route exact path="/workout/addroutine" render={props => (
                    <AddExerciseView
                      date={workoutDate}
@@ -64,8 +64,8 @@ class App extends Component {
                      tab={tab}
                    />
                  )}/>
-             </AddExerciseProvider>
-            </WorkoutProvider>
+             </WorkoutProvider>
+            </AddExerciseProvider>
 
            {/*NUTRITION ROUTES*/}
            <NutritionProvider>

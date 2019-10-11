@@ -145,7 +145,7 @@ Workout Page
   color: red;
 }
 
-#CurrentRoutine{
+.CurrentRoutineWorkouts{
   width: 96.8vw;
   min-height: 75vh;
 
@@ -156,7 +156,7 @@ Workout Page
   font-family: 'Nunito',sans-serif;
 }
 
-#CurrentRoutineTitle{
+.CurrentRoutineWorkoutsTitle{
   width: 90.1vw;
   min-height: 10vh;
   display: flex;
@@ -168,7 +168,7 @@ Workout Page
   overflow: hidden;
 }
 
-#CurrentRoutineTitle > p{
+.CurrentRoutineWorkoutsTitle > p{
   font-family: 'Nunito',sans-serif;
   font-weight: 900;
   font-style: italic;
@@ -176,7 +176,7 @@ Workout Page
   color: #1F0CAD;
 }
 
-#CurrentRoutineTitle > p:first-of-type{
+.CurrentRoutineWorkoutsTitle > p:first-of-type{
   margin-right: 3vh;
 }
 
