@@ -11,7 +11,11 @@ class AddExerciseHeader extends Component {
           <div id="AddExerciseHeader">
             <h1 id="AddExerciseName">Add Exercises</h1>
 
-            <textarea id="ExerciseSearchBar" placeholder="Search for Exercises" onKeyPress={(e) => SearchExercise(e)}></textarea>
+            <textarea
+              id="ExerciseSearchBar"
+              placeholder="Search for Exercises"
+              onKeyPress={(e) => SearchExercise(e)}>
+            </textarea>
 
             <div id="AddExerciseOptionsWrapper">
               <BodyOptions />

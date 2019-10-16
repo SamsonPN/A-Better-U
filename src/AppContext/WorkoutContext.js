@@ -4,6 +4,36 @@ import {AddExerciseContext} from './AddExerciseContext';
 export const WorkoutContext = React.createContext();
 
 export class WorkoutProvider extends Component {
+  AddExercise = (e, exercise) => {
+    let {name, type, muscle} = exercise;
+    let {currentRoutine} = this.state;
+    let newState = {...currentRoutine};
+    let checkBox = e.target.style;
+    let checkBoxColor = checkBox.backgroundColor;
+    if (checkBoxColor === "" || checkBoxColor === "white"){
+      checkBox.backgroundColor = '#1F0CAD';
+      let addExercise= {
+        "name": name,
+        "muscle": muscle,
+        "type": type,
+        "sets": [{
+          'Type': '',
+          'Weight': '',
+          'Reps': ''
+        }]
+      };
+      newState.exercises.push(addExercise);
+    }
+    else {
+      checkBox.backgroundColor = "white";
+      newState.exercises = newState.exercises.filter( exercise => {
+        return exercise.name !== name || exercise.muscle !== muscle || exercise.type !== type
+      })
+    }
+    this.setState({
+      currentRoutine: newState
+    })
+  }
 
   AddSet = (index) => {
     let newSet = {
@@ -20,67 +50,55 @@ export class WorkoutProvider extends Component {
     }))
   }
 
-  ChangeWorkoutDate = workoutDate => {
-    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    workoutDate = workoutDate.toLocaleDateString("en-US", options);
-    this.setState({
-      workoutDate
-    }, function(){
-      let {tab} = this.state;
-      if (tab !== 'Routine'){
+  ChangeWorkoutDate = (tab, workoutDate) => {
+    let newState = { tab };
+    if(workoutDate){
+      let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+      workoutDate = workoutDate.toLocaleDateString("en-US", options);
+      newState = {...newState, workoutDate}
+    }
+    this.setState(newState, function(){
+      if( !tab.includes('Routine') ){
         this.GetWorkoutsByDate()
-      }
-      else{
-        this.CreateNewRoutine()
       }
     })
   }
 
   ChangeRoutineName = (e) => {
     let name = e.target.value;
-    let newState = {...this.state.currentRoutine};
+    let {currentRoutine} = this.state;
+    let newState = {...currentRoutine};
     newState.name = name;
     this.setState({
       currentRoutine: newState
     })
   }
 
-  CreateNewRoutine = () => {
-    let newRoutine = {
-      name: "Routine Name",
-      exercises: []
-    }
-    this.setState({
-      currentRoutine: newRoutine
-    })
-  }
-
-  GetWorkoutsByDate = () => {
-    let {workoutDate} = this.state;
-    let uri = `getWorkouts/?date=${workoutDate}`;
-    fetch(uri)
-      .then(res => res.json())
-      .then(data =>{
-        this.setState({
-          workouts: data,
-          tab: 'Date',
-          currentRoutine: {}
-        })
-     })
-  }
-
-  DeleteRoutine = () => {
-    let {objectID} = this.state.currentRoutine;
-    let confirm = window.confirm(`This routine will no longer show up in the Routine tab. Continue?`)
+  DeleteCurrentRoutine = () => {
+    let { currentRoutine, tab } = this.state;
+    let collection = tab === 'Saved' ? 'workout' : 'routine';
+    let confirm = window.confirm(`This ${collection} will no longer show up in the ${tab} tab. Continue?`);
     if(confirm){
-      let uri = encodeURI(`/deleteRoutine/${objectID}`);
+      collection += 's';
+      let uri = `/workout/deleteCurrentRoutine/${collection}/${currentRoutine._id}`;
       fetch(uri, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
-      this.setState(prevState => ({
-        routines: prevState.routines.filter(item => {return item._id !== objectID}),
-        currentRoutine: {}
-      }))
+        .catch(err => console.error(err))
+
+      if(tab === 'Saved'){
+        this.setState({
+          currentRoutine: {}
+        }, function(){
+          this.FillSavedTab();
+        })
+      }
+      else {
+        this.setState(prevState => ({
+          routines: prevState.routines.filter(item => {return item._id !== currentRoutine._id}),
+          currentRoutine: {}
+        }))
+      }
     }
   }
 
@@ -94,26 +112,9 @@ export class WorkoutProvider extends Component {
     }))
   }
 
-  DeleteWorkout = () => {
-    let { _id } = this.state.currentRoutine;
-    let confirm = window.confirm(`This workout will no longer show up in the Saved tab. Continue?`)
-    if(confirm){
-      let uri = `/deleteWorkout/${_id}`;
-      fetch(uri , {
-        method: 'DELETE'
-      })
-      this.setState(prevState => ({
-        currentRoutine: {},
-        workouts: []
-      }), function(){
-        this.FillSavedTab();
-      })
-    }
-  }
-
   // fetches and puts all saved workouts into saved tab
   FillSavedTab = () => {
-    fetch('/getWorkouts')
+    fetch('/workout/getWorkouts')
       .then(res => res.json())
       .then(data => {
         this.setState({
@@ -122,8 +123,32 @@ export class WorkoutProvider extends Component {
       })
   }
 
+  GetRoutines = () => {
+    fetch('/workout/getRoutines')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          routines: data
+       })
+    })
+  }
+
+  GetWorkoutsByDate = () => {
+    let {workoutDate} = this.state;
+    let uri = `/workout/getWorkouts/?date=${workoutDate}`;
+    fetch(uri)
+      .then(res => res.json())
+      .then(data =>{
+        this.setState({
+          workouts: data,
+          tab: 'Date',
+          currentRoutine: {}
+        })
+     })
+  }
+
   GetWorkoutById = (id) => {
-    let uri = `getWorkoutById?_id=${id}`;
+    let uri = `/workout/getWorkoutById?_id=${id}`;
     fetch(uri)
       .then(res => res.json())
       .then(data =>{
@@ -132,6 +157,16 @@ export class WorkoutProvider extends Component {
           tab: 'Saved'
         })
      })
+  }
+
+  InsertNewRoutine = () => {
+    let currentRoutine = {
+      name : "Routine Name",
+      exercises: []
+    }
+    this.setState({
+      currentRoutine
+    })
   }
 
   RemoveExercise = (exercise) => {
@@ -148,8 +183,8 @@ export class WorkoutProvider extends Component {
   SaveSetValues = (e, exercise, index) => {
     let {currentRoutine} = this.state;
     let newState = {...currentRoutine};
-    let field = e.target.placeholder;
-    newState.exercises[exercise].sets[index][field] = e.target.value;
+    let {placeholder, value} = e.target;
+    newState.exercises[exercise].sets[index][placeholder] = value;
     this.setState({
       currentRoutine: newState
     })
@@ -157,15 +192,10 @@ export class WorkoutProvider extends Component {
 
   SaveWorkout = () => {
     let {currentRoutine, workoutDate} = this.state;
+    let requestObject = {...currentRoutine, "date" : workoutDate}
     let confirm = window.confirm('Save this workout?')
     if(confirm){
-      let requestObject = {
-        "name": currentRoutine.name,
-        "date": workoutDate,
-        "exercises": currentRoutine.exercises
-      }
-
-      fetch('/saveWorkout', {
+      fetch('/workout/saveWorkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -178,12 +208,12 @@ export class WorkoutProvider extends Component {
   }
 
   ShowRoutine = (routineInfo, tab) => {
-    let {name, exercises, objectID} = routineInfo;
+    let {name, exercises, _id} = routineInfo;
     let {workoutDate} = this.state;
     let currentRoutine = {
       name,
       exercises,
-      objectID,
+      _id,
       date : workoutDate
     }
     this.setState({
@@ -192,47 +222,56 @@ export class WorkoutProvider extends Component {
     })
   }
 
+  StoreExercises = (collectionName) => {
+    let {currentRoutine} = this.state;
+    let {exercises} = currentRoutine;
+    let requestObject = {...currentRoutine, collectionName};
+    if( (exercises || []).length !== 0 ){
+      fetch('/workout/updateExercises', {
+        method: 'PUT',
+        mode: 'same-origin',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+      })
+        .then(res => {
+          this.GetRoutines()
+        })
+     }
+     else{
+       this.setState({
+         currentRoutine: {}
+       })
+     }
+  }
+
   componentDidMount(){
     let date = new Date();
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
     let today = date.toLocaleDateString("en-US", options);
-    fetch('/getRoutines')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          routines: data,
-          workoutDate: today
-       })
+    this.setState({
+      workoutDate: today
     })
+    this.GetRoutines();
     this.FillSavedTab();
   }
 
   state = {
-    routines: [],
     currentRoutine: {},
+    routines: [],
     workoutDate: new Date(),
     workouts: [],
     routineName: 'Routine Name',
     savedWorkouts: [],
-    tab: 'Routine',
-    AddSet: this.AddSet,
-    ChangeRoutineName: this.ChangeRoutineName,
-    ChangeWorkoutDate: this.ChangeWorkoutDate,
-    DeleteRoutine: this.DeleteRoutine,
-    DeleteSet: this.DeleteSet,
-    DeleteWorkout: this.DeleteWorkout,
-    FillSavedTab: this.FillSavedTab,
-    GetWorkoutById: this.GetWorkoutById,
-    RemoveExercise: this.RemoveExercise,
-    SaveSetValues: this.SaveSetValues,
-    SaveWorkout: this.SaveWorkout,
-    ShowRoutine: this.ShowRoutine,
+    tab: 'Routine'
   }
+
   render() {
     return (
       <AddExerciseContext.Consumer>
         { context => (
-          <WorkoutContext.Provider value={{ ...context, ...this.state }}>
+          <WorkoutContext.Provider value={{ ...context, ...this.state, ...this }}>
             {this.props.children}
           </WorkoutContext.Provider>
         )}

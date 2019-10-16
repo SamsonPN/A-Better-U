@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 
 export const StoryContext = React.createContext();
 
-// all methods should be declared first BEFORE they are
-// put into the state!
 export class StoryProvider extends Component {
   GetStories = () => {
     fetch('/getStories')
@@ -134,12 +132,6 @@ export class StoryProvider extends Component {
 
   state = {
     stories: [],
-    GetStories: this.GetStories,
-    SubmitStory: this.SubmitStory,
-    DeleteStory: this.DeleteStory,
-    ToggleModal: this.ToggleModal,
-    SaveChanges: this.SaveChanges,
-    PutFileInLabel: this.PutFileInLabel,
     showModal: false,
     editFile: "",
     editStory: "",
@@ -155,7 +147,7 @@ export class StoryProvider extends Component {
 
   render() {
     return (
-      <StoryContext.Provider value={this.state}>
+      <StoryContext.Provider value={{...this, ...this.state}}>
         {this.props.children}
       </StoryContext.Provider>
     );

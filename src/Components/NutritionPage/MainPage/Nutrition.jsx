@@ -8,7 +8,10 @@ class Nutrition extends Component {
   static contextType = NutritionContext;
 
   componentDidMount(){
-    this.context.FetchFood()
+    this.context.FetchFood();
+    fetch('/getFDC')
+      .then(res => res.json())
+      .then(data => console.log(data))
   }
 
   render() {

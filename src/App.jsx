@@ -11,27 +11,9 @@ import { StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, Add
 class App extends Component {
   state = {
     today: new Date(),
-    workoutDate: new Date(),
-    routineName: 'Routine Name',
-    tab: 'Routine'
   }
-
-  //used to determine if exercises saved to routine or workout
-  //given to routineview and addroutine
-  RoutineOption = (routineName, tab) => {
-    this.setState( { routineName, tab } );
-  }
-
-  ChangeWorkoutDate = (workoutDate, GetWorkouts) => {
-  this.setState( {workoutDate}, function(){
-    if(GetWorkouts){
-    GetWorkouts('workouts', this.state.workoutDate)
-  }
-  });
-}
 
   render() {
-    const {routineName, tab, workoutDate} = this.state;
     return (
       <Router>
           <div id="App">
@@ -40,30 +22,15 @@ class App extends Component {
             {/*WORKOUT ROUTES*/}
             <AddExerciseProvider>
              <WorkoutProvider>
-              <Route exact path="/workout" render={props => (
-                <React.Fragment>
-                  <Header/>
-                  <Workout
-                    ChangeWorkoutDate={this.ChangeWorkoutDate}
-                    routineOption={this.RoutineOption}
-                    workoutDate={workoutDate}
-                  />
-                </React.Fragment>
-               )} />
-
-             <Route exact path="/workout/routineview" render={props => (
-                 <RoutineView
-                   routineName={routineName}
-                   tab={tab}
-                 />
-               )}/>
-               <Route exact path="/workout/addroutine" render={props => (
-                   <AddExerciseView
-                     date={workoutDate}
-                     routineName={routineName}
-                     tab={tab}
-                   />
-                 )}/>
+                <Route exact path="/workout" render={props => (
+                  <React.Fragment>
+                    <Header/>
+                    <Workout
+                    />
+                  </React.Fragment>
+                 )} />
+               <Route exact path="/workout/routineview/:collection/:id" render={props => (<RoutineView {...props}/>) }/>
+               <Route exact path="/workout/addroutine/:collection/:id" render={props => ( <AddExerciseView {...props}/>) }/>
              </WorkoutProvider>
             </AddExerciseProvider>
 
@@ -83,22 +50,20 @@ class App extends Component {
              </AddFoodProvider>
             </NutritionProvider>
 
-           <Route exact path="/nutrition/bmrcalculator" component={BMR}/>
-           <Route exact path="/nutrition/macrocalculator" component={Macro}/>
-           <Route exact path="/nutrition/totals" render={props => (
-               <Totals date={this.state.nutritionDate} />
-             )}/>
+           <Route exact path="/nutrition/bmrcalculator" component={BMR} />
+           <Route exact path="/nutrition/macrocalculator" component={Macro} />
+           <Route exact path="/nutrition/totals" component={Totals} />
 
 
            {/*STORY ROUTES*/}
-          <Route exact path="/" render={props => (
-            <React.Fragment>
-              <Header/>
-              <StoryProvider>
+          <StoryProvider>
+            <Route exact path="/" render={props => (
+              <React.Fragment>
+                <Header/>
                 <Story/>
-              </StoryProvider>
-            </React.Fragment>
-           )} />
+              </React.Fragment>
+             )} />
+          </StoryProvider>
           </div>
       </Router>
     );

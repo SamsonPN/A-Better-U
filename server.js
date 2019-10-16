@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
-const port = 9000;
+const port = process.env.PORT || 9000;
+
 const path = require('path');
 const crypto = require('crypto');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const GridFs = require('gridfs-stream');
+const request = require('request');
+const cors = require('cors');
 
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
@@ -13,7 +16,10 @@ const url = 'mongodb://localhost:27017/';
 const dbName = 'a-better-u'; //name of the database to be used
 const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 const ObjectID = Mongo.ObjectID;
+app.locals.ObjectID = ObjectID;
 let gfs;
+
+const workoutRouter = require('./WorkoutRouter');
 
 client.connect((err)=> {
   console.log('Successfully connected to the server')
@@ -29,13 +35,29 @@ client.connect((err)=> {
   gfs.collection('storyMedia');
 })
 
-
 app.use(express.json());
-app.use('/', express.static(path.join(__dirname, 'build')));
 app.listen(port, function(){
   console.log(`Listening on port ${port}`);
 });
+app.use(cors());
 
+app.use('/workout', workoutRouter);
+
+// use request module to grab all data from FoodData Central API
+app.get('/getFDC', (req, res) => {
+  let uri = `https://api.nal.usda.gov/fdc/v1/search/?api_key=${key}`;
+  let requestObject = {"generalSearchInput":"Cheddar cheese"};
+  request.post({
+    url: uri,
+    body: requestObject,
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    json: true
+  }, function(error, response, body){
+    res.json(body)
+  })
+});
 /*
 
 Nutrition Operations
@@ -44,12 +66,11 @@ Nutrition Operations
 
 // inserts all recorded food items into the database
 app.post('/createNutritionDocument', (req, res) => {
-  let today = req.app.locals.date;
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutrition');
 
   collection.insertOne({
-    date : req.body.date,
+    date: req.body.date,
     Breakfast: [],
     Lunch: [],
     Dinner: [],
@@ -59,12 +80,13 @@ app.post('/createNutritionDocument', (req, res) => {
 })
 
 app.post('/insertFood', (req,res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutrition');
+  let {date, FoodAdded, meal} = req.body;
 
   collection.updateOne(
-    { date : req.body.date},
-    { $addToSet: { [req.body.meal]: { $each: req.body.FoodAdded } } }
+    { date},
+    { $addToSet: { [meal]: { $each: FoodAdded } } }
   )
     .catch(err => console.error(`Failed to insert item: ${err}`))
   res.end()
@@ -73,7 +95,7 @@ app.post('/insertFood', (req,res) => {
 
 // returns all food that have been consumed today
 app.get('/getFood/:date', (req,res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutrition');
 
   collection.findOne(
@@ -85,15 +107,13 @@ app.get('/getFood/:date', (req,res) => {
 })
 
 app.put('/updateServings', (req, res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutrition');
-  //req.body.meal
-  //req.body.ndbno
-  //req.body.servings
+  let {date, meal, ndbno, servings} = req.body;
 
   collection.updateOne(
-    { date : req.body.date, [req.body.meal + ".ndbno"] : req.body.ndbno },
-    { $set: { [req.body.meal + ".$.servings"] : req.body.servings } }
+    { date, [meal + ".ndbno"] : ndbno },
+    { $set: { [meal + ".$.servings"] : servings } }
   )
    .catch(err => console.error(err))
   res.end()
@@ -101,7 +121,7 @@ app.put('/updateServings', (req, res) => {
 
 // will probably delete this and put it into user and call it once!
 app.get('/getGoals', (req,res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutritionGoals');
 
   collection.findOne(
@@ -112,29 +132,32 @@ app.get('/getGoals', (req,res) => {
 
 // updates the users' goals such as weight loss goals and macronutrient goals
 app.put('/updateGoals', (req,res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutritionGoals');
+  let {CalorieGoal, ProteinGoal, FatGoal, CarbsGoal} = req.body;
 
   //updates the bmr goals only
-  if(req.body.CalorieGoal !== undefined){
-  collection.updateOne( {"type" : "goals" }, { $set: {"CalorieGoal" : req.body.CalorieGoal}})
+  if(CalorieGoal !== undefined){
+  collection.updateOne(
+    {"type" : "goals" },
+    { $set: { CalorieGoal } }
+  )
     .catch(err => console.error(error))
-  }else{ //else updates the macronutrient goals
-    collection.updateOne( {"type" : "goals" }, { $set : {
-      "ProteinGoal" : req.body.ProteinGoal,
-      "FatGoal" : req.body.FatGoal,
-      "CarbsGoal": req.body.CarbsGoal
-    }})
+  } else{ //else updates the macronutrient goals
+    collection.updateOne(
+      {"type" : "goals" },
+      { $set : { ProteinGoal, FatGoal, CarbsGoal } }
+    )
+      .catch(err => console.error(error))
   }
   res.end()
 })
 
 // deletes any food items from the database that the user deleted in the client
 app.delete('/deleteFood', (req,res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('nutrition');
-  //item.meal
-  //item.ndbno
+
   req.body.delete.forEach(item =>
     collection.updateOne(
         { "date" : item.date },
@@ -147,240 +170,49 @@ app.delete('/deleteFood', (req,res) => {
 
 /*
 
-Workout Operations
-
-*/
-
-app.get('/getExerciseTypes', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('exerciseList');
-
-  collection.findOne( { "record" : "Exercise Types"} )
-    .then(result => res.json(result))
-})
-
-app.get('/getExerciseByCategory', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('exerciseList');
-
-  collection.find( req.query )
-    .sort( { "name": 1} )
-    .toArray()
-    .then(items => {res.json(items)})
-    .catch( err => console.error(err))
-})
-
-app.get('/getExerciseBySearch/:search', (req, res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('exerciseList');
-
-  collection.find( { "name" : {$regex: req.params.search, $options: "i" }})
-    .sort( { "name": 1} )
-    .toArray()
-    .then(items => {res.json(items)})
-    .catch( err => console.error(err))
-})
-
-app.get('/getRoutineExercises/:name', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
-
-  collection.findOne( { "name": req.params.name } )
-    .then(result => res.json(result))
-})
-
-app.get('/getRoutines', (req, res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
-
-  collection.find()
-    .sort( { "name" : 1 } )
-    .toArray()
-    .then(items => res.json(items))
-    .catch(err => console.error(err))
-})
-
-app.get('/getWorkouts', (req, res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-  collection.find(req.query)
-    .sort( { "date" : 1 } )
-    .toArray()
-    .then(result => res.json(result))
-    .catch(err => console.error(err))
-})
-
-app.get('/getWorkoutById', (req, res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-  collection.findOne(
-   { _id: ObjectID(req.query._id) } )
-    .then(result => res.json(result))
-    .catch(err => console.error(err))
-})
-
-
-//inserts exercises into the routine collection (doesn't need a date)
-app.post('/insertRoutineExercises', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
-
-  collection.updateOne(
-   { "name" : req.body.name } ,
-   { $addToSet: {"exercises": { $each: req.body.exercises } } },
-   {upsert: true}
-   )
-    .catch(err => console.error(`Failed to insert item: ${err}`))
-  res.end();
-})
-
-//updates the routine in the routineView page
-app.put('/updateRoutine', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
-
-  collection.updateOne(
-    { "name": req.body.oldName },
-    {$set: { "name" : req.body.newName, "exercises": req.body.exercises } }
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
-
-
-
-//deletes the entire routine from routine tab
-app.delete('/deleteRoutine/:id', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('routines');
-  collection.deleteOne(
-    { _id: ObjectID(req.params.id) }
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
-
-app.post('/saveWorkout', (req, res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-  collection.updateOne(
-    {"name" : req.body.name, "date" : req.body.date},
-    {$set: {"exercises": req.body.exercises}},
-    {upsert: true}
-  )
-  res.end();
-})
-
-app.post('/insertWorkoutExercises', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-  collection.updateOne(
-   { "name" : req.body.name, "date": req.body.date } ,
-   { $addToSet: {"exercises": { $each: req.body.exercises } } }
-   )
-    .catch(err => console.error(`Failed to insert item: ${err}`))
-  res.end();
-})
-
-app.put('/updateWorkouts', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-  collection.updateOne(
-    { "name": req.body.oldName, "date" : req.body.date },
-    {$set: { "name" : req.body.newName, "exercises": req.body.exercises } }
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
-
-app.delete('/deleteWorkout/:id', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('workouts');
-
-
-  collection.deleteOne(
-     { _id: ObjectID(req.params.id) }
-   )
-    .catch(err => console.error(err))
-  res.end();
-})
-
-/*
-
 DEALING WITH FAVORITING STUFF!!!
 
 */
 
 //get favorites!
 app.get('/getFavorites', (req,res) => {
-  let db = req.app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('users');
 
   collection.findOne(
-    { "user" : "1"},
+    { user : "1"},
     req.query
   )
     .then(result => res.json(result))
     .catch(err => console.error(err))
 })
 
-// insert Favorites
-app.post('/insertFavoriteExercises', (req,res) => {
-  let db = req.app.locals.db;
+app.post('/insertFavorites', (req, res) => {
+  let {db} = req.app.locals;
   let collection = db.collection('users');
+  let {favItems, field, user} = req.body;
 
   collection.updateOne(
-    { "user" : req.body.user },
-    { $addToSet: {"favExercises" : { $each: req.body.favExercises } } },
+    { user },
+    { $addToSet: { [field] : { $each: favItems } } },
     { upsert: true }
   )
     .catch(err => console.error(err))
   res.end();
 })
 
-app.post('/insertFavoriteFoods', (req,res) => {
-  let db = req.app.locals.db;
+app.put('/deleteFavorites', (req, res) => {
+  let {db} = req.app.locals;
   let collection = db.collection('users');
-  console.log(req.body)
+  let {user, item, field} = req.body;
 
   collection.updateOne(
-    { "user" : req.body.user },
-    { $addToSet: {"favFoods" : { $each: req.body.favFoods } } },
-    { upsert: true }
+    { user },
+    { $pull: { [field] : item } }
   )
     .catch(err => console.error(err))
   res.end();
 })
-
-app.put('/deleteFavoriteExercises', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('users');
-
-  collection.updateOne(
-    { "user" : req.body.user },
-    { $pull: { "favExercises" : { "name" : req.body.name, "type" : req.body.type } } }
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
-
-app.put('/deleteFavoriteFoods', (req,res) => {
-  let db = req.app.locals.db;
-  let collection = db.collection('users');
-
-  collection.updateOne(
-    { "user" : req.body.user },
-    { $pull: { "favFoods" : { "name" : req.body.name, "ndbno" : req.body.ndbno } } }
-  )
-    .catch(err => console.error(err))
-  res.end();
-})
-
 
 /*
 
@@ -388,11 +220,11 @@ Story Media Uploads
 
 */
 app.get('/getStories', (req,res) => {
-  let db = app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('stories');
 
   collection.find()
-    .sort( { "date": -1, "_id" : -1} )
+    .sort( { date: -1, _id: -1} )
     .toArray()
     .then(items => { res.json(items) } )
     .catch( err => console.error(err))
@@ -463,45 +295,51 @@ app.get('/files', (req, res) => {
 // @route POST /upload
 // @desc Uploads file to DB
 app.post('/uploadStoriesWithFile', upload.single('file'), (req, res) => {
-  let db = app.locals.db;
+  let {db, date} = req.app.locals;
   let collection = db.collection('stories');
   let text = req.body.text || "";
-  let today = app.locals.date;
+  let {contentType, id} = req.file;
 
   collection.insertOne({
-    "user" : "1",
-    "text" : text,
-    "file_id" : req.file.id,
-    "file_type" : req.file.contentType,
-    "date" : today
+    user: "1",
+    text,
+    "file_id" : id,
+    "file_type" : contentType,
+    date
   })
     .catch(err => console.error(err))
   res.end()
 });
 
 app.post('/uploadStoriesWithoutFile', (req, res) => {
-  let db = app.locals.db;
+  let {db, date} = req.app.locals;
   let collection = db.collection('stories');
-  let today = app.locals.date;
+  let {text} = req.body;
 
   collection.insertOne({
-    "user" : "1", "text" : req.body.text, "file_id" : false, "file_type" : false, "date" : today
+    user: "1",
+    text,
+    file_id: false,
+    file_type: false,
+    date
   })
     .catch(err => console.error(err))
   res.end()
 })
 
 app.put('/editStoriesWithFile', upload.single('file'), (req, res) => {
-  let db = app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('stories');
+  let {_id, text, oldFile} = req.body;
+  let {id, contentType} = req.file;
 
   collection.updateOne(
-    { "_id" : ObjectID(req.body._id) },
-    {$set: {"text" : req.body.text, "file_id" : ObjectID(req.file.id), "file_type" : req.file.contentType} }
+    { "_id" : ObjectID(_id) },
+    {$set: { text, "file_id" : ObjectID(id), "file_type" : contentType} }
   )
     .catch(err => console.error(err))
 
-  gfs.remove({_id: req.body.oldFile, root: 'storyMedia'}, (err, gridStore) => {
+  gfs.remove({_id: oldFile, root: 'storyMedia'}, (err, gridStore) => {
     if(err){
       return res.status(404).json({
         err: err
@@ -512,12 +350,13 @@ app.put('/editStoriesWithFile', upload.single('file'), (req, res) => {
 });
 
 app.put('/editStoriesWithoutFile', (req, res) => {
-  let db = app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('stories');
+  let {_id, text} = req.body;
 
   collection.updateOne(
-    {"_id" : ObjectID(req.body._id)},
-    {$set: {"text" : req.body.text}}
+    { _id: ObjectID(_id) },
+    { $set: { text } }
   )
     .catch(err => console.error(err))
   res.end()
@@ -574,14 +413,15 @@ app.delete('/files/:id', (req,res) => {
 });
 
 app.delete('/deleteStory', (req, res) => {
-  let db = app.locals.db;
+  let {db} = req.app.locals;
   let collection = db.collection('stories');
+  let { story_id, file_id } = req.query;
 
-  collection.deleteOne( { "_id" : ObjectID(req.query.story_id) } )
+  collection.deleteOne( { _id : ObjectID(story_id) } )
     .catch(err => console.error(err))
 
-  if(req.query.file_id){
-    gfs.remove({_id: ObjectID(req.query.file_id), root: 'storyMedia'}, (err, gridStore) => {
+  if(file_id){
+    gfs.remove({_id: ObjectID(file_id), root: 'storyMedia'}, (err, gridStore) => {
       if(err){
         return res.status(404).json({
           err: err

@@ -8,7 +8,7 @@ class WorkoutRoutineDropdown extends Component {
     const routineItems = routines.map( (item) =>
       <RoutineDropdownItem
         key={item._id}
-        objectID={item._id}
+        _id={item._id}
         name={item.name}
         exercises={item.exercises}
       />

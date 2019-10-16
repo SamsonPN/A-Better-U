@@ -109,10 +109,11 @@ export class AddFoodProvider extends Component {
 
     let requestObject = {
       "user" : "1",
-      "favFoods" : favItems
+      favItems,
+      "field" : "favFoods"
     }
 
-    fetch('/insertFavoriteFoods', {
+    fetch('/insertFavorites', {
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -133,15 +134,18 @@ export class AddFoodProvider extends Component {
     })
     let requestObject = {
       "user": "1",
-      "name" : name,
-      "ndbno" : ndbno
+      "item": {
+        "name" : name,
+        "ndbno" : ndbno
+      },
+      "field": "favFoods"
     }
 
     this.setState({
       FoodSearch: newState
     })
 
-    fetch('/deleteFavoriteFoods', {
+    fetch('/deleteFavorites', {
       method: 'PUT',
       headers: {
         'Content-Type' : 'application/json'
@@ -187,20 +191,12 @@ export class AddFoodProvider extends Component {
     favorite: false,
     FoodAdded: [],
     FoodSearch: [],
-    showFavorite: false,
-    AddFood: this.AddFood,
-    DeleteFromFavorite: this.DeleteFromFavorite,
-    FavoriteFood: this.FavoriteFood,
-    GetFavorites: this.GetFavorites,
-    HeartColor: this.HeartColor,
-    onEnter: this.onEnter,
-    StoreFavorites: this.StoreFavorites,
-    StoreFood: this.StoreFood
+    showFavorite: false
   }
 
   render() {
     return (
-      <AddFoodContext.Provider value ={this.state}>
+      <AddFoodContext.Provider value ={{...this, ...this.state}}>
         {this.props.children}
       </AddFoodContext.Provider>
     );

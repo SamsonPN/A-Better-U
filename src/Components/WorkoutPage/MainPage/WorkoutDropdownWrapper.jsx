@@ -13,8 +13,8 @@ class WorkoutDropdownWrapper extends Component {
           <div id="WoWrapper">
             <DatePicker
               selected={new Date(workoutDate)}
-              onSelect={(e) => ChangeWorkoutDate(e)}
-              onChange={(e) => ChangeWorkoutDate(e)}
+              onSelect={(e) => ChangeWorkoutDate('Date', e)}
+              onChange={(e) => ChangeWorkoutDate('Date', e)}
               className="WoViews"
               withPortal
               utcOffset

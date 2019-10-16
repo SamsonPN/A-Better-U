@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "chart.js": "^2.8.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "gridfs-stream": "^1.1.1",
     "mongodb": "^3.3.0",

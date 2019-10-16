@@ -5,7 +5,8 @@ import {WorkoutContext} from '../../../AppContext/ExportContexts';
 class CurrentRoutine extends Component {
   static contextType = WorkoutContext;
   render() {
-    const {currentRoutine, workoutDate} = this.context;
+    const {currentRoutine, workoutDate, tab} = this.context;
+    const collection = tab === 'Saved' ? 'Workout' : 'Routine';
     const exercises = currentRoutine.exercises || [];
     const exerciseItems = exercises.map( (exercise, i) =>
       <RI
@@ -22,8 +23,8 @@ class CurrentRoutine extends Component {
           <p className="EmptyRoutineMsg">Please add a routine or choose one from the dropdown above</p>
           :
           <div className="CurrentRoutineWorkoutsTitle">
-              <p><span>Routine:</span> {currentRoutine.name}</p>
-              <p><span>Date:</span> {workoutDate}</p>
+              <p>{collection}: {currentRoutine.name}</p>
+              <p>Date: {workoutDate}</p>
           </div>
         }
         {exerciseItems}

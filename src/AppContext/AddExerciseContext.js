@@ -5,123 +5,40 @@ import Heart from '../assets/heart.svg';
 export const AddExerciseContext = React.createContext();
 
 export class AddExerciseProvider extends Component {
-  //create a function to clear out the selections for muscles and types!!!
-  //search by category, getfavorites
-  // replace ShowValue with a reference instead!
-  componentDidMount(){
-    fetch('/getExerciseTypes')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          muscles: data.Muscles,
-          types: data.EType
-        })
-     })
+
+  ClearSelections = () => {
+    let AddExerciseFavorite = document.getElementsByClassName('AddExerciseFavorite');
+    [...AddExerciseFavorite].forEach( item => {
+      item.src = Heart;
+    })
   }
 
-  SearchExercise = (e) => {
-    if (e.key === "Enter"){
-      e.preventDefault();
-      let search = e.target.value;
-      let uri = encodeURI(`/getExerciseBySearch/${search}`);
-
-      fetch(uri)
-        .then(res => res.json())
-        .then(data => {
-          let showFavorite;
-          if(this.state.showFavorite){
-            showFavorite = false;
-            this.ClearSelections()
-          }
-          this.setState({
-            exercises: data,
-            showFavorite
-          })
-        })
-    }
-  }
-
-  SearchByCategory = () => {
-    let bodyPart = document.getElementsByClassName('AeViews')[0].textContent;
-    let eType = document.getElementsByClassName('AeViews')[1].textContent;
-    let muscles = bodyPart === 'Muscles' ? '' : `muscle=${bodyPart}&`
-    let type = eType === 'Exercise Type' ? '' : `type=${eType}`
-    let uri = encodeURI('/getExerciseByCategory?' + muscles + type);
-
-    fetch(uri)
-      .then(res => res.json())
-      .then(data => {
-        let showFavorite;
-        if(this.state.showFavorite){
-          showFavorite = false;
-          this.ClearSelections()
-        }
-        this.setState( {
-          exercises: data,
-          showFavorite
-        })
-      })
-  }
-
-  GetFavorites = () => {
-    let uri = '/getFavorites?favFoods=0';
-    fetch(uri)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          exercises: data.favExercises,
-          showFavorite: true
-        }, function(){
-          let AddExerciseFavorite = document.getElementsByClassName('AddExerciseFavorite');
-          [...AddExerciseFavorite].forEach( item => {
-            item.src = BlueHeart;
-          })
-        })
-      })
-      .catch(err => console.error(err))
-  }
-
-  AddExercise = (e, exercise) => {
-    console.log(this.state.currentRoutine)
+  DeleteFromFavorite = (exercise) => {
     let {name, type, muscle} = exercise;
-    let checkbox = e.target.style;
-    let newState;
+    let newState = this.state.exercises.filter( item => {
+      return item.name !== name || item.muscle !== muscle || item.type !== type;
+    });
+    let requestObject = {
+      "user": "1",
+      "item": {
+        "name" : name,
+        "type" : type
+      },
+      "field": 'favExercises'
+    };
 
-    if (checkbox.backgroundColor === "" || checkbox.backgroundColor === "white"){
-      checkbox.backgroundColor = '#1F0CAD';
-      newState = [{
-        "name": name,
-        "muscle": muscle,
-        "type": type,
-        "sets": [{
-          'Type': '',
-          'Weight': '',
-          'Reps': ''
-        }]
-      }];
+    this.setState({
+      exercises: newState
+    });
 
-      this.setState(previousState => ( {
-        addItems: previousState.addItems.concat(newState),
-        add: true
-      }))
-    }
-
-    else {
-      checkbox.backgroundColor = "white";
-      newState = this.state.addItems.filter( item => {
-        return item.name !== name || item.muscle !== muscle || item.type !== type
-      })
-
-      this.setState({
-        addItems: newState
-      }, function(){
-        if(this.state.addItems.length === 0){
-          this.setState({
-            add: false
-          })
-        }
-      })
-    }
+    fetch('/deleteFavorites', {
+      method: 'PUT',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(requestObject)
+    })
+      .catch(err => console.error(err))
   }
 
   FavoriteExercise = (e, exercise) => {
@@ -166,52 +83,101 @@ export class AddExerciseProvider extends Component {
     }
   }
 
-  DeleteFromFavorite = (exercise) => {
-    let {name, type, muscle} = exercise;
-    let newState = this.state.exercises.filter( item => {
-      return item.name !== name || item.muscle !== muscle || item.type !== type
-    })
+  GetFavorites = () => {
+    let uri = '/getFavorites?favFoods=0';
+    fetch(uri)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          exercises: data.favExercises,
+          showFavorite: true
+        }, function(){
+          let AddExerciseFavorite = document.getElementsByClassName('AddExerciseFavorite');
+          [...AddExerciseFavorite].forEach( item => {
+            item.src = BlueHeart;
+          })
+        })
+      })
+      .catch(err => console.error(err))
+  }
+
+  SearchByCategory = () => {
+    let bodyPart = document.getElementsByClassName('AeViews')[0].textContent;
+    let eType = document.getElementsByClassName('AeViews')[1].textContent;
+    let muscles = bodyPart === 'Muscles' ? '' : `muscle=${bodyPart}&`
+    let type = eType === 'Exercise Type' ? '' : `type=${eType}`
+    let uri = encodeURI('/workout/getExerciseByCategory?' + muscles + type);
+
+    fetch(uri)
+      .then(res => res.json())
+      .then(data => {
+        let showFavorite;
+        if(this.state.showFavorite){
+          showFavorite = false;
+          this.ClearSelections()
+        }
+        this.setState( {
+          exercises: data,
+          showFavorite
+        })
+      })
+  }
+
+  SearchExercise = (e) => {
+    if (e.key === "Enter"){
+      e.preventDefault();
+      let search = e.target.value;
+      let uri = encodeURI(`/workout/getExerciseBySearch/${search}`);
+
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          let showFavorite;
+          if(this.state.showFavorite){
+            showFavorite = false;
+            this.ClearSelections()
+          }
+          this.setState({
+            exercises: data,
+            showFavorite
+          })
+        })
+    }
+  }
+
+  StoreFavorites = () => {
+    let {favItems} = this.state;
     let requestObject = {
-      "user": "1",
-      "name" : name,
-      "type" : type
+      user : "1",
+      favItems,
+      field: "favExercises"
     }
 
-    this.setState({
-      exercises: newState
-    })
-
-    fetch('/deleteFavoriteExercises', {
-      method: 'PUT',
-      headers: {
+    fetch('/insertFavorites', {
+      method: 'POST',
+      headers:{
         'Content-Type' : 'application/json'
       },
       body: JSON.stringify(requestObject)
     })
-      .catch(err => console.error(err))
-  }
-
-  RemoveBar = (option, optionItems) => {
-    this.setState( {
-      [option.toLowerCase()]: false,
-      [optionItems]: [],
+    this.setState({
+      favorite: false,
+      favItems: []
     })
-    this.ClearSelections(option)
+
+    this.ClearSelections()
+
   }
 
-  ClearSelections = (option) => {
-    if(option === 'add'){
-      let AddExerciseCheckBox = document.getElementsByClassName('AddExerciseCheckBox');
-      [...AddExerciseCheckBox].forEach( item => {
-        item.style.backgroundColor = 'white';
-      })
-    }
-    else{
-      let AddExerciseFavorite = document.getElementsByClassName('AddExerciseFavorite');
-      [...AddExerciseFavorite].forEach( item => {
-        item.src = Heart;
-      })
-    }
+  componentDidMount(){
+    fetch('/workout/getExerciseTypes')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          muscles: data.Muscles,
+          types: data.EType
+        })
+     })
   }
 
   state = {
@@ -219,21 +185,13 @@ export class AddExerciseProvider extends Component {
     muscles: [],
     types: [],
     showFavorite: false,
-    add : false,
-    addItems: [],
     favorite: false,
-    favItems: [],
-    AddExercise: this.AddExercise,
-    FavoriteExercise: this.FavoriteExercise,
-    GetFavorites: this.GetFavorites,
-    RemoveBar: this.RemoveBar,
-    SearchExercise: this.SearchExercise,
-    SearchByCategory: this.SearchByCategory,
+    favItems: []
   }
 
   render() {
     return (
-      <AddExerciseContext.Provider value={this.state}>
+      <AddExerciseContext.Provider value={{...this, ...this.state }}>
         {this.props.children}
       </AddExerciseContext.Provider>
     );

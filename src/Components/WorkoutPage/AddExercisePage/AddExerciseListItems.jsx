@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Heart from '../../../assets/heart.svg';
-import {AddExerciseContext} from '../../../AppContext/ExportContexts';
+import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class AddExerciseItem extends Component {
 
   render() {
     const {name, type, muscle} = this.props;
     return (
-      <AddExerciseContext.Consumer>
+      <WorkoutContext.Consumer>
         { ({ AddExercise, FavoriteExercise }) => (
           <div className="AddExerciseItem">
             <p>{type} {name} ({muscle})</p>
@@ -26,7 +26,7 @@ class AddExerciseItem extends Component {
             </div>
           </div>
         )}
-      </AddExerciseContext.Consumer>
+      </WorkoutContext.Consumer>
     );
   }
 

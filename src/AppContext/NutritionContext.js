@@ -260,18 +260,12 @@ export class NutritionProvider extends Component {
     fat: 0,
     carbs: 0,
     deleteItems: [],
-    showDelete: false,
-    ChangeNutritionDate: this.ChangeNutritionDate,
-    DeleteFood: this.DeleteFood,
-    FetchFood: this.FetchFood,
-    SaveServing: this.SaveServing,
-    ShowDeleteBar: this.ShowDeleteBar,
-    UpdateServings: this.UpdateServings
+    showDelete: false
   }
 
   render() {
     return (
-      <NutritionContext.Provider value={this.state}>
+      <NutritionContext.Provider value={{...this, ...this.state}}>
         {this.props.children}
       </NutritionContext.Provider>
     );

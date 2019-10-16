@@ -91,6 +91,7 @@ Workout Page
   position: relative;
   display: inline-block;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .WoDropdownDiv:hover .WoViews{
@@ -110,12 +111,6 @@ Workout Page
   text-align: center;
   color: black;
   cursor: pointer;
-}
-
-.WoViews:hover{
-  background-color: #1F0CAD;
-  color: white;
-  border:none;
 }
 
 .WoViewsDropdown{

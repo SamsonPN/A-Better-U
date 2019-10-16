@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
 import {AddExerciseContext} from '../../../AppContext/ExportContexts';
-/* Props for:
-  - id
-  - text like favorite or whatever
-  - length of items (addItems or favItems)
-  - store to exercises or favorites
-  - Remove what things?
-*/
+
 class UpdateDeleteBars extends Component {
   render() {
     const {items, store, text} = this.props;

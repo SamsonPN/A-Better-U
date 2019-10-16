@@ -4,25 +4,23 @@ import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class RoutineHeader extends Component {
   static contextType = WorkoutContext;
-
   render() {
+    const {currentRoutine, ChangeRoutineName, StoreExercises} = this.context;
+    const name = currentRoutine.name;
+    const {collection} = this.props.match.params;
     return (
-      <WorkoutContext.Consumer>
-        { ({ currentRoutine, ChangeRoutineName }) => (
           <div id="RoutineHeader">
             <div id="RoutineHeaderWrapper">
               <textarea
                 id="RoutineName"
-                defaultValue={currentRoutine.name || 'Routine Name'}
+                placeholder={name || 'Routine Name'}
                 onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
                 onChange={(e) => ChangeRoutineName(e)}
                 maxLength="25">
               </textarea>
-              <Link id="RoutineFinish" to="/workout" onClick={this.props.store}>Finish</Link>
+              <Link id="RoutineFinish" to="/workout" onClick={() => StoreExercises(collection)}>Finish</Link>
             </div>
           </div>
-        )}
-      </WorkoutContext.Consumer>
     );
   }
 
