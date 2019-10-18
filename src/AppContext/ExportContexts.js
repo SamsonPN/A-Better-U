@@ -3,6 +3,7 @@ import {NutritionProvider, NutritionContext} from './NutritionContext';
 import {AddFoodProvider, AddFoodContext} from './AddFoodContext';
 import {WorkoutProvider, WorkoutContext} from './WorkoutContext';
 import {AddExerciseProvider, AddExerciseContext} from './AddExerciseContext';
+import {CalculatorProvider, CalculatorContext} from './CalculatorContext';
 
 
 export {
@@ -12,8 +13,10 @@ export {
   NutritionContext,
   AddFoodProvider,
   AddFoodContext,
+  CalculatorProvider,
+  CalculatorContext,
   WorkoutProvider,
   WorkoutContext,
   AddExerciseContext,
-  AddExerciseProvider
+  AddExerciseProvider,
 }

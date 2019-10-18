@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
-import Key from '../API/API_Key';
+import {Key} from '../API/API_Key';
 import Heart from '../assets/heart.svg';
 import BlueHeart from '../assets/filled-in-heart.svg';
 
 export const AddFoodContext = React.createContext();
 
 export class AddFoodProvider extends Component {
-  onEnter = e => {
+  ResetSelections = () => {
+    this.setState({
+      FoodAdded: [],
+      FoodSearch: [],
+      showFavorite: false
+    })
+  }
+
+  OnEnter = e => {
     let search = e.target.value;
     if(e.key === 'Enter' && search !== ''){
       e.preventDefault();
@@ -29,7 +37,7 @@ export class AddFoodProvider extends Component {
     }
 
   GetFavorites = () => {
-    let uri = '/getFavorites?favExercises=0';
+    let uri = '/user/getFavorites?favExercises=0';
     fetch(uri)
       .then(res => res.json())
       .then(data => {
@@ -69,86 +77,39 @@ export class AddFoodProvider extends Component {
   }
 
   FavoriteFood = (name, ndbno, e) => {
+    let {FoodSearch, showFavorite} = this.state;
     let img = e.target;
-    let newState;
+    let operation;
 
-    if(this.state.showFavorite){
-      this.DeleteFromFavorite(name, ndbno)
-    }
-    else if(img.src.indexOf('filled-in-heart') === -1){
+    if(img.src.indexOf('filled-in-heart') === -1){
       img.src = BlueHeart;
-      newState = {
-        "name" : name,
-        "ndbno" : ndbno
-      }
-      this.setState(prevState => ({
-        favItems: prevState.favItems.concat(newState),
-        favorite: true
-      }))
+      operation = 'insert';
     }
     else {
+      if(showFavorite){
+        let newState = FoodSearch.filter( item => {
+          return item.name !== name || item.ndbno !== ndbno
+        })
+        this.setState({
+          FoodSearch: newState
+        })
+      }
       img.src = Heart;
-      newState = this.state.favItems.filter( item => {
-        return item.name !== name || item.ndbno !== ndbno
-      })
-      this.setState({
-        favItems: newState
-      }, function(){
-        if(this.state.favItems.length === 0){
-          this.setState({
-            favorite: false
-          })
-        }
-      })
+      operation = 'delete';
     }
-  }
 
-  StoreFavorites = () => {
-    let {favItems} = this.state;
-    alert(`${favItems.length} favorited!`);
-
+    let uri = `/user/${operation}Favorites`;
+    let method = operation === 'insert' ? 'POST' : 'PUT';
     let requestObject = {
-      "user" : "1",
-      favItems,
-      "field" : "favFoods"
+      user: "1",
+      item: { name, ndbno },
+      field: "favFoods"
     }
 
-    fetch('/insertFavorites', {
-      method: 'POST',
+    fetch(uri, {
+      method,
       headers:{
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestObject)
-    })
-
-    this.setState({
-      favorite: false,
-      favItems: []
-    })
-    this.HeartColor(false)
-  }
-
-  DeleteFromFavorite = (name, ndbno) => {
-    let newState = this.state.FoodSearch.filter( item => {
-      return item.name !== name || item.ndbno !== ndbno
-    })
-    let requestObject = {
-      "user": "1",
-      "item": {
-        "name" : name,
-        "ndbno" : ndbno
-      },
-      "field": "favFoods"
-    }
-
-    this.setState({
-      FoodSearch: newState
-    })
-
-    fetch('/deleteFavorites', {
-      method: 'PUT',
-      headers: {
-        'Content-Type' : 'application/json'
       },
       body: JSON.stringify(requestObject)
     })
@@ -167,7 +128,7 @@ export class AddFoodProvider extends Component {
     }
 
     if(FoodAdded.length > 0 && currentMeal !== ""){
-      fetch('/insertFood', {
+      fetch('/nutrition/insertFood', {
         method: 'POST',
         mode: 'same-origin',
         headers: {
@@ -187,16 +148,15 @@ export class AddFoodProvider extends Component {
   }
 
   state = {
-    favItems: [],
-    favorite: false,
     FoodAdded: [],
     FoodSearch: [],
     showFavorite: false
   }
 
   render() {
+    const {state, ...methods} = this;
     return (
-      <AddFoodContext.Provider value ={{...this, ...this.state}}>
+      <AddFoodContext.Provider value ={{...methods, ...state}}>
         {this.props.children}
       </AddFoodContext.Provider>
     );

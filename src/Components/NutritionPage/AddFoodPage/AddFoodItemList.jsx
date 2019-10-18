@@ -9,7 +9,8 @@ class AddFoodItemList extends Component {
       <FoodItem
         key={item.name}
         name={item.name}
-        ndbno={item.ndbno}/>
+        ndbno={item.ndbno}
+      />
     );
 
     return (

@@ -5,7 +5,7 @@ class StoryStatViewer extends Component {
   render() {
     return (
       <div id="StoryStatViewer">
-        
+
       </div>
     );
   }

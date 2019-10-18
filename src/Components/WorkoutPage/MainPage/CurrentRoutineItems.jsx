@@ -15,7 +15,8 @@ class CurrentRoutineItems extends Component {
         index={i}
         sets={item}
         exercise={index}
-        tab={tab}/>
+        tab={tab}
+      />
     )
     return (
       <div className="CurrentRoutineItems">

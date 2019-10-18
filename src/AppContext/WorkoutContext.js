@@ -268,10 +268,11 @@ export class WorkoutProvider extends Component {
   }
 
   render() {
+    const {state, ...methods} = this;
     return (
       <AddExerciseContext.Consumer>
         { context => (
-          <WorkoutContext.Provider value={{ ...context, ...this.state, ...this }}>
+          <WorkoutContext.Provider value={{ ...context, ...state, ...methods }}>
             {this.props.children}
           </WorkoutContext.Provider>
         )}

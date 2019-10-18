@@ -6,7 +6,7 @@ import Header from './Components/Header/Header';
 import {Workout, RoutineView, AddExerciseView} from './Components/WorkoutPage/ExportWorkoutComponents';
 import {Nutrition, Totals, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';
 import Story from './Components/StoryPage/StoryPage';
-import { StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider} from './AppContext/ExportContexts';
+import { StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider, CalculatorProvider} from './AppContext/ExportContexts';
 
 class App extends Component {
   state = {
@@ -37,12 +37,14 @@ class App extends Component {
            {/*NUTRITION ROUTES*/}
            <NutritionProvider>
              <AddFoodProvider>
+               <CalculatorProvider>
                  <Route exact path="/nutrition" render={props => (
                    <React.Fragment>
                      <Header />
                      <Nutrition />
                    </React.Fragment>
                  )} />
+               </CalculatorProvider>
 
                <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
                      <AddFoodView {...props}/>
@@ -50,8 +52,11 @@ class App extends Component {
              </AddFoodProvider>
             </NutritionProvider>
 
-           <Route exact path="/nutrition/bmrcalculator" component={BMR} />
-           <Route exact path="/nutrition/macrocalculator" component={Macro} />
+           <CalculatorProvider>
+             <Route exact path="/nutrition/bmrcalculator" component={BMR} />
+             <Route exact path="/nutrition/macrocalculator" component={Macro} />
+           </CalculatorProvider>
+
            <Route exact path="/nutrition/totals" component={Totals} />
 
 

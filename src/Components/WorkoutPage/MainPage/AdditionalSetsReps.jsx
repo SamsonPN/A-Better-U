@@ -39,12 +39,14 @@ class AdditionalSetsReps extends Component {
           <p>{index + 1}</p>
 
           {setCategories}
-
-          <img
-            className="SetDeleteBtn"
-            onClick={() => DeleteSet(exercise, index)}
-            src={DeleteBtn} alt='Delete button'
-          />
+          {tab !== 'Date' ?
+            <img
+              className="SetDeleteBtn"
+              onClick={() => DeleteSet(exercise, index)}
+              src={DeleteBtn} alt='Delete button'
+            />
+            : null
+          }
         </div>
     );
   }

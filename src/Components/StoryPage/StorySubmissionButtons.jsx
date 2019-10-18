@@ -21,7 +21,6 @@ class StorySubmissionButtons extends Component {
       </StoryContext.Consumer>
     );
   }
-
 }
 
 export default StorySubmissionButtons;

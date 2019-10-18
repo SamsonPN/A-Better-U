@@ -15,12 +15,6 @@ class NutritionMealItems extends Component {
     ))
   }
 
-  PreventEnter = (e) => {
-    if (e.key === 'Enter'){
-      e.preventDefault()
-    }
-  }
-
   render() {
     const {name, meal, ndbno, servings} = this.props;
     const {showModal} = this.state;
@@ -30,7 +24,7 @@ class NutritionMealItems extends Component {
 
     return (
       <NutritionContext.Consumer>
-        { ({ ShowDeleteBar }) => (
+        { ({ DeleteFood }) => (
           <React.Fragment>
           <div className="NutritionMealItems">
             <p onClick={this.ShowModal}>{name}</p>
@@ -40,11 +34,10 @@ class NutritionMealItems extends Component {
                 className="NutritionDeleteBtn"
                 src={DeleteBtn}
                 alt="Delete Button"
-                onClick={(e) => ShowDeleteBar(e, meal, ndbno)}
+                onClick={(e) => DeleteFood(meal, ndbno)}
                />
             </div>
           </div>
-
           {showModal ?
             <Modal
             {...this.props}

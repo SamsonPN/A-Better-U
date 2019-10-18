@@ -1,43 +1,52 @@
 import React, { Component } from 'react';
+import {CalculatorContext} from '../../../AppContext/ExportContexts';
 
-class Dropdown extends Component {
+export class ActivityDropdown extends Component {
+  static contextType = CalculatorContext;
   render() {
-    const dropdownItems = this.props.levels.map((item, i) =>
-      <a key={item.level}
+    const {HandleDropdownChange, levels, user} = this.context;
+    const dropdownItems = levels.map(item =>
+      <a
+        key={item.name}
         className="ActivityDropdownLi"
         href="#!"
-        index={i}
-        onClick={this.props.changeActivity.bind(this, i)}
+        onClick={() => HandleDropdownChange('activity', item)}
       >
-        {item.level}
+        {item.name}
       </a>
     )
     return (
       <div className="BMRDropdownWrapper">
-        <div className="BMRDropdownDiv">{this.props.activity}</div>
+        <div className="BMRDropdownDiv">{ user.activity.name }</div>
         <ul className="BMRDropdown">
-        {dropdownItems}
+          {dropdownItems}
         </ul>
       </div>
     );
   }
 }
 
-class GoalDropdown extends Component {
+export class GoalDropdown extends Component {
+  static contextType = CalculatorContext;
   render() {
-    const dropdownItems = this.props.goals.map((item, i) =>
-      <a key={item.goal} className="GoalDropdownLi" href="#!" onClick={this.props.changeGoal.bind(this,i)} index={i}>{item.goal}</a>
+    const {goals, HandleDropdownChange, user} = this.context;
+    const dropdownItems = goals.map(item =>
+      <a
+        key={item.name}
+        className="GoalDropdownLi"
+        href="#!"
+        onClick={() => HandleDropdownChange('goal', item)}
+      >
+        {item.name}
+      </a>
     )
     return (
       <div className="BMRDropdownWrapper">
-        <div className="BMRDropdownDiv">{this.props.goal}</div>
+        <div className="BMRDropdownDiv">{ user.goal.name }</div>
         <ul className="BMRDropdown">
-        {dropdownItems}
+          {dropdownItems}
         </ul>
       </div>
     );
   }
 }
-
-
-export {Dropdown, GoalDropdown};

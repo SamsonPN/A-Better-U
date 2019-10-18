@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import Key from '../API/API_Key';
-import BlackDeleteBtn from '../assets/delete-food-button.svg';
-import RedDeleteBtn from '../assets/red-delete-food-button.svg';
+import {Key} from '../API/API_Key';
 
 export const NutritionContext = React.createContext();
 
 export class NutritionProvider extends Component {
+
   ChangeNutritionDate = nutritionDate => {
     this.setState({
       nutritionDate
@@ -14,6 +13,7 @@ export class NutritionProvider extends Component {
     })
   }
 
+  // creates an ndbno list to for usda api
   GetNDBNO = (meal, ndbno_list) => {
     meal.forEach( item => {
       let ndbno = "ndbno=" + item.ndbno + "&";
@@ -25,12 +25,13 @@ export class NutritionProvider extends Component {
   }
 
   FetchFood = () => {
+    let {nutritionDate} = this.state;
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let date = this.state.nutritionDate.toLocaleDateString("en-US", options);
+    let date = nutritionDate.toLocaleDateString("en-US", options);
     let regex = /\//g;
     let dateParam = date.replace(regex, '%2F');
 
-    let uri = `/getFood/${dateParam}`;
+    let uri = `/nutrition/getFood/${dateParam}`;
     fetch(uri)
     .then(response => response.json())
     .then(data => {
@@ -62,7 +63,7 @@ export class NutritionProvider extends Component {
         }
       } else{
         //if there is no document in db, initialize it
-        fetch('/createNutritionDocument', {
+        fetch('/nutrition/createNutritionDocument', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -129,15 +130,13 @@ export class NutritionProvider extends Component {
       e.target.value = 1;
       serving = 1;
       alert('Please enter valid numbers only!')
-   }
-
-   for(let i = 0; i < currentMeal.length; i++){
-     if(currentMeal[i].ndbno === ndbno){
-       currentMeal[i].servings = serving;
-       break;
-     }
-   }
-
+    }
+    for(let i = 0; i < currentMeal.length; i++){
+      if(currentMeal[i].ndbno === ndbno){
+        currentMeal[i].servings = serving;
+        break;
+      }
+    }
    this.setState({
      currentMeal
    }, function(){
@@ -146,19 +145,17 @@ export class NutritionProvider extends Component {
   }
 
   SaveServing = (meal, ndbno, inputElement) => {
-    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let date = this.state.nutritionDate.toLocaleDateString('en-US', options);
     let servings = inputElement.value;
-
+    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+    let date = this.state.nutritionDate.toLocaleDateString("en-US", options);
     if(servings !== ''){
       let requestObject = {
-        "date" : date,
-        "meal": meal,
-        "ndbno" : ndbno,
-        "servings" : servings
+        date,
+        meal,
+        ndbno,
+        servings
       }
-
-      fetch('/updateServings', {
+      fetch('/nutrition/updateServings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -169,82 +166,55 @@ export class NutritionProvider extends Component {
     }
   }
 
-  ShowDeleteBar = (e, meal, ndbno) => {
-    let {deleteItems} = this.state;
-    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let date = this.state.nutritionDate.toLocaleDateString("en-US", options);
-    let duplicate = false;
-    let deleteBtn = e.target;
-
-    let item = [{
-      "date": date,
-      "meal": meal,
-      "ndbno": ndbno
-    }]
-
-    deleteItems.forEach(delItem => {
-      if(delItem.ndbno === item[0].ndbno && delItem.meal === item[0].meal){
-        duplicate = true;
-      }
-    })
-
-    if(duplicate === false){
-      this.setState(previousState => ({
-        showDelete: true,
-        deleteItems: previousState.deleteItems.concat(item)
-      }));
-      deleteBtn.src = RedDeleteBtn;
-    }
-    else {
-      let newState = deleteItems.filter( item => {
-        return item.ndbno !== ndbno
-      })
-
-      this.setState({
-        deleteItems: newState
-      }, function(){
-        deleteBtn.src = BlackDeleteBtn;
-        if(this.state.deleteItems.length === 0){
-          this.setState({
-            showDelete: false
-          })
-        }
-      })
-    }
+   DeleteFood = (meal, ndbno) => {
+     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+     let date = this.state.nutritionDate.toLocaleDateString("en-US", options);
+     let requestObject = {
+       date,
+       meal,
+       ndbno
+     }
+     let confirm = window.confirm('Delete this item?');
+     if(confirm){
+       this.setState(prevState => ({
+         [meal]: prevState[meal].filter (food => {return food.ndbno !== ndbno})
+       }))
+       fetch('/nutrition/deleteFood', {
+         method: 'DELETE',
+         headers: {
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(requestObject)
+       })
+     }
   }
 
-    DeleteFood = () => {
-      let requestObject = {
-        delete: this.state.deleteItems
-      }
-
-      fetch('/deleteFood', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestObject)
-      })
-      .then(res => {
+  GetGoals = () => {
+    fetch('/user/getGoals')
+      .then(res => res.json())
+      .then(data => {
+        let Goals = {};
+        for(let macro in data){
+          if( !macro.includes("Calorie") ) {
+            let goal = macro.replace("Goal", "");
+            Goals[macro] = this.CalculateMacros(goal, data[macro], data.CalorieGoal);
+          }
+        }
         this.setState({
-          showDelete: false,
-          deleteItems: []
-        },
-        this.FetchFood()
-       )
-     })
-   }
+          CalorieGoal: data.CalorieGoal,
+          ProteinGoal: Goals.ProteinGoal,
+          FatGoal: Goals.CalorieGoal,
+          CarbsGoal: Goals.CarbsGoal
+        })
+      })
+  }
 
-   RemoveDeleteBar = () => {
-     this.setState( {
-       showDelete: false,
-       deleteItems: []
-     })
+  CalculateMacros = (macro, goal, calories) => {
+    let multiplier = macro === 'Fat' ? 9 : 4;
+    return Math.round( ( (goal / 100) * calories ) / multiplier );
+  }
 
-     let deleteButtons = document.getElementsByClassName('NutritionDeleteBtn');
-     [...deleteButtons].forEach(item => {
-       item.src = BlackDeleteBtn;
-    })
+  componentDidMount(){
   }
 
   state = {
@@ -259,13 +229,16 @@ export class NutritionProvider extends Component {
     protein: 0,
     fat: 0,
     carbs: 0,
-    deleteItems: [],
-    showDelete: false
+    CalorieGoal: '0',
+    ProteinGoal: '0',
+    FatGoal: '0',
+    CarbsGoal: '0'
   }
 
   render() {
+    const {state, ...methods} = this;
     return (
-      <NutritionContext.Provider value={{...this, ...this.state}}>
+      <NutritionContext.Provider value={{...methods, ...state}}>
         {this.props.children}
       </NutritionContext.Provider>
     );

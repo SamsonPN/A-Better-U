@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Chart from './NutritionTotalsChart'
-import Key from '../../../API/API_Key'
+import {Key} from '../../../API/API_Key'
 
 class NutritionTotalsPage extends Component {
   state = {

@@ -940,25 +940,30 @@ BMR Calculator for Nutrition Page
   width: 100vw;
   display: flex;
   flex-direction: column;
+  font-family: 'Nunito', sans-serif;
 }
 
 #BMRHeader{
+  overflow: auto;
+  height: 15vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 15vh;
-  width: 100vw;
   margin-bottom: 10px;
+  color: #1F0CAD;
 }
 
-#bmrTitle{
+#BMRHeader > h1{
+  height: 50%;
   font-size: 3em;
 }
 
-.bmrInfo{
-  font-family: 'Nunito', sans-serif;
-  color: #1F0CAD;
+#BMRHeader > p{
+  height: 50%;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 #userInfoOuter{
@@ -986,7 +991,6 @@ BMR Calculator for Nutrition Page
 }
 
 .userTraits{
-  font-family: 'Nunito',sans-serif;
   font-size: 3em;
 }
 
@@ -1019,7 +1023,6 @@ BMR Calculator for Nutrition Page
 #feet, #inches
 {
  outline: none;
- font-family: 'Nunito', sans-serif;
  font-weight: 200;
  color: #1F0CAD;
  font-size: 2em;
@@ -1039,8 +1042,6 @@ BMR Calculator for Nutrition Page
 .BMRDropdownDiv{
   width: 12vw;
   border: 1px solid #707070;
-
-  font-family: 'Nunito', sans-serif;
   font-size: 1.65em;
   font-weight: 200;
   text-align: center;
@@ -1057,7 +1058,6 @@ BMR Calculator for Nutrition Page
   display:none;
   text-decoration: none;
   flex-direction: column;
-
   border: 1px solid #1f0cad;
   background-color: #1f0cad;
 }
@@ -1067,7 +1067,6 @@ BMR Calculator for Nutrition Page
 }
 
 .ActivityDropdownLi, .GoalDropdownLi{
-  font-family: 'Nunito', sans-serif;
   font-weight: 200;
   color: white;
   border-top: 1px solid white;
@@ -1079,27 +1078,32 @@ BMR Calculator for Nutrition Page
   color: red;
 }
 
-.bmrButton{
+.BMRButton{
+  overflow: auto;
   position: fixed;
   bottom: 4vh;
-  font-family: 'Nunito',sans-serif;
-  font-size: 2em;
-  border: 1px solid #1F0CAD;
   width: 11vw;
   height: 7vh;
-  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  font-size: 2em;
+  text-decoration: none;
+  color: black;
+  cursor: pointer
 }
 
-.bmrButton:hover{
-  color: #ffffff;
+.BMRButton:hover{
   background-color: #1F0CAD;
+  color: white;
 }
 
-#bmrCalculateBtn{
+#BMRCalculateBtn{
   right: 51vw;
 }
 
-#bmrFinishBtn{
+#BMRFinishBtn{
   right: 35vw;
 }
 
@@ -1121,10 +1125,8 @@ BMR Calculator for Nutrition Page
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   background-color: white;
   color: #1F0CAD;
-  font-family: 'Nunito', sans-serif;
   font-size: 5em;
   font-weight: 200;
 }
@@ -1140,6 +1142,7 @@ Macro Calculator for Nutrition Page
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Nunito',sans-serif;
 }
 
 #macroTitleWrapper{
@@ -1156,7 +1159,6 @@ Macro Calculator for Nutrition Page
   display: flex;
   justify-content: center;
   color: #1F0CAD;
-  font-family: 'Nunito',sans-serif;
   font-size: 3em;
 }
 
@@ -1164,7 +1166,6 @@ Macro Calculator for Nutrition Page
   width: 95vw;
   white-space: pre-line;
   border: 1px solid black;
-  font-family: 'Nunito', sans-serif;
   font-size: 1.5em;
   padding-left: 1vh;
   margin-bottom: 1vh;
@@ -1190,8 +1191,6 @@ Macro Calculator for Nutrition Page
   width: 10vw;
   border: 1px solid #1F0CAD;
   resize:none;
-
-  font-family: 'Nunito',sans-serif;
   font-size: 2.5em;
   color: #1F0CAD;
   text-align: center;
@@ -1199,33 +1198,33 @@ Macro Calculator for Nutrition Page
 
 #macroValueSpecifier > p,
 .macroWrapper > p{
-  font-family: 'Nunito',sans-serif;
   font-size: 2em;
   font-weight: 200;
   color: #1F0CAD;
 }
 
-
+/*
 #MacroButtonWrapper{
+
+} */
+
+#MacroFinishButton{
   position: fixed;
   bottom: 5vh;
   right: 2.5vw;
-  width: 25vw;
-  display: flex;
-  justify-content: space-between;
-}
-
-.macroButton{
-  font-family: 'Nunito',sans-serif;
-  font-size: 2em;
-  border: 1px solid #1F0CAD;
   width: 11vw;
   height: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  font-size: 2em;
+  text-decoration: none;
 }
 
-.macroButton:hover{
-  color: #ffffff;
+#MacroFinishButton:hover{
   background-color: #1F0CAD;
+  color: white;
 }
 
 /*

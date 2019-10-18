@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class NutritionViewButtons extends Component {
-
   render() {
     return (
       <NutritionContext.Consumer>

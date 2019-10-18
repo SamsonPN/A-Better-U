@@ -6,26 +6,18 @@ import UpArrow from '../../../assets/up-arrow.svg';
 import DownArrow from '../../../assets/down-arrow.svg';
 
 class NutritionMealDividers extends Component {
-  state = {
-    collapseDiv: false
-  }
-
   CollapseMealDiv = (e) => {
-    let arrowImg = e.target;
-    let collapsible = document.getElementById('Collapse' + this.props.meal);
-
-    this.setState(prevState => ({
-      collapseDiv: !prevState.collapseDiv
-    }), function(){
-      if(this.state.collapseDiv){
-        collapsible.style.display = 'none';
-        arrowImg.src = DownArrow;
-      }
-      else {
-        collapsible.style.display = 'flex';
-        arrowImg.src = UpArrow;
-      }
-    })
+    let img = e.target;
+    let collapsible = this.Collapsible.style;
+    let display = collapsible.display;
+    if(display === '' || display === 'flex'){
+      collapsible.display = 'none';
+      img.src = DownArrow;
+    }
+    else{
+      collapsible.display = 'flex';
+      img.src = UpArrow;
+    }
   }
 
   render() {
@@ -51,7 +43,9 @@ class NutritionMealDividers extends Component {
             onClick={(e) => this.CollapseMealDiv(e)}
             />
         </div>
-        <div className="MealItemCollapsible" id={"Collapse" + meal}>
+        <div
+          className="MealItemCollapsible"
+          ref={collapsible => this.Collapsible = collapsible}>
           <div className="MealItemsWrapper">
             {meal_Items}
           </div>

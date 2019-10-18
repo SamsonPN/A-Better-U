@@ -3,6 +3,31 @@ import React, {Component} from 'react';
 export const StoryContext = React.createContext();
 
 export class StoryProvider extends Component {
+  ClearSubmissionForm = () => {
+    document.getElementById('file').value = [];
+    document.getElementById('StoryMediaLabel').textContent = "Photo / Video";
+    document.getElementById('StorySubmitText').value = "";
+  }
+
+  DeleteStory = (story_id, file_id) => {
+    let confirm = window.confirm('Do you want to delete this story?');
+    if(confirm){
+      let storyParam = `?story_id=${story_id}`;
+      let fileParam = file_id ? `&file_id=${file_id}` : "";
+      let uri = '/deleteStory' + storyParam + fileParam;
+
+      fetch(uri, {
+        method: "DELETE",
+        headers: {
+          'Content-Type' : 'application/json'
+        }
+      })
+      .then(res => {
+        this.GetStories()
+      })
+    }
+  }
+
   GetStories = () => {
     fetch('/getStories')
       .then(res => res.json())
@@ -13,16 +38,49 @@ export class StoryProvider extends Component {
      })
   }
 
-  ClearSubmissionForm = () => {
-    document.getElementById('file').value = [];
-    document.getElementById('StoryMediaLabel').textContent = "Photo / Video";
-    document.getElementById('StorySubmitText').value = "";
-  }
-
   PutFileInLabel = (e) => {
     let file = e.target.files[0];
     let label = e.target.nextElementSibling;
     label.textContent = (file || {}).name || "Photo / Video";
+  }
+
+  SaveChanges = (fileRef, textRef) => {
+    let newFile = fileRef.files[0] || false;
+    let newText = textRef.value;
+    let {editFile, editStory, editText, mediaTypes} = this.state;
+    let text = editText === newText ? editText : newText;
+    if(newFile){
+      if(mediaTypes.indexOf(newFile.type) === -1){
+        alert("Please upload a photo or a video only!");
+        return
+      }
+      let uri = '/editStoriesWithFile';
+      let formData = new FormData();
+      formData.append('file', newFile);
+      formData.append('_id', editStory);
+      formData.append('oldFile', editFile);
+      formData.append('text', text);
+      fetch(uri, {
+        method: 'PUT',
+        body: formData
+      })
+        .then(res => {
+          this.GetStories();
+        })
+    }
+    else {
+      fetch('/editStoriesWithoutFile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({"text" : text, "_id" : editStory})
+      })
+        .then(res => {
+          this.GetStories();
+        })
+    }
+    this.ToggleModal()
   }
 
   SubmitStory = () => {
@@ -62,25 +120,6 @@ export class StoryProvider extends Component {
     }
   }
 
-  DeleteStory = (story_id, file_id) => {
-    let confirm = window.confirm('Do you want to delete this story?');
-    if(confirm){
-      let storyParam = `?story_id=${story_id}`;
-      let fileParam = file_id ? `&file_id=${file_id}` : "";
-      let uri = '/deleteStory' + storyParam + fileParam;
-
-      fetch(uri, {
-        method: "DELETE",
-        headers: {
-          'Content-Type' : 'application/json'
-        }
-      })
-      .then(res => {
-        this.GetStories()
-      })
-    }
-  }
-
   ToggleModal = (story_id, file_id, story_text) => {
     this.setState(prevState => ({
       showModal: !prevState.showModal,
@@ -88,46 +127,9 @@ export class StoryProvider extends Component {
       editFile: file_id !== undefined ? file_id : "",
       editText: story_text !== undefined ? story_text : ""
     }), function(){
-      let modalToggle = this.state.showModal;
-      document.body.style.overflow = modalToggle ? 'hidden' : 'auto';
+      let {showModal} = this.state;
+      document.body.style.overflow = showModal ? 'hidden' : 'auto';
     })
-  }
-
-  SaveChanges = (newText, newFile) => {
-    let {editFile, editStory, editText, mediaTypes} = this.state;
-    let text = editText === newText ? editText : newText;
-    if(newFile){
-      if(mediaTypes.indexOf(newFile.type) === -1){
-        alert("Please upload a photo or a video only!");
-        return
-      }
-      let uri = '/editStoriesWithFile';
-      let formData = new FormData();
-      formData.append('file', newFile);
-      formData.append('_id', editStory);
-      formData.append('oldFile', editFile);
-      formData.append('text', text);
-      fetch(uri, {
-        method: 'PUT',
-        body: formData
-      })
-        .then(res => {
-          this.GetStories();
-        })
-    }
-    else {
-      fetch('/editStoriesWithoutFile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify({"text" : text, "_id" : editStory})
-      })
-        .then(res => {
-          this.GetStories();
-        })
-    }
-    this.ToggleModal()
   }
 
   state = {
@@ -146,11 +148,11 @@ export class StoryProvider extends Component {
   }
 
   render() {
+    const {state, ...methods} = this;
     return (
-      <StoryContext.Provider value={{...this, ...this.state}}>
+      <StoryContext.Provider value={{...methods, ...state}}>
         {this.props.children}
       </StoryContext.Provider>
     );
   }
-
 }
