@@ -14,7 +14,7 @@ export class StoryProvider extends Component {
     if(confirm){
       let storyParam = `?story_id=${story_id}`;
       let fileParam = file_id ? `&file_id=${file_id}` : "";
-      let uri = '/deleteStory' + storyParam + fileParam;
+      let uri = '/story/deleteStory' + storyParam + fileParam;
 
       fetch(uri, {
         method: "DELETE",
@@ -22,14 +22,14 @@ export class StoryProvider extends Component {
           'Content-Type' : 'application/json'
         }
       })
-      .then(res => {
+      .then(() => {
         this.GetStories()
       })
     }
   }
 
   GetStories = () => {
-    fetch('/getStories')
+    fetch('/story/getStories')
       .then(res => res.json())
       .then(data => {
         this.setState({
@@ -54,32 +54,20 @@ export class StoryProvider extends Component {
         alert("Please upload a photo or a video only!");
         return
       }
-      let uri = '/editStoriesWithFile';
-      let formData = new FormData();
-      formData.append('file', newFile);
-      formData.append('_id', editStory);
-      formData.append('oldFile', editFile);
-      formData.append('text', text);
-      fetch(uri, {
-        method: 'PUT',
-        body: formData
-      })
-        .then(res => {
-          this.GetStories();
-        })
     }
-    else {
-      fetch('/editStoriesWithoutFile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify({"text" : text, "_id" : editStory})
+    let uri = '/story/editStories';
+    let formData = new FormData();
+    formData.append('file', newFile);
+    formData.append('_id', editStory);
+    formData.append('oldFile', editFile);
+    formData.append('text', text);
+    fetch(uri, {
+      method: 'PUT',
+      body: formData
+    })
+      .then(() => {
+        this.GetStories();
       })
-        .then(res => {
-          this.GetStories();
-        })
-    }
     this.ToggleModal()
   }
 
@@ -92,32 +80,19 @@ export class StoryProvider extends Component {
         alert("Please upload a photo or a video only!");
         return
       }
-      let uri = '/uploadStoriesWithFile';
-      let formData = new FormData();
-      formData.append('file', file);
-      formData.append('text', text);
-      fetch(uri, {
-        method: 'POST',
-        body: formData
-      })
-        .then(res => {
-          this.ClearSubmissionForm();
-          this.GetStories();
-        })
     }
-    else {
-      fetch('/uploadStoriesWithoutFile', {
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify({text})
+    let uri = '/story/uploadStories';
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('text', text);
+    fetch(uri, {
+      method: 'POST',
+      body: formData
+    })
+      .then(() => {
+        this.ClearSubmissionForm();
+        this.GetStories();
       })
-        .then(res => {
-          this.ClearSubmissionForm();
-          this.GetStories();
-        })
-    }
   }
 
   ToggleModal = (story_id, file_id, story_text) => {

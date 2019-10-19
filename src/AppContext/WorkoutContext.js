@@ -235,7 +235,7 @@ export class WorkoutProvider extends Component {
         },
         body: JSON.stringify(requestObject)
       })
-        .then(res => {
+        .then(() => {
           this.GetRoutines()
         })
      }

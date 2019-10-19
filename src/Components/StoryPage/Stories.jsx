@@ -4,7 +4,7 @@ import {StoryContext} from '../../AppContext/ExportContexts';
 class Stories extends Component {
   render() {
     const {date, id, story, text, type} = this.props;
-    const media = `media/${id}`;
+    const media = `/story/media/${id}`;
     const image = <img src={media} alt="None shown"/>;
     const video = <video width="500px" controls src={media} alt="None Shown"></video>;
     const tag = (type || "").includes("image") ? image : video;

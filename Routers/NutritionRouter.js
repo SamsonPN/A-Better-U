@@ -1,4 +1,4 @@
-const {FDC_Key} = require('./src/API/API_Key');
+const {FDC_Key} = require('../src/API/API_Key');
 const nutrition = require('express').Router();
 const request = require('request');
 
