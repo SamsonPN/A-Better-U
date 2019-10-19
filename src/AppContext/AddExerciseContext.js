@@ -30,7 +30,6 @@ export class AddExerciseProvider extends Component {
     }
 
     let uri = `/user/${operation}Favorites`;
-    let method = operation === 'insert' ? 'POST' : 'PUT';
     let requestObject = {
       user: "1",
       item: {
@@ -46,7 +45,7 @@ export class AddExerciseProvider extends Component {
       field: 'favExercises'
     };
     fetch(uri, {
-      method,
+      method: "POST",
       headers:{
         'Content-Type': 'application/json'
       },
@@ -70,6 +69,11 @@ export class AddExerciseProvider extends Component {
         })
       })
       .catch(err => console.error(err))
+  }
+
+  ResetCategories = () => {
+    document.getElementsByClassName('AeViews')[0].textContent = 'Muscles';
+    document.getElementsByClassName('AeViews')[1].textContent = 'Exercise Type';
   }
 
   SearchByCategory = () => {
@@ -98,7 +102,6 @@ export class AddExerciseProvider extends Component {
       e.preventDefault();
       let search = e.target.value;
       let uri = encodeURI(`/workout/getExerciseBySearch/${search}`);
-
       fetch(uri)
         .then(res => res.json())
         .then(data => {
@@ -110,8 +113,15 @@ export class AddExerciseProvider extends Component {
             exercises: data,
             showFavorite
           })
-        })
+       })
+       document.getElementsByClassName('AeViews')[0].textContent = 'Muscles';
+       document.getElementsByClassName('AeViews')[1].textContent = 'Exercise Types';
     }
+  }
+
+  ShowValue = (e, ref) => {
+    ref.textContent = e.target.textContent;
+    this.SearchByCategory()
   }
 
   componentDidMount(){

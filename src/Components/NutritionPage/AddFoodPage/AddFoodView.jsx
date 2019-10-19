@@ -7,7 +7,7 @@ import {AddFoodContext, NutritionContext} from '../../../AppContext/ExportContex
 class AddFoodView extends Component {
   static contextType = AddFoodContext;
   componentDidMount(){
-    this.context.ResetSelections();
+    this.context.GetRecents();
   }
   render() {
     const currentMeal = this.props.match.params.meal;

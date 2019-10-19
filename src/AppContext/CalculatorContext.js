@@ -21,8 +21,8 @@ export class CalculatorProvider extends Component {
       this.setState({
         BMR: Math.round(BMR)
       });
-      fetch('/user/updateCalorieGoal', {
-        method: "PUT",
+      fetch('/user/updateUserStats', {
+        method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
@@ -89,7 +89,7 @@ export class CalculatorProvider extends Component {
     }
     else if (!isNaN(total) && total !== 0){
       fetch('/user/updateMacroGoals', {
-        method: "PUT",
+        method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },

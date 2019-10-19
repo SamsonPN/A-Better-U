@@ -33,11 +33,10 @@ nutrition.get('/detailsFDC/:id', (req, res) => {
 
 // returns all food that have been consumed today
 nutrition.get('/getFood/:date', (req,res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('nutrition');
+  let {nutrition} = req.app.locals;
   let {date} = req.params;
 
-  collection.findOne(
+  nutrition.findOne(
     { date },
     { projection : { _id: 0, type: 0, date: 0 } }
   )
@@ -45,13 +44,31 @@ nutrition.get('/getFood/:date', (req,res) => {
   .catch(err => console.error(`Failed to find documents ${err}`))
 })
 
+nutrition.get('/getRecents', (req, res) => {
+  let {nutrition} = req.app.locals;
+  nutrition.find(
+    { $or:
+      [
+        {'Breakfast.0' : { $exists: true } },
+        {'Lunch.0' : { $exists: true } },
+        {'Dinner.0' : { $exists: true } },
+        {'Snacks.0' : { $exists: true } },
+      ]
+    },
+    { projection: {_id: 0, date: 0 } }
+  )
+    .sort({ _id: -1})
+    .limit(1)
+    .toArray()
+    .then(result => res.json(result))
+})
+
 // inserts all recorded food items into the database
 nutrition.post('/createNutritionDocument', (req, res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('nutrition');
+  let {nutrition} = req.app.locals;
   let {date} = req.body;
 
-  collection.insertOne({
+  nutrition.insertOne({
     date: req.body.date,
     Breakfast: [],
     Lunch: [],
@@ -62,11 +79,10 @@ nutrition.post('/createNutritionDocument', (req, res) => {
 })
 
 nutrition.post('/insertFood', (req,res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('nutrition');
+  let {nutrition} = req.app.locals;
   let {date, FoodAdded, meal} = req.body;
 
-  collection.updateOne(
+  nutrition.updateOne(
     { date},
     { $addToSet: { [meal]: { $each: FoodAdded } } }
   )
@@ -74,12 +90,11 @@ nutrition.post('/insertFood', (req,res) => {
   res.end()
 })
 
-nutrition.put('/updateServings', (req, res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('nutrition');
+nutrition.post('/updateServings', (req, res) => {
+  let {nutrition} = req.app.locals;
   let {date, meal, ndbno, servings} = req.body;
 
-  collection.updateOne(
+  nutrition.updateOne(
     { date, [meal + ".ndbno"] : ndbno },
     { $set: { [meal + ".$.servings"] : servings } }
   )
@@ -89,11 +104,10 @@ nutrition.put('/updateServings', (req, res) => {
 
 // deletes any food items from the database that the user deleted in the client
 nutrition.delete('/deleteFood', (req,res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('nutrition');
+  let {nutrition} = req.app.locals;
   let { date, meal, ndbno } = req.body;
 
-  collection.updateOne(
+  nutrition.updateOne(
     { date },
     { $pull: { [meal] : { ndbno } } }
   )

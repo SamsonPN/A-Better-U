@@ -6,33 +6,28 @@ import BlueHeart from '../assets/filled-in-heart.svg';
 export const AddFoodContext = React.createContext();
 
 export class AddFoodProvider extends Component {
-  ResetSelections = () => {
-    this.setState({
-      FoodAdded: [],
-      FoodSearch: [],
-      showFavorite: false
-    })
-  }
+  AddFood = (name, ndbno, e) => {
+      let checkbox = e.target.style;
+      let newState;
 
-  OnEnter = e => {
-    let search = e.target.value;
-    if(e.key === 'Enter' && search !== ''){
-      e.preventDefault();
-      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=${Key}`)
-      fetch(uri)
-        .then(response => response.json())
-        .then(data => {
-          if (data.list === undefined){
-            alert("We are unable to find the food you were searching for. Please enter another item!")
-          }
-          else{
-            this.setState({
-              FoodSearch: data.list.item
-            }, function(){
-              this.HeartColor(false)
-            })
-          }
+      if (checkbox.backgroundColor === "" || checkbox.backgroundColor === "white"){
+        checkbox.backgroundColor = '#1F0CAD';
+        newState = [{"name": name, "ndbno": ndbno, "servings" : 1}];
+
+        this.setState(previousState => ( {
+          FoodAdded: previousState.FoodAdded.concat(newState)
+        } ))
+      }
+      else {
+        checkbox.backgroundColor = "white";
+        newState = this.state.FoodAdded.filter((item) => {
+          return item.name !== name
         })
+
+        this.setState(previousState => ( {
+          FoodAdded: newState,
+        } ))
+
       }
     }
 
@@ -51,29 +46,39 @@ export class AddFoodProvider extends Component {
       .catch(err => console.error(err))
   }
 
-  AddFood = (name, ndbno, e) => {
-    let checkbox = e.target.style;
-    let newState;
-
-    if (checkbox.backgroundColor === "" || checkbox.backgroundColor === "white"){
-      checkbox.backgroundColor = '#1F0CAD';
-      newState = [{"name": name, "ndbno": ndbno, "servings" : 1}];
-
-      this.setState(previousState => ( {
-        FoodAdded: previousState.FoodAdded.concat(newState)
-      } ))
-    }
-    else {
-      checkbox.backgroundColor = "white";
-      newState = this.state.FoodAdded.filter((item) => {
-        return item.name !== name
+  GetRecents = () => {
+    fetch('/nutrition/getRecents')
+      .then(res => res.json())
+      .then(data => {
+        let results = {};
+        let FoodSearch = [];
+        for (let meal in data[0]){
+          let mealName = data[0][meal];
+          if(mealName.length === 0){
+            continue;
+          }
+          for(let i = 0; i < mealName.length; i++){
+            results = {...results, [mealName[i].name]: mealName[i]}
+          }
+        }
+        for (let items in results){
+          FoodSearch.push(results[items])
+        }
+        this.setState({
+          FoodSearch,
+          FoodAdded: [],
+          showFavorite: false
+        }, function(){
+          this.HeartColor(false);
+        })
       })
+  }
 
-      this.setState(previousState => ( {
-        FoodAdded: newState,
-      } ))
-
-    }
+  HeartColor = (fill) => {
+    let AddFoodFavorite = document.getElementsByClassName('AddFoodFavorite');
+    [...AddFoodFavorite].forEach( item => {
+      item.src = fill === true ? BlueHeart : Heart;
+    })
   }
 
   FavoriteFood = (name, ndbno, e) => {
@@ -99,7 +104,6 @@ export class AddFoodProvider extends Component {
     }
 
     let uri = `/user/${operation}Favorites`;
-    let method = operation === 'insert' ? 'POST' : 'PUT';
     let requestObject = {
       user: "1",
       item: { name, ndbno },
@@ -107,7 +111,7 @@ export class AddFoodProvider extends Component {
     }
 
     fetch(uri, {
-      method,
+      method: 'POST',
       headers:{
         'Content-Type': 'application/json'
       },
@@ -115,6 +119,28 @@ export class AddFoodProvider extends Component {
     })
       .catch(err => console.error(err))
   }
+
+  SearchFood = e => {
+    let search = e.target.value;
+    if(e.key === 'Enter' && search !== ''){
+      e.preventDefault();
+      let uri = encodeURI(`https://api.nal.usda.gov/ndb/search/?format=json&q=${search}&sort=r&offset=0&api_key=${Key}`)
+      fetch(uri)
+        .then(response => response.json())
+        .then(data => {
+          if (data.list === undefined){
+            alert("We are unable to find the food you were searching for. Please enter another item!")
+          }
+          else{
+            this.setState({
+              FoodSearch: data.list.item
+            }, function(){
+              this.HeartColor(false)
+            })
+          }
+        })
+      }
+    }
 
   StoreFood = (nutritionDate, currentMeal) => {
     let {FoodAdded} = this.state;
@@ -138,13 +164,6 @@ export class AddFoodProvider extends Component {
       })
         .catch(err => console.log(err))
     }
-  }
-
-  HeartColor = (fill) => {
-    let AddFoodFavorite = document.getElementsByClassName('AddFoodFavorite');
-    [...AddFoodFavorite].forEach( item => {
-      item.src = fill === true ? BlueHeart : Heart;
-    })
   }
 
   state = {

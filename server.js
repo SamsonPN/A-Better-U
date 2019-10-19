@@ -9,8 +9,6 @@ const MongoClient = Mongo.MongoClient;
 const url = 'mongodb://localhost:27017/';
 const dbName = 'a-better-u';
 const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-const ObjectID = Mongo.ObjectID;
-app.locals.ObjectID = ObjectID;
 
 const workoutRouter = require('./Routers/WorkoutRouter');
 const nutritionRouter = require('./Routers/NutritionRouter');
@@ -21,6 +19,13 @@ client.connect((err)=> {
   console.log('Successfully connected to the server')
   const db = client.db(dbName);
   app.locals.db = db;
+  app.locals.ObjectID = Mongo.ObjectID;
+  app.locals.exerciseList = db.collection('exerciseList');
+  app.locals.nutrition = db.collection('nutrition');
+  app.locals.routines = db.collection('routines');
+  app.locals.stories = db.collection('stories');
+  app.locals.users = db.collection('users');
+  app.locals.workouts = db.collection('workouts');
 
   let options = {month: "2-digit", day: "2-digit", year: "numeric"};
   let date = new Date();
@@ -35,7 +40,7 @@ client.connect((err)=> {
 
 app.use(express.json());
 app.use(cors());
-app.listen(port, function(){
+app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 

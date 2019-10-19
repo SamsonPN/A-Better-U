@@ -28,80 +28,14 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 story.get('/getStories', (req,res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('stories');
+  let {stories} = req.app.locals;
 
-  collection.find()
+  stories.find()
     .sort( { date: -1, _id: -1} )
     .toArray()
     .then(items => { res.json(items) } )
     .catch( err => console.error(err))
 })
-
-// @route GET /files
-// @desc Display all files in JSON
-// gonna use GridFsStream for this
-// returns an array of files
-story.get('/files', (req, res) => {
-  let {gfs} = req.app.locals;
-  gfs.files.find().toArray((err, files) => {
-    // Check if files
-    if(!files || files.length === 0){
-      return res.status(404).json({
-        err: 'No files exist'
-      });
-    }
-
-    // Files exist
-    return res.json(files);
-  });
-});
-
-// @route POST /upload
-// @desc Uploads file to DB
-story.post('/uploadStories', upload.single('file'), (req, res) => {
-  let {db, date} = req.app.locals;
-  let collection = db.collection('stories');
-  let text = req.body.text || "";
-  let file_id = req.file ? req.file.id : false;
-  let file_type = req.file ? req.file.contentType : false;
-
-  collection.insertOne({
-    user: "1",
-    text,
-    file_id,
-    file_type,
-    date
-  })
-    .catch(err => console.error(err))
-  res.end()
-});
-
-story.put('/editStories', upload.single('file'), (req, res) => {
-  let {db, gfs, ObjectID} = req.app.locals;
-  let collection = db.collection('stories');
-  let {_id, oldFile} = req.body;
-  let text = req.body.text || "";
-  let file_id = req.file ? ObjectID(req.file.id) : false;
-  let file_type = req.file ? req.file.contentType : false;
-
-  collection.updateOne(
-    { _id : ObjectID(_id) },
-    {$set: { text, file_id, file_type } }
-  )
-    .catch(err => console.error(err))
-
-  if(req.file){
-    gfs.remove({_id: oldFile, root: 'storyMedia'}, (err, gridStore) => {
-      if(err){
-        return res.status(404).json({
-          err: err
-        });
-      }
-    })
-  }
-  res.end()
-});
 
 //need to use readStream to show the files
 //@route GET /image/:filename
@@ -120,25 +54,55 @@ story.get('/media/:id', (req, res) => {
   });
 });
 
-//@route DELETE /files/:id
-// @desc Delete file
-story.delete('/files/:id', (req,res) => {
-  let {gfs} = req.app.locals;
-  gfs.remove({_id: req.params.id, root: 'storyMedia'}, (err, gridStore) => {
-    if(err){
-      return res.status(404).json({
-        err: err
-      });
-    }
+// @route POST /upload
+// @desc Uploads file to DB
+story.post('/uploadStories', upload.single('file'), (req, res) => {
+  let {date, stories} = req.app.locals;
+  let text = req.body.text || "";
+  let file_id = req.file ? req.file.id : false;
+  let file_type = req.file ? req.file.contentType : false;
+
+  stories.insertOne({
+    user: "1",
+    text,
+    file_id,
+    file_type,
+    date
   })
+    .catch(err => console.error(err))
+  res.end()
+});
+
+story.put('/editStories', upload.single('file'), (req, res) => {
+  let {gfs, ObjectID, stories} = req.app.locals;
+  let {_id, oldFile} = req.body;
+  let text = req.body.text || "";
+  let file_id = req.file ? ObjectID(req.file.id) : false;
+  let file_type = req.file ? req.file.contentType : false;
+
+  stories.updateOne(
+    { _id : ObjectID(_id) },
+    {$set: { text, file_id, file_type } }
+  )
+    .catch(err => console.error(err))
+
+  if(req.file){
+    gfs.remove({_id: oldFile, root: 'storyMedia'}, (err, gridStore) => {
+      if(err){
+        return res.status(404).json({
+          err: err
+        });
+      }
+    })
+  }
+  res.end()
 });
 
 story.delete('/deleteStory', (req, res) => {
-  let {db, gfs, ObjectID} = req.app.locals;
-  let collection = db.collection('stories');
+  let {gfs, ObjectID, stories} = req.app.locals;
   let { story_id, file_id } = req.query;
 
-  collection.deleteOne( { _id : ObjectID(story_id) } )
+  stories.deleteOne( { _id : ObjectID(story_id) } )
     .catch(err => console.error(err))
 
   if(file_id){

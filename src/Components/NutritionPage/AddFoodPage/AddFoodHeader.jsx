@@ -7,12 +7,12 @@ class AddFoodHeader extends Component {
     const currentMeal = this.props.match.params.meal;
     return (
       <AddFoodContext.Consumer>
-        { ({OnEnter}) => (
+        { ({ SearchFood }) => (
           <div id="AddFoodHeader">
             <h1>Add {currentMeal}</h1>
             <textarea id="AddFoodSearch"
               onClick={(e) => e.target.value = ""}
-              onKeyPress={(e) => OnEnter(e)}
+              onKeyPress={(e) => SearchFood(e)}
               placeholder="Search for a food item">
             </textarea>
             <SortBtns />

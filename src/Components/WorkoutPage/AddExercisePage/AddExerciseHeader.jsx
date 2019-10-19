@@ -7,7 +7,7 @@ class AddExerciseHeader extends Component {
   render() {
     return (
       <AddExerciseContext.Consumer>
-        { ({ GetFavorites, SearchExercise }) => (
+        { ({ GetFavorites, ResetCategories, SearchExercise }) => (
           <div id="AddExerciseHeader">
             <h1 id="AddExerciseName">Add Exercises</h1>
 
@@ -20,12 +20,18 @@ class AddExerciseHeader extends Component {
             <div id="AddExerciseOptionsWrapper">
               <BodyOptions />
               <EtOptions />
-              <button
-                id="AddExerciseFavoriteBtn"
+              <div
+                className="AddExerciseBtn"
+                onClick={() => ResetCategories()}
+                >
+                Reset
+              </div>
+              <div
+                className="AddExerciseBtn"
                 onClick={() => GetFavorites()}
               >
               Favorites
-              </button>
+            </div>
             </div>
           </div>
         )}

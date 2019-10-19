@@ -156,7 +156,7 @@ export class NutritionProvider extends Component {
         servings
       }
       fetch('/nutrition/updateServings', {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },

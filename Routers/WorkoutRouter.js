@@ -2,19 +2,15 @@ const workout = require('express').Router();
 
 // used by addexerciseview to return list of Muscles and Exercise types
 workout.get('/getExerciseTypes', (req,res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('exerciseList');
-
-  collection.findOne( { "record" : "Exercise Types"} )
+  let {exerciseList} = req.app.locals;
+  exerciseList.findOne( { "record" : "Exercise Types"} )
     .then(result => res.json(result))
 })
 
 // returns all exercises categorized by Muscle and Exercise tabs
 workout.get('/getExerciseByCategory', (req,res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('exerciseList');
-
-  collection.find( req.query )
+  let {exerciseList} = req.app.locals;
+  exerciseList.find( req.query )
     .sort( { "name": 1} )
     .toArray()
     .then(items => {res.json(items)})
@@ -23,10 +19,8 @@ workout.get('/getExerciseByCategory', (req,res) => {
 
 //used by addexerciseview to return exercises via search bar
 workout.get('/getExerciseBySearch/:search', (req, res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('exerciseList');
-
-  collection.find(
+  let {exerciseList} = req.app.locals;
+  exerciseList.find(
     { name : { $regex: req.params.search, $options: "i" } }
   )
     .sort( { name: 1} )
@@ -37,10 +31,8 @@ workout.get('/getExerciseBySearch/:search', (req, res) => {
 
 // used by workoutcontext.js to fill the Routine tab
 workout.get('/getRoutines', (req, res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('routines');
-
-  collection.find()
+  let {routines} = req.app.locals;
+  routines.find()
     .sort( { name : 1 } )
     .toArray()
     .then(items => res.json(items))
@@ -49,10 +41,8 @@ workout.get('/getRoutines', (req, res) => {
 
 //used by workoutcontext.js to fill the Saved tab with workouts
 workout.get('/getWorkouts', (req, res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('workouts');
-
-  collection.find( req.query )
+  let {workouts} = req.app.locals;
+  workouts.find( req.query )
     .sort( { date : 1 } )
     .toArray()
     .then(result => res.json(result))
@@ -61,27 +51,36 @@ workout.get('/getWorkouts', (req, res) => {
 
 // used by the Date selector to grab the workout
 workout.get('/getWorkoutById', (req, res) => {
-  let {db, ObjectID } = req.app.locals;
-  let collection = db.collection('workouts');
-
-  collection.findOne(
+  let {ObjectID, workouts } = req.app.locals;
+  workouts.findOne(
    { _id: ObjectID(req.query._id) } )
     .then(result => res.json(result))
     .catch(err => console.error(err))
 })
 
 //used to update the exercise list for routines/workouts
-workout.put('/updateExercises', (req,res) => {
+workout.post('/updateExercises', (req,res) => {
   let { db, ObjectID } = req.app.locals;
   let {_id, exercises, name, collectionName} = req.body;
   let collection = db.collection(collectionName);
-
   collection.updateOne(
     { _id: ObjectID(_id) },
     {$set: { name, exercises } },
     {upsert: true}
   )
     .catch(err => console.error(err))
+  res.end();
+})
+
+// saves the workouts to the workout collection
+workout.post('/saveWorkout', (req, res) => {
+  let {workouts} = req.app.locals;
+  let {name, date, exercises} = req.body;
+  workouts.updateOne(
+    { name, date },
+    { $set: { exercises } },
+    { upsert: true }
+  )
   res.end();
 })
 
@@ -94,20 +93,6 @@ workout.delete('/deleteCurrentRoutine/:collectionName/:id', (req, res) => {
     { _id: ObjectID(req.params.id) }
   )
     .catch(err => console.error(err))
-  res.end();
-})
-
-// saves the workouts to the workout collection
-workout.post('/saveWorkout', (req, res) => {
-  let {db} = req.app.locals;
-  let collection = db.collection('workouts');
-  let {name, date, exercises} = req.body;
-
-  collection.updateOne(
-    { name, date },
-    { $set: { exercises } },
-    { upsert: true }
-  )
   res.end();
 })
 

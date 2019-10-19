@@ -63,7 +63,6 @@ Header
 }
 
 
-
 /*
 
 Workout Page
@@ -435,19 +434,17 @@ ADD EXERCISE VIEW
 
 #AddExerciseView{
   height: 100vh;
+  font-family: 'Nunito', sans-serif;
 }
 
 #AddExerciseHeader{
   min-width: 100vw;
   height: 25vh;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-
   border-bottom: 1px solid #1F0CAD;
-  font-family: 'Nunito',sans-serif;
 }
 
 #AddExerciseName{
@@ -458,16 +455,10 @@ ADD EXERCISE VIEW
 #ExerciseSearchBar, #ExerciseSearchBar:focus{
   width: 79.8vw;
   height: 10vh;
-
   resize: none;
   border: 1px solid #1F0CAD;
-
   font-weight: 200;
   font-size: 2em;
-}
-
-#AddExerciseName{
-  font-family: 'Nunito', sans-serif;
 }
 
 #AddExerciseOptionsWrapper{
@@ -478,11 +469,9 @@ ADD EXERCISE VIEW
 
 .AddExerciseOptions{
   height: 3.5vh;
-  width: 20vw;
-
+  width: 15vw;
   position: relative;
   display: inline-block;
-
   font-size: 1em;
   font-weight: 200;
   cursor: pointer;
@@ -495,12 +484,10 @@ ADD EXERCISE VIEW
 }
 
 .AeViews{
-  width: 20vw;
+  width: inherit;
   height: 3.5vh;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
-
-  font-family: 'Nunito', sans-serif;
   font-size: 1.25em;
   font-weight: 600;
   text-align: center;
@@ -514,14 +501,12 @@ ADD EXERCISE VIEW
 
 .AeViewsDropdown{
   height: 30vh;
-  width: 20vw;
+  width: inherit;
   overflow: auto;
-
   visibility: hidden;
   text-decoration: none;
   display:flex;
   flex-direction: column;
-
   background-color: #1F0CAD;
 }
 
@@ -530,12 +515,10 @@ ADD EXERCISE VIEW
 }
 
 .AeOptionItem{
-  font-family: 'Nunito', sans-serif;
+  border-top: 1px solid white;
   font-size: 1.15em;
   font-weight: 200;
   color: white;
-
-  border-top: 1px solid white;
   text-align: center;
 }
 
@@ -543,21 +526,20 @@ ADD EXERCISE VIEW
   color: red;
 }
 
-#AddExerciseFavoriteBtn{
-  width: 20vw;
-  height: 3.75vh;
+.AddExerciseBtn{
+  width: 15vw;
+  height: 3.5vh;
   border: 1px solid #1F0CAD;
-
-  font-family: 'Nunito', sans-serif;
+  box-sizing: border-box;
   font-size: 1.25em;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
 }
 
-#AddExerciseFavoriteBtn:hover{
-  color: white;
+.AddExerciseBtn:hover{
   background-color: #1F0CAD;
+  color: white;
 }
 
 #AddExerciseList{
@@ -574,8 +556,6 @@ ADD EXERCISE VIEW
   display: flex;
   justify-content: space-between;
   margin-bottom: 1.5vh;
-
-  font-family: 'Nunito',sans-serif;
   font-size: 2em;
   font-weight: 200;
   font-style: italic;
@@ -593,31 +573,12 @@ ADD EXERCISE VIEW
   height: 25px;
   width: 25px;
   margin-bottom: 1.2vh;
+  cursor: pointer;
 }
 
 .AddExerciseFavorite{
   height: 46.5px;
   width: 52.5px;
-}
-
-.AddExerciseCheckBox:hover , .AddExerciseFavorite:hover{
-  cursor: pointer;
-}
-
-#AddExerciseConfirmation{
-  height: 8vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid #1F0CAD;
-
-  font-family: 'Nunito', sans-serif;
-  font-weight: 200;
-  color: white;
-  z-index: 1;
-
-  background-color: blue;
 }
 
 /*
@@ -1331,7 +1292,7 @@ Add Food Page
 }
 
 .SortBtns{
-  width: 20vw;
+  width: 35vw;
   height: 5vh;
   border: 1px solid #1F0CAD;
   font-family: 'Nunito',sans-serif;

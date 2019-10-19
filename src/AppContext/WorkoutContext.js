@@ -228,7 +228,7 @@ export class WorkoutProvider extends Component {
     let requestObject = {...currentRoutine, collectionName};
     if( (exercises || []).length !== 0 ){
       fetch('/workout/updateExercises', {
-        method: 'PUT',
+        method: 'POST',
         mode: 'same-origin',
         headers:{
           'Content-Type': 'application/json'

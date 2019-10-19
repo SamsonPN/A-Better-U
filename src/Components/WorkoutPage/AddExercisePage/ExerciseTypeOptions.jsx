@@ -3,14 +3,14 @@ import {AddExerciseContext} from '../../../AppContext/ExportContexts';
 
 class ExerciseTypeOptions extends Component {
   static contextType = AddExerciseContext;
-  ShowValue = (e) => {
-    this.AeViews.textContent = e.target.textContent;
-    this.context.SearchByCategory();
-  }
-
   render() {
-    const types = this.context.types.map(type =>
-      <EtOptionItem key={type} name={type} ShowValue={this.ShowValue}/>
+    const {ShowValue, types} = this.context;
+    const typeItems = types.map(type =>
+      <EtOptionItem
+        key={type}
+        name={type}
+        ShowValue={ShowValue}
+        textRef={this.AeViews}/>
     )
     return (
       <div className="AddExerciseOptions">
@@ -20,7 +20,7 @@ class ExerciseTypeOptions extends Component {
           Exercise Type
         </div>
         <ul className="AeViewsDropdown">
-          {types}
+          {typeItems}
         </ul>
       </div>
 
@@ -32,14 +32,14 @@ export default ExerciseTypeOptions;
 
 class EtOptionItem extends Component {
   render() {
-    const {name, ShowValue} = this.props;
+    const {name, ShowValue, textRef} = this.props;
     return (
-      <div
-        className="AeOptionItem"
-        onClick={(e) => ShowValue(e)}
-      >
-        {name}
-      </div>
+        <div
+          className="AeOptionItem"
+          onClick={(e) => ShowValue(e, textRef)}
+        >
+          {name}
+        </div>
     );
   }
 }
