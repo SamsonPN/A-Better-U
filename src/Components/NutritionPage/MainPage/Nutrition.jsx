@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import NutritionView from './NutritionView.jsx';
-import NVBtns from './NutritionViewButtons.jsx';
-import Meals from './NutritionMealDividers.jsx';
+import NutritionView from './NutritionView';
+import NVBtns from './NutritionViewButtons';
+import Meals from './NutritionMealDividers';
+import Totals from './NutritionTotalsModal';
 import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class Nutrition extends Component {
@@ -10,8 +11,9 @@ class Nutrition extends Component {
   componentDidMount(){
     this.context.FetchFood();
   }
-  
+
   render() {
+    const {showTotals} = this.context;
     const meals = ["Breakfast", "Lunch", "Dinner", "Snacks"].map(meal =>
       <Meals
        key={meal}
@@ -24,6 +26,7 @@ class Nutrition extends Component {
         <NutritionView />
         <NVBtns />
         {meals}
+        {showTotals ? <Totals /> : null}
       </div>
     )
   }

@@ -8,8 +8,9 @@ class NutritionViewButtons extends Component {
   render() {
     return (
       <NutritionContext.Consumer>
-        { ({ ChangeNutritionDate, nutritionDate }) => (
+        { ({ ChangeNutritionDate, nutritionDate, ToggleTotals }) => (
           <div id="NVButtonsWrapper">
+
             <div className="NVInnerWrapper">
               <DatePicker
                 selected={nutritionDate}
@@ -18,12 +19,26 @@ class NutritionViewButtons extends Component {
                 className="NVButtons"
                 withPortal
                 utcOffset/>
-              <Link to="/nutrition/totals"><button className="NVButtons">Nutrient Totals</button></Link>
+              <button
+                className="NVButtons"
+                onClick={() => ToggleTotals()}>
+                Nutrient Totals
+              </button>
             </div>
+
             <div className="NVInnerWrapper">
-              <Link to="/nutrition/bmrcalculator"><button className="NVButtons">Determine Calorie Goal</button></Link>
-              <Link to="/nutrition/macrocalculator"><button className="NVButtons">Determine Macro Goal</button></Link>
+              <Link
+                to="/nutrition/bmrcalculator"
+                className="NVButtons">
+                Determine Calorie Goal
+              </Link>
+              <Link
+                to="/nutrition/macrocalculator"
+                className="NVButtons">
+                Determine Macro Goal
+              </Link>
             </div>
+
           </div>
         )}
       </NutritionContext.Consumer>

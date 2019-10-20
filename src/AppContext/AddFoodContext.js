@@ -51,19 +51,19 @@ export class AddFoodProvider extends Component {
       .then(res => res.json())
       .then(data => {
         let results = {};
-        let FoodSearch = [];
         for (let meal in data[0]){
           let mealName = data[0][meal];
           if(mealName.length === 0){
             continue;
           }
           for(let i = 0; i < mealName.length; i++){
-            results = {...results, [mealName[i].name]: mealName[i]}
+            results[mealName[i].name] = mealName[i]
+            // results = {...results, [mealName[i].name]: mealName[i]}
           }
         }
-        for (let items in results){
-          FoodSearch.push(results[items])
-        }
+        let FoodSearch = Object.keys(results).map (item => {
+          return results[item]
+        })
         this.setState({
           FoodSearch,
           FoodAdded: [],

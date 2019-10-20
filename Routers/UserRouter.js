@@ -1,3 +1,4 @@
+"use strict";
 const user = require('express').Router();
 
 // will probably delete this and put it into user and call it once!

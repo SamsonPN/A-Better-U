@@ -1,3 +1,4 @@
+"use strict";
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 9000;
@@ -27,11 +28,6 @@ client.connect((err)=> {
   app.locals.users = db.collection('users');
   app.locals.workouts = db.collection('workouts');
 
-  let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-  let date = new Date();
-  let today = date.toLocaleDateString("en-US", options);
-  app.locals.date = today;
-
   let gfs;
   gfs = GridFs(db, Mongo);
   gfs.collection('storyMedia');
@@ -43,6 +39,15 @@ app.use(cors());
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+//gets today's date
+app.use((req, res, next) => {
+  let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+  let date = new Date();
+  let today = date.toLocaleDateString("en-US", options);
+  app.locals.date = today;
+  next()
+})
 
 // Routers for the workout, nutrition, and story pages and user information
 app.use('/workout', workoutRouter);

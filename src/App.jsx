@@ -4,7 +4,7 @@ import './App.css';
 import Login from './Login';
 import Header from './Components/Header/Header';
 import {Workout, RoutineView, AddExerciseView} from './Components/WorkoutPage/ExportWorkoutComponents';
-import {Nutrition, Totals, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';
+import {Nutrition, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';
 import Story from './Components/StoryPage/StoryPage';
 import { StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider, CalculatorProvider} from './AppContext/ExportContexts';
 
@@ -35,30 +35,25 @@ class App extends Component {
             </AddExerciseProvider>
 
            {/*NUTRITION ROUTES*/}
-           <NutritionProvider>
-             <AddFoodProvider>
-               <CalculatorProvider>
-                 <Route exact path="/nutrition" render={props => (
-                   <React.Fragment>
-                     <Header />
-                     <Nutrition />
-                   </React.Fragment>
-                 )} />
-               </CalculatorProvider>
-
-               <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
-                     <AddFoodView {...props}/>
-                   )}/>
-             </AddFoodProvider>
-            </NutritionProvider>
-
            <CalculatorProvider>
+             <NutritionProvider>
+               <AddFoodProvider>
+                   <Route exact path="/nutrition" render={props => (
+                     <React.Fragment>
+                       <Header />
+                       <Nutrition />
+                     </React.Fragment>
+                   )} />
+
+
+                 <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
+                       <AddFoodView {...props}/>
+                     )}/>
+               </AddFoodProvider>
+              </NutritionProvider>
              <Route exact path="/nutrition/bmrcalculator" component={BMR} />
              <Route exact path="/nutrition/macrocalculator" component={Macro} />
            </CalculatorProvider>
-
-           <Route exact path="/nutrition/totals" component={Totals} />
-
 
            {/*STORY ROUTES*/}
           <StoryProvider>

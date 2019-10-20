@@ -1,3 +1,4 @@
+"use strict";
 const workout = require('express').Router();
 
 // used by addexerciseview to return list of Muscles and Exercise types

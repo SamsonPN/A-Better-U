@@ -12,7 +12,10 @@ class NutritionMealItems extends Component {
   ShowModal = (e) => {
     this.setState(prevState =>(
       { showModal: !prevState.showModal }
-    ))
+    ), function(){
+      let {showModal} = this.state;
+      document.body.style.overflow = showModal ? 'hidden' : 'auto';
+    })
   }
 
   render() {

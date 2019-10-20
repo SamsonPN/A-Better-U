@@ -3,13 +3,6 @@ import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class NutritionItemModal extends Component {
   static contextType = NutritionContext;
-
-  PreventInvalidInput = (e) => {
-    if(e.key === 'Enter'){
-      e.preventDefault()
-    }
-  }
-
   render() {
     const {meal, name, ndbno, servings, showModal} = this.props;
     const {reports} = this.context;
@@ -44,7 +37,7 @@ class NutritionItemModal extends Component {
                        className="NutritionModalTextArea"
                        defaultValue={servings !== '' ? servings : 0}
                        onChange={(e) => UpdateServings(e, meal, ndbno)}
-                       onKeyPress={this.PreventInvalidInput}
+                       onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
                        ref={element => this.inputElement = element}
                      >
                      </textarea>

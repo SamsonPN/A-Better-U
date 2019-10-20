@@ -11,10 +11,8 @@ Header
 #header{
   height: 15vh;
   min-width: 100vw;
-
   display:flex;
   align-items: flex-end;
-
   background-image: url("./assets/main-header.jpg");
 }
 
@@ -22,7 +20,6 @@ Header
   position: absolute;
   top: 0vh;
   height: 10vh;
-
   display: flex;
   align-items: flex-start;
 }
@@ -80,7 +77,6 @@ Workout Page
 #WoWrapper{
   display: flex;
   justify-content: space-around;
-
   margin-top: 2vh;
   width: 100%;
   height: 6vh;
@@ -103,7 +99,6 @@ Workout Page
   width: 30vw;
   box-sizing: border-box;
   border: 1px solid #1F0CAD;
-
   font-family: 'Nunito', sans-serif;
   font-size: 2em;
   font-weight: 600;
@@ -142,7 +137,6 @@ Workout Page
 .CurrentRoutineWorkouts{
   width: 96.8vw;
   min-height: 75vh;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -177,11 +171,9 @@ Workout Page
 .CurrentRoutineItems{
   width: 90vw;
   min-height: 0vh;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   border: 1px solid #1F0CAD;
   margin-bottom: 3vh;
   box-shadow: 10px 10px 10px #707070;
@@ -193,11 +185,9 @@ Workout Page
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
-
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-
   font-size: 3em;
   font-weight: 200;
   color: #1F0CAD;
@@ -231,11 +221,9 @@ Workout Page
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
-
   width: 12vw;
   height: 10vh;
   border-bottom: 1px solid #1F0CAD;
-
   text-align: center;
   font-size: 3em;
   font-weight: 200;
@@ -252,13 +240,11 @@ Workout Page
 .CurrentRoutineAddSet{
   height: 10vh;
   width: 100%;
-
   display:flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 2vh;
-
   font-size: 2.25em;
   font-weight: 200;
   cursor: pointer;
@@ -353,7 +339,6 @@ Routine View Page
   bottom: 0;
   width: 100vw;
   height: 5vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -599,12 +584,10 @@ NUTRITION PAGE STUFF
 #NutritionView{
   height: 25vh;
   width: 85vw;
-
   display:flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-
   border: 1px solid #1F0CAD;
   margin-top: 2vh;
 }
@@ -631,7 +614,6 @@ NUTRITION PAGE STUFF
 #NVButtonsWrapper{
   width: 85vw;
   height: 12vh;
-
   display: flex;
   flex-direction: column;
   margin: 1vh;
@@ -640,7 +622,6 @@ NUTRITION PAGE STUFF
 .NVInnerWrapper{
   width: 85vw;
   height: 100%;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -649,12 +630,16 @@ NUTRITION PAGE STUFF
 .NVButtons{
   height: 5vh;
   width: 42vw;
-  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #1F0CAD;
-
+  background-color: white;
+  color: black;
   font-family: 'Nunito',sans-serif;
   font-size: 1em;
   text-align: center;
+  text-decoration: none;
   cursor: pointer;
   box-sizing: border-box;
 }
@@ -682,12 +667,10 @@ NUTRITION PAGE STUFF
 .MealNameWrapper{
   height: 7vh;
   width: 100%;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid black;
-
   background-color: #1F0CAD;
 }
 
@@ -763,40 +746,6 @@ NUTRITION PAGE STUFF
  margin-top: 0.5vh;
 }
 
-.UpdateDeleteBars{
-  position: fixed;
-  bottom: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 85.1vw;
-  height: 7vh;
-
-  background-color: red;
-  color: white;
-
-  font-family: 'Nunito', sans-serif;
-  font-size: 2em;
-}
-
-#UpdateBar{
-  background-color: green;
-}
-
-.UpdateDeleteBars > p{
-  margin-right: 2vh;
-}
-
-.BarOptns{
-  cursor: pointer;
-}
-
-.DeleteBarOptns:active{
-  color: #1F0CAD;
-}
-
 .NutritionItemModal{
   position: fixed;
   display: flex;
@@ -815,7 +764,6 @@ NUTRITION PAGE STUFF
   opacity: 1;
   display: flex;
   flex-direction: column;
-
   height: 50vh;
   width: 50vw;
   background-color: white;
@@ -855,7 +803,6 @@ NUTRITION PAGE STUFF
   resize: none;
   border: none;
   outline: none;
-
   height: 70%;
   width: 10%;
   box-sizing: border-box;
@@ -886,7 +833,6 @@ NUTRITION PAGE STUFF
   margin-top: 0.5%;
   margin-bottom: 0.5%;
 }
-
 
 /*
 
@@ -973,10 +919,6 @@ BMR Calculator for Nutrition Page
 
 #feet, #inches{
   width: 5vw;
-}
-
-#cm{
-  display:none;
 }
 
 .userTraitsAnswer:focus, .userTraitsAnswer,
@@ -1190,51 +1132,59 @@ Macro Calculator for Nutrition Page
 
 /*
 
-TOTAL NUTRIENTS PAGE
+TOTAL NUTRIENTS MODAL
 
 */
-#NutritionTotals{
-  width: 100vw;
-  height: 100vh;
-  font-family: 'Nunito',sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-#NutritionTotals > h1{
-  height: auto;
-  width: 100%;
+#TotalsModal{
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
-  color: #1F0CAD;
-  font-weight: 200;
-  font-size: 3em;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
 }
 
-#NutritionTotalsContentWrapper{
-  height: 90%;
-  width: 100%;
+#TotalsModalContent{
+  height: 80%;
+  width: 80%;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  background-color: white;
+  overflow: auto;
 }
 
-#NutritionTotalsList{
+#NutritionChart{
+  height: 100%;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1F0CAD;
+}
+
+#TotalsList{
+  overflow: auto;
   width: 30%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: auto;
 }
 
 .NutritionTotalRows{
   width: 100%;
-  height: auto;
+  height: 10%;
   display: flex;
   justify-content: space-between;
-  font-size: 1.5em;
   padding: 5px;
   box-sizing: border-box;
+  align-items: center;
+  font-size: 1.25em;
 }
 
 .NutritionTotalRows:nth-child(odd){
@@ -1242,9 +1192,6 @@ TOTAL NUTRIENTS PAGE
   color: white;
 }
 
-.NutritionChart{
-  width: 70%;
-}
 
 /*
 
@@ -1258,12 +1205,10 @@ Add Food Page
 #AddFoodHeader{
   min-width: 100vw;
   height: 25vh;
-
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
   border-bottom: 1px solid #1F0CAD;
 }
 
@@ -1311,11 +1256,9 @@ Add Food Page
   position: sticky;
   bottom: 0vh;
   left: 92vw;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   height: 7vh;
   width: 100vw;
   border-top: 1px solid #1F0CAD;
@@ -1332,7 +1275,6 @@ Add Food Page
   height: 68vh;
   width: 100vw;
   overflow: auto;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1343,7 +1285,6 @@ Add Food Page
   display: flex;
   justify-content: space-between;
   margin-top: 1.5vh;
-
   font-family: 'Nunito',sans-serif;
   font-size: 1.5vw;
   font-weight: 200;
@@ -1572,6 +1513,7 @@ STORY PAGE STUFF
 #StoryModalHeader > p:nth-child(even){
   cursor: pointer;
 }
+
 #StoryModalText, #StoryModalText:focus{
   outline: none;
   resize: none;
