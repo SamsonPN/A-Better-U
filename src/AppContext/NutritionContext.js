@@ -11,7 +11,7 @@ export class NutritionProvider extends Component {
     let {reports} = this.state;
     let nutrients = {};
     meals.forEach(meal => {
-      this.state[meal].forEach( item => {
+      this.state[meal].forEach(item => {
         nutrients = this.FillNutrients(nutrients, reports[item.ndbno].nutrients, item.servings);
       })
     })
@@ -76,17 +76,21 @@ export class NutritionProvider extends Component {
           ndbno_list = this.GetNDBNO(data[meal], ndbno_list);
         }
         this.setState({
-          "Breakfast": data.Breakfast,
-          "Lunch": data.Lunch,
-          "Dinner": data.Dinner,
-          "Snacks": data.Snacks,
+          Breakfast: data.Breakfast,
+          Lunch: data.Lunch,
+          Dinner: data.Dinner,
+          Snacks: data.Snacks,
           ndbno_list
         })
-        if(this.state.ndbno_list !== ''){
+        if(ndbno_list !== ''){
           this.FetchReports()
         }
-      } else{
-        //if there is no document in db, initialize it
+        else{
+          this.ResetState()
+        }
+      }
+      //if there is no document in the database with that date, create one!
+      else{
         fetch('/nutrition/createNutritionDocument', {
           method: 'POST',
           headers: {
@@ -94,6 +98,7 @@ export class NutritionProvider extends Component {
           },
           body: JSON.stringify( { date } )
         })
+        this.ResetState()
       }
     })
   }
@@ -143,13 +148,26 @@ export class NutritionProvider extends Component {
 
   // creates an ndbno list to for usda api
   GetNDBNO = (meal, ndbno_list) => {
-    meal.forEach( item => {
+    meal.forEach(item => {
       let ndbno = "ndbno=" + item.ndbno + "&";
       if (ndbno_list.indexOf(ndbno) === -1){
       ndbno_list += ndbno
       }
     })
     return ndbno_list
+  }
+
+  ResetState = () => {
+    this.setState({
+      Breakfast: [],
+      Lunch: [],
+      Dinner: [],
+      Snacks: [],
+      ndbno_list: "",
+      reports: {}
+    }, function(){
+      this.CalculateNutritionInfo()
+    })
   }
 
   SaveServing = (meal, ndbno, inputElement) => {

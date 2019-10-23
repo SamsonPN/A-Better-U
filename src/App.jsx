@@ -6,18 +6,14 @@ import Header from './Components/Header/Header';
 import {Workout, RoutineView, AddExerciseView} from './Components/WorkoutPage/ExportWorkoutComponents';
 import {Nutrition, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';
 import Story from './Components/StoryPage/StoryPage';
-import { StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider, CalculatorProvider} from './AppContext/ExportContexts';
+import {StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider, CalculatorProvider} from './AppContext/ExportContexts';
 
 class App extends Component {
-  state = {
-    today: new Date(),
-  }
-
   render() {
     return (
       <Router>
           <div id="App">
-            <Route exact path="/login" component={Login}/>
+            <Route exact path="/" component={Login}/>
 
             {/*WORKOUT ROUTES*/}
             <AddExerciseProvider>
@@ -44,8 +40,6 @@ class App extends Component {
                        <Nutrition />
                      </React.Fragment>
                    )} />
-
-
                  <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
                        <AddFoodView {...props}/>
                      )}/>
@@ -57,7 +51,7 @@ class App extends Component {
 
            {/*STORY ROUTES*/}
           <StoryProvider>
-            <Route exact path="/" render={props => (
+            <Route exact path="/story" render={props => (
               <React.Fragment>
                 <Header/>
                 <Story/>

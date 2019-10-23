@@ -4,6 +4,8 @@ const app = express();
 const port = process.env.PORT || 9000;
 const cors = require('cors');
 const GridFs = require('gridfs-stream');
+const passport = require('passport');
+const FaceBookStrategy = require('passport-facebook').Strategy;
 
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
@@ -19,6 +21,10 @@ const storyRouter = require('./Routers/StoryRouter');
 client.connect((err)=> {
   console.log('Successfully connected to the server')
   const db = client.db(dbName);
+  let gfs;
+  gfs = GridFs(db, Mongo);
+  gfs.collection('storyMedia');
+  app.locals.gfs = gfs;
   app.locals.db = db;
   app.locals.ObjectID = Mongo.ObjectID;
   app.locals.exerciseList = db.collection('exerciseList');
@@ -27,20 +33,42 @@ client.connect((err)=> {
   app.locals.stories = db.collection('stories');
   app.locals.users = db.collection('users');
   app.locals.workouts = db.collection('workouts');
-
-  let gfs;
-  gfs = GridFs(db, Mongo);
-  gfs.collection('storyMedia');
-  app.locals.gfs = gfs;
 })
 
 app.use(express.json());
 app.use(cors());
+app.use(passport.initialize());
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
-//gets today's date
+passport.use(new FaceBookStrategy({
+  clientID: FACEBOOK_APP_ID,
+  clientSecret: FACEBOOK_APP_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, cb){
+    User.findOrCreate({ facebookId: profile.id }, function(err, user) {
+      return cb(err,user);
+    })
+  }
+))
+
+//Authentication
+app.get('/auth/facebook',
+  passport.authenticate('facebook', {scope: 'user_friends'})
+)
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  (req, res) => {
+    //successful authentication, redirect home
+    res.redirect('/story')
+  })
+
+
+
+//Middleware to get today's date
 app.use((req, res, next) => {
   let options = {month: "2-digit", day: "2-digit", year: "numeric"};
   let date = new Date();

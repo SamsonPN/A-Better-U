@@ -14,17 +14,16 @@ class NutritionTotals extends Component {
         unit={nutrient.unit}
       />
     )
-    const EmptyNutrientMsg = "Please add foods to see total nutrients!";
     return (
       <div id="TotalsModal" onClick={() => ToggleTotals()}>
         <div id="TotalsModalContent" onClick={(e) => e.stopPropagation()}>
           { nutrientList.length === 0 ?
-            EmptyNutrientMsg
+            <p className="EmptyNutrientMsg">Please add foods to see total nutrients!</p>
             :
             <React.Fragment>
               <Chart />
               <div id="TotalsList">
-                <div id="TotalsModalHeader">Nutrient Totals</div>
+                <div id="TotalsListHeader">Nutrient Totals</div>
                 {nutrientItems}
               </div>
             </React.Fragment>

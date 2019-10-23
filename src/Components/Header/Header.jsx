@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TabWrapper from './HeaderTabWrapper.jsx';
-import IconName from './HeaderIconName.jsx';
+import TabWrapper from './HeaderTabWrapper';
+import IconName from './HeaderIconName';
 
 
 class Header extends Component {
