@@ -5,18 +5,29 @@ const port = process.env.PORT || 9000;
 const cors = require('cors');
 const GridFs = require('gridfs-stream');
 const passport = require('passport');
-const FaceBookStrategy = require('passport-facebook').Strategy;
-
+const cookieSession = require('cookie-session');
+const keys = require('./config/keys');
+const passportSetup = require('./config/passport-setup');
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
 const url = 'mongodb://localhost:27017/';
 const dbName = 'a-better-u';
 const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-
+const authRouter = require('./Routers/AuthRouter');
 const workoutRouter = require('./Routers/WorkoutRouter');
 const nutritionRouter = require('./Routers/NutritionRouter');
 const userRouter = require('./Routers/UserRouter');
 const storyRouter = require('./Routers/StoryRouter');
+
+app.use(cookieSession({
+  maxAge: 24 * 60 * 60 * 1000,
+  keys: [keys.session.cookieKey]
+}));
+
+app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cors());
 
 client.connect((err)=> {
   console.log('Successfully connected to the server')
@@ -35,38 +46,9 @@ client.connect((err)=> {
   app.locals.workouts = db.collection('workouts');
 })
 
-app.use(express.json());
-app.use(cors());
-app.use(passport.initialize());
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-passport.use(new FaceBookStrategy({
-  clientID: FACEBOOK_APP_ID,
-  clientSecret: FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback"
-  },
-  function(accessToken, refreshToken, profile, cb){
-    User.findOrCreate({ facebookId: profile.id }, function(err, user) {
-      return cb(err,user);
-    })
-  }
-))
-
-//Authentication
-app.get('/auth/facebook',
-  passport.authenticate('facebook', {scope: 'user_friends'})
-)
-
-app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/' }),
-  (req, res) => {
-    //successful authentication, redirect home
-    res.redirect('/story')
-  })
-
-
 
 //Middleware to get today's date
 app.use((req, res, next) => {
@@ -75,10 +57,13 @@ app.use((req, res, next) => {
   let today = date.toLocaleDateString("en-US", options);
   app.locals.date = today;
   next()
-})
+});
 
 // Routers for the workout, nutrition, and story pages and user information
+app.use('/auth', authRouter);
 app.use('/workout', workoutRouter);
 app.use('/nutrition', nutritionRouter);
 app.use('/user', userRouter);
 app.use('/story', storyRouter);
+
+module.exports.db = app.locals.db;

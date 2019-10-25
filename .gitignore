@@ -21,8 +21,9 @@
 # API Key
 /src/API
 
+
 #authentication
-Auth.js
+/config/keys.js
 
 npm-debug.log*
 yarn-debug.log*

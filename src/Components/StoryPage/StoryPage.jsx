@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import StoryStatView from './StoryStatView';
 import StoriesList from './StoriesList';
 import StoryModal from './StoryModal';
 import SubmissionButtons from './StorySubmissionButtons';
@@ -10,8 +11,11 @@ class Story extends Component {
       <StoryContext.Consumer>
         { ({showModal}) => (
         <div id="Story">
-          <StorySubmission />
-          <StoriesList />
+          <StoryStatView />
+          <div id="StoryTimeline">
+            <StorySubmission />
+            <StoriesList />
+          </div>
           { showModal ? <StoryModal/> : null }
         </div>
       )}

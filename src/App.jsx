@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route  } from 'react-router-dom';
 import './App.css';
-import Login from './Login';
+import Login from './Components/Login/Login';
 import Header from './Components/Header/Header';
 import {Workout, RoutineView, AddExerciseView} from './Components/WorkoutPage/ExportWorkoutComponents';
 import {Nutrition, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';

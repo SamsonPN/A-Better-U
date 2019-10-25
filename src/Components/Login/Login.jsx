@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import LoginImg from './assets/login-page.jpg';
-import GoogleImg from './assets/google.jpg';
+import LoginImg from '../../assets/login-page.jpg';
+import GoogleImg from '../../assets/google.jpg';
 import './Login.css';
 
 class Login extends Component {
-
   render() {
     return (
       <div id="LoginPage">
@@ -16,19 +15,13 @@ class Login extends Component {
             <p>Helping you strive to be a better version of yourself</p>
           </div>
 
-          {/*<div id="googleBtn">
+          <a id="googleBtn" href="http://localhost:9000/auth/google">
             <img id="GoogleImg" src={GoogleImg} alt="google button"/>
             <p id="googleBtnText">Sign in with Google</p>
-          </div>*/}
-
-          <div
-            class="fb-login-button"
-            data-width=""
-            data-size="large"
-            data-button-type="continue_with"
-            data-auto-logout-link="false"
-            data-use-continue-as="false">
-          </div>
+          </a>
+          <a id="googleBtn" href="http://localhost:9000/auth/facebook">
+            Login with facebook!
+          </a>
         </div>
       </div>
     );
