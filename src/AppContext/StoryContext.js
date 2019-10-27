@@ -38,6 +38,18 @@ export class StoryProvider extends Component {
      })
   }
 
+  GetUserInfo = () => {
+    fetch('/user/getUserInfo')
+     .then(res => res.json())
+     .then(data => {
+       this.setState({
+         user: data
+       }, function(){
+         console.log(this.state.user);
+       })
+     });
+  }
+
   PutFileInLabel = (e) => {
     let file = e.target.files[0];
     let label = e.target.nextElementSibling;
@@ -58,8 +70,8 @@ export class StoryProvider extends Component {
     let uri = '/story/editStories';
     let formData = new FormData();
     formData.append('file', newFile);
+    formData.append('oldFile', JSON.stringify(editFile));
     formData.append('_id', editStory);
-    formData.append('oldFile', editFile);
     formData.append('text', text);
     fetch(uri, {
       method: 'PUT',
@@ -71,35 +83,37 @@ export class StoryProvider extends Component {
     this.ToggleModal()
   }
 
-  SubmitStory = () => {
+  SubmitStory = (e) => {
     let {mediaTypes} = this.state;
     let file = document.getElementById('file').files[0];
     let text = document.getElementById('StorySubmitText').value;
-    if(file){
-      if(mediaTypes.indexOf(file.type) === -1){
-        alert("Please upload a photo or a video only!");
-        return
+    if (file || text){
+      if(file){
+        if(mediaTypes.indexOf(file.type) === -1){
+          alert("Please upload a photo or a video only!");
+          return
+        }
       }
-    }
-    let uri = '/story/uploadStories';
-    let formData = new FormData();
-    formData.append('file', file);
-    formData.append('text', text);
-    fetch(uri, {
-      method: 'POST',
-      body: formData
-    })
-      .then(() => {
-        this.ClearSubmissionForm();
-        this.GetStories();
+      let uri = '/story/uploadStories';
+      let formData = new FormData();
+      formData.append('file', file);
+      formData.append('text', text);
+      fetch(uri, {
+        method: 'POST',
+        body: formData
       })
+        .then(() => {
+          this.ClearSubmissionForm();
+          this.GetStories();
+       })
+    }
   }
 
-  ToggleModal = (story_id, file_id, story_text) => {
+  ToggleModal = (story_id, file, story_text) => {
     this.setState(prevState => ({
       showModal: !prevState.showModal,
       editStory: story_id !== undefined ? story_id : "",
-      editFile: file_id !== undefined ? file_id : "",
+      editFile: file !== undefined ? file : "",
       editText: story_text !== undefined ? story_text : ""
     }), function(){
       let {showModal} = this.state;
@@ -108,6 +122,7 @@ export class StoryProvider extends Component {
   }
 
   state = {
+    user: {},
     stories: [],
     showModal: false,
     editFile: "",
@@ -119,7 +134,8 @@ export class StoryProvider extends Component {
   }
 
   componentDidMount(){
-    this.GetStories()
+    this.GetStories();
+    this.GetUserInfo();
   }
 
   render() {

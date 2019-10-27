@@ -84,7 +84,7 @@ passport.use(
         }
         else{
           // if user doesn't exist, add it to user collection
-          let picture = `https://graph.facebook.com/${profile.id}/picture?type=large'`;
+          let picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
           users.insertOne({
             user: profile.id,
             name: profile.displayName,

@@ -58,36 +58,41 @@ story.get('/media/:id', (req, res) => {
 // @route POST /upload
 // @desc Uploads file to DB
 story.post('/uploadStories', upload.single('file'), (req, res) => {
-  let {date, stories} = req.app.locals;
+  let {date, ObjectID, stories, users} = req.app.locals;
   let text = req.body.text || "";
-  let file_id = req.file ? req.file.id : false;
-  let file_type = req.file ? req.file.contentType : false;
-
-  stories.insertOne({
-    user: "1",
-    text,
-    file_id,
-    file_type,
-    date
-  })
-    .catch(err => console.error(err))
+  let file = req.file ? req.file : false;
+  users.findOne(
+    { _id: ObjectID(req.session.passport.user)}
+  )
+    .then(result => {
+      let {name, picture, user} = result;
+      stories.insertOne({
+        user: {
+          user,
+          name,
+          picture
+        },
+        text,
+        file,
+        date
+      })
+        .catch(err => console.error(err))
+    })
   res.end()
 });
 
 story.put('/editStories', upload.single('file'), (req, res) => {
   let {gfs, ObjectID, stories} = req.app.locals;
-  let {_id, oldFile} = req.body;
-  let text = req.body.text || "";
-  let file_id = req.file ? ObjectID(req.file.id) : false;
-  let file_type = req.file ? req.file.contentType : false;
-
+  let {_id, oldFile, text} = req.body;
+  text = text || "";
+  oldFile = JSON.parse(oldFile);
+  let file = req.file ? req.file : oldFile;
   stories.updateOne(
     { _id : ObjectID(_id) },
-    {$set: { text, file_id, file_type } }
+    {$set: { text, file} }
   )
     .catch(err => console.error(err))
-
-  if(req.file){
+  if(file && file.id !== oldFile.id){
     gfs.remove({_id: oldFile, root: 'storyMedia'}, (err, gridStore) => {
       if(err){
         return res.status(404).json({

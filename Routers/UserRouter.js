@@ -7,7 +7,10 @@ user.get('/getGoals', (req,res) => {
   users.findOne(
     { user: '1' },
     { projection : { _id: 0, type: 0, user: 0, favExercises: 0, favFoods: 0} } )
-    .then(result => res.json(result))
+    .then(result => {
+      console.log(result);
+      res.json(result)
+    })
 })
 
 //get favorites!
@@ -19,6 +22,14 @@ user.get('/getFavorites', (req,res) => {
   )
     .then(result => res.json(result))
     .catch(err => console.error(err))
+})
+
+user.get('/getUserInfo', (req, res) => {
+  let {ObjectID, users} = req.app.locals;
+  users.findOne(
+    { _id: ObjectID(req.session.passport.user)}
+  )
+   .then(user => res.json(user));
 })
 
 // updates the users' goals such as weight loss goals and macronutrient goals

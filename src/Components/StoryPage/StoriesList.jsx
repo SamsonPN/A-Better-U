@@ -9,10 +9,9 @@ class UserStories extends Component {
       <Stories
         key={story._id}
         date={story.date}
-        id={story.file_id}
         text={story.text}
         story={story._id}
-        type={story.file_type}
+        file={story.file}
         user={story.user}
         />
     )

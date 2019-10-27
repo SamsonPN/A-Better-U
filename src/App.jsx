@@ -6,7 +6,14 @@ import Header from './Components/Header/Header';
 import {Workout, RoutineView, AddExerciseView} from './Components/WorkoutPage/ExportWorkoutComponents';
 import {Nutrition, AddFoodView, BMR, Macro} from './Components/NutritionPage/ExportNutritionComponents';
 import Story from './Components/StoryPage/StoryPage';
-import {StoryProvider, NutritionProvider, AddFoodProvider, WorkoutProvider, AddExerciseProvider, CalculatorProvider} from './AppContext/ExportContexts';
+import {
+  StoryProvider,
+  NutritionProvider,
+   AddFoodProvider,
+   WorkoutProvider,
+   AddExerciseProvider,
+   CalculatorProvider
+ } from './AppContext/ExportContexts';
 
 class App extends Component {
   render() {

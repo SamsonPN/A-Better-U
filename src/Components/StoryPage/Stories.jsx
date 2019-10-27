@@ -2,20 +2,24 @@ import React, { Component } from 'react';
 import {StoryContext} from '../../AppContext/ExportContexts';
 
 class Stories extends Component {
+  componentDidMount(){
+    console.log(this.props.user.picture)
+  }
   render() {
-    const {date, id, story, text, type} = this.props;
-    const media = `/story/media/${id}`;
-    const image = <img src={media} alt="None shown"/>;
-    const video = <video width="500px" controls src={media} alt="None Shown"></video>;
-    const tag = (type || "").includes("image") ? image : video;
+    const {date, file, story, text, user} = this.props;
+    const media = `/story/media/${file.id}`;
+    const image = <img className="StoriesMedia" src={media} alt="None shown"/>;
+    const video = <video className="StoriesMedia" width="500px" controls src={media} alt="None Shown"></video>;
+    const tag = (file.mimetype || "").includes("image") ? image : video;
 
     return (
       <StoryContext.Consumer>
         { ({ DeleteStory, ToggleModal }) => (
           <React.Fragment>
             <div className="Stories">
-                <div className="StoriesDateDiv">
-                  <p>{date}</p>
+                <div className="StoriesHeader">
+                  <img src={user.picture} alt="PFP"/>
+                  <p>{`${user.name}\n${date}`}</p>
                 </div>
                 {text ?
                   <div className="StoriesTextDiv">
@@ -24,7 +28,7 @@ class Stories extends Component {
                   : null
                 }
 
-                {id ?
+                {file.id ?
                   <div className="StoriesMediaDiv">
                     {tag}
                   </div>
@@ -32,8 +36,8 @@ class Stories extends Component {
                 }
             </div>
             <div className="StoriesButtonWrapper">
-              <button onClick={() => ToggleModal(story, id, text)}>Edit</button>
-              <button onClick={() => DeleteStory(story, id)}>Delete</button>
+              <button onClick={() => ToggleModal(story, file, text)}>Edit</button>
+              <button onClick={() => DeleteStory(story, file.id)}>Delete</button>
             </div>
           </React.Fragment>
         )}
