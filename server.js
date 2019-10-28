@@ -24,6 +24,7 @@ app.use(cookieSession({
   keys: [keys.session.cookieKey]
 }));
 
+app.enable('trust proxy');
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,16 +50,6 @@ client.connect((err)=> {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-// isAuthenticated use this for later!
-// app.use((req, res, next) => {
-//   if(req.session.passport.user){
-//     next()
-//   }
-//   else{
-//     res.redirect('http://localhost:3000/');
-//   }
-// })
 
 //Middleware to get today's date
 app.use((req, res, next) => {

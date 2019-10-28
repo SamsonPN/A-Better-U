@@ -31,7 +31,6 @@ export class AddExerciseProvider extends Component {
 
     let uri = `/user/${operation}Favorites`;
     let requestObject = {
-      user: "1",
       item: {
         name,
         type,
@@ -119,9 +118,9 @@ export class AddExerciseProvider extends Component {
     }
   }
 
-  ShowValue = (e, ref) => {
-    ref.textContent = e.target.textContent;
-    this.SearchByCategory()
+  ShowValue = (e, index) => {
+    document.getElementsByClassName('AeViews')[index].textContent = e.target.textContent;
+    this.SearchByCategory();
   }
 
   componentDidMount(){

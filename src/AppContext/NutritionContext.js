@@ -65,7 +65,6 @@ export class NutritionProvider extends Component {
     let date = nutritionDate.toLocaleDateString("en-US", options);
     let regex = /\//g;
     let dateParam = date.replace(regex, '%2F');
-
     let uri = `/nutrition/getFood/${dateParam}`;
     fetch(uri)
     .then(response => response.json())

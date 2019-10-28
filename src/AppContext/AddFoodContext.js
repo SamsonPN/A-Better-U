@@ -53,23 +53,22 @@ export class AddFoodProvider extends Component {
         let results = {};
         for (let meal in data[0]){
           let mealName = data[0][meal];
-          if(mealName.length === 0){
-            continue;
-          }
-          for(let i = 0; i < mealName.length; i++){
-            results[mealName[i].name] = mealName[i]
-            // results = {...results, [mealName[i].name]: mealName[i]}
+          if(mealName.length !== 0){
+            for(let i = 0; i < mealName.length; i++){
+              results[mealName[i].name] = mealName[i]
+            }
           }
         }
-        let FoodSearch = Object.keys(results).map (item => {
+        let FoodSearch = Object.keys(results).map(item => {
           return results[item]
-        })
+        });
         this.setState({
           FoodSearch,
           FoodAdded: [],
           showFavorite: false
         }, function(){
           this.HeartColor(false);
+          console.log(this.state.FoodSearch);
         })
       })
   }
@@ -105,7 +104,6 @@ export class AddFoodProvider extends Component {
 
     let uri = `/user/${operation}Favorites`;
     let requestObject = {
-      user: "1",
       item: { name, ndbno },
       field: "favFoods"
     }

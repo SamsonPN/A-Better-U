@@ -42,11 +42,14 @@ export class StoryProvider extends Component {
     fetch('/user/getUserInfo')
      .then(res => res.json())
      .then(data => {
-       this.setState({
-         user: data
-       }, function(){
-         console.log(this.state.user);
-       })
+       if(data.error && window.location.pathname !== '/'){
+         window.location.href = '/';
+       }
+       else{
+         this.setState({
+           user: data
+         })
+       }
      });
   }
 

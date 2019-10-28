@@ -36,40 +36,44 @@ nutrition.get('/detailsFDC/:id', (req, res) => {
 nutrition.get('/getFood/:date', (req,res) => {
   let {nutrition} = req.app.locals;
   let {date} = req.params;
+  let {user} = req.session.passport;
 
   nutrition.findOne(
-    { date },
-    { projection : { _id: 0, type: 0, date: 0 } }
+    { date, user },
+    { projection : { _id: 0, type: 0, date: 0, user: 0 } }
   )
-  .then(result => res.json(result))
+  .then(result => {res.json(result)})
   .catch(err => console.error(`Failed to find documents ${err}`))
 })
 
 nutrition.get('/getRecents', (req, res) => {
   let {nutrition} = req.app.locals;
+  let {user} = req.session.passport;
   nutrition.find(
-    { $or:
-      [
-        {'Breakfast.0' : { $exists: true } },
-        {'Lunch.0' : { $exists: true } },
-        {'Dinner.0' : { $exists: true } },
-        {'Snacks.0' : { $exists: true } },
-      ]
+    { user,
+      $or:
+        [
+          {'Breakfast.0' : { $exists: true } },
+          {'Lunch.0' : { $exists: true } },
+          {'Dinner.0' : { $exists: true } },
+          {'Snacks.0' : { $exists: true } },
+        ]
     },
-    { projection: {_id: 0, date: 0 } }
+    { projection: {_id: 0, date: 0, user: 0 } }
   )
     .sort({ _id: -1})
     .limit(1)
     .toArray()
-    .then(result => res.json(result))
+    .then(result => res.json(result));
 })
 
 // inserts all recorded food items into the database
 nutrition.post('/createNutritionDocument', (req, res) => {
   let {nutrition} = req.app.locals;
   let {date} = req.body;
-
+  let {user} = req.session.passport;
   nutrition.insertOne({
+    user,
     date: req.body.date,
     Breakfast: [],
     Lunch: [],
@@ -82,9 +86,9 @@ nutrition.post('/createNutritionDocument', (req, res) => {
 nutrition.post('/insertFood', (req,res) => {
   let {nutrition} = req.app.locals;
   let {date, FoodAdded, meal} = req.body;
-
+  let {user} = req.session.passport;
   nutrition.updateOne(
-    { date},
+    { date, user },
     { $addToSet: { [meal]: { $each: FoodAdded } } }
   )
     .catch(err => console.error(`Failed to insert item: ${err}`))
@@ -94,9 +98,9 @@ nutrition.post('/insertFood', (req,res) => {
 nutrition.post('/updateServings', (req, res) => {
   let {nutrition} = req.app.locals;
   let {date, meal, ndbno, servings} = req.body;
-
+  let {user} = req.session.passport;
   nutrition.updateOne(
-    { date, [meal + ".ndbno"] : ndbno },
+    { date, [meal + ".ndbno"] : ndbno, user },
     { $set: { [meal + ".$.servings"] : servings } }
   )
    .catch(err => console.error(err))
@@ -107,9 +111,9 @@ nutrition.post('/updateServings', (req, res) => {
 nutrition.delete('/deleteFood', (req,res) => {
   let {nutrition} = req.app.locals;
   let { date, meal, ndbno } = req.body;
-
+  let {user} = req.session.passport;
   nutrition.updateOne(
-    { date },
+    { date, user },
     { $pull: { [meal] : { ndbno } } }
   )
     .catch(err => console.error(err))

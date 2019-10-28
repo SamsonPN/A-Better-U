@@ -30,7 +30,6 @@ const upload = multer({ storage });
 
 story.get('/getStories', (req,res) => {
   let {stories} = req.app.locals;
-
   stories.find()
     .sort( { date: -1, _id: -1} )
     .toArray()
@@ -107,10 +106,8 @@ story.put('/editStories', upload.single('file'), (req, res) => {
 story.delete('/deleteStory', (req, res) => {
   let {gfs, ObjectID, stories} = req.app.locals;
   let { story_id, file_id } = req.query;
-
   stories.deleteOne( { _id : ObjectID(story_id) } )
     .catch(err => console.error(err))
-
   if(file_id){
     gfs.remove({_id: ObjectID(file_id), root: 'storyMedia'}, (err, gridStore) => {
       if(err){

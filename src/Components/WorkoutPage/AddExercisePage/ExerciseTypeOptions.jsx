@@ -10,13 +10,12 @@ class ExerciseTypeOptions extends Component {
         key={type}
         name={type}
         ShowValue={ShowValue}
-        textRef={this.AeViews}/>
+        index={1}/>
     )
     return (
       <div className="AddExerciseOptions">
         <div
-          className="AeViews"
-          ref={element => this.AeViews = element}>
+          className="AeViews">
           Exercise Type
         </div>
         <ul className="AeViewsDropdown">
@@ -32,11 +31,11 @@ export default ExerciseTypeOptions;
 
 class EtOptionItem extends Component {
   render() {
-    const {name, ShowValue, textRef} = this.props;
+    const {name, ShowValue, index} = this.props;
     return (
         <div
           className="AeOptionItem"
-          onClick={(e) => ShowValue(e, textRef)}
+          onClick={(e) => ShowValue(e, index)}
         >
           {name}
         </div>

@@ -4,6 +4,9 @@ import {AddFoodContext} from '../../../AppContext/ExportContexts';
 
 class AddFoodItemList extends Component {
   static contextType = AddFoodContext;
+  componentDidUpdate(){
+    console.log(this.context.FoodSearch)
+  }
   render() {
     const listItems = this.context.FoodSearch.map((item) =>
       <FoodItem

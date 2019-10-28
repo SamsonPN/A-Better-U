@@ -33,7 +33,9 @@ workout.get('/getExerciseBySearch/:search', (req, res) => {
 // used by workoutcontext.js to fill the Routine tab
 workout.get('/getRoutines', (req, res) => {
   let {routines} = req.app.locals;
-  routines.find()
+  routines.find(
+    { user: req.session.passport.user }
+  )
     .sort( { name : 1 } )
     .toArray()
     .then(items => res.json(items))
@@ -43,7 +45,8 @@ workout.get('/getRoutines', (req, res) => {
 //used by workoutcontext.js to fill the Saved tab with workouts
 workout.get('/getWorkouts', (req, res) => {
   let {workouts} = req.app.locals;
-  workouts.find( req.query )
+  let query = {...req.query, user: req.session.passport.user};
+  workouts.find( query )
     .sort( { date : 1 } )
     .toArray()
     .then(result => res.json(result))
@@ -52,7 +55,7 @@ workout.get('/getWorkouts', (req, res) => {
 
 // used by the Date selector to grab the workout
 workout.get('/getWorkoutById', (req, res) => {
-  let {ObjectID, workouts } = req.app.locals;
+  let { ObjectID, workouts } = req.app.locals;
   workouts.findOne(
    { _id: ObjectID(req.query._id) } )
     .then(result => res.json(result))
@@ -65,7 +68,7 @@ workout.post('/updateExercises', (req,res) => {
   let {_id, exercises, name, collectionName} = req.body;
   let collection = db.collection(collectionName);
   collection.updateOne(
-    { _id: ObjectID(_id) },
+    { _id: ObjectID(_id), user: req.session.passport.user },
     {$set: { name, exercises } },
     {upsert: true}
   )
@@ -77,11 +80,11 @@ workout.post('/updateExercises', (req,res) => {
 workout.post('/saveWorkout', (req, res) => {
   let {workouts} = req.app.locals;
   let {name, date, exercises} = req.body;
-  workouts.updateOne(
-    { name, date },
-    { $set: { exercises } },
-    { upsert: true }
+  let {user} = req.session.passport;
+  workouts.insertOne(
+    { name, date, user, exercises }
   )
+    .catch(err => console.error(err));
   res.end();
 })
 
