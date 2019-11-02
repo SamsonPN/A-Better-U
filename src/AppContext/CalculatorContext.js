@@ -12,7 +12,6 @@ export class CalculatorProvider extends Component {
     let BMR = weight + height - age;
     sex.toUpperCase() === 'M' ? BMR += 5 : BMR -= 161;
     BMR = Math.round( ( BMR * activity.value ) + goal.value );
-
     if(isNaN(BMR)){
       alert("Please fill out all entries with appropriate data");
     }

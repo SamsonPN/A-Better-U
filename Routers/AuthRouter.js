@@ -3,7 +3,7 @@ const passport = require('passport');
 
 Auth.get('/logout', (req, res) => {
   req.logout();
-  res.redirect('/');
+  res.redirect('http://localhost:3000/');
 });
 
 Auth.get('/google', passport.authenticate('google', {

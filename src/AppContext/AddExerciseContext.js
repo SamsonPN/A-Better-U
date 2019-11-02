@@ -11,7 +11,6 @@ export class AddExerciseProvider extends Component {
     let {exercises, showFavorite} = this.state;
     let img = e.target;
     let operation;
-
     if(img.src.indexOf('filled-in-heart') === -1){
       img.src = BlueHeart;
       operation = 'insert';
@@ -28,7 +27,6 @@ export class AddExerciseProvider extends Component {
       img.src = Heart;
       operation = 'delete';
     }
-
     let uri = `/user/${operation}Favorites`;
     let requestObject = {
       item: {
@@ -50,6 +48,17 @@ export class AddExerciseProvider extends Component {
       },
       body: JSON.stringify(requestObject)
     })
+  }
+
+  GetExerciseTypes = () => {
+    fetch('/workout/getExerciseTypes')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          muscles: data.Muscles,
+          types: data.EType
+        })
+     })
   }
 
   GetFavorites = () => {
@@ -81,7 +90,6 @@ export class AddExerciseProvider extends Component {
     let muscles = bodyPart === 'Muscles' ? '' : `muscle=${bodyPart}&`
     let type = eType === 'Exercise Type' ? '' : `type=${eType}`
     let uri = encodeURI('/workout/getExerciseByCategory?' + muscles + type);
-
     fetch(uri)
       .then(res => res.json())
       .then(data => {
@@ -121,17 +129,6 @@ export class AddExerciseProvider extends Component {
   ShowValue = (e, index) => {
     document.getElementsByClassName('AeViews')[index].textContent = e.target.textContent;
     this.SearchByCategory();
-  }
-
-  componentDidMount(){
-    fetch('/workout/getExerciseTypes')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          muscles: data.Muscles,
-          types: data.EType
-        })
-     })
   }
 
   state = {

@@ -12,6 +12,7 @@ class StorySubmissionButtons extends Component {
               name="file"
               id="file"
               className="inputFile"
+              accept="image/*, video/*"
               onChange={(e) => PutFileInLabel(e)}>
             </input>
             <label htmlFor="file" id="StoryMediaLabel" className="inputLabel">Photo / Video</label>

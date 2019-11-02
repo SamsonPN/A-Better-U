@@ -37,7 +37,6 @@ nutrition.get('/getFood/:date', (req,res) => {
   let {nutrition} = req.app.locals;
   let {date} = req.params;
   let {user} = req.session.passport;
-
   nutrition.findOne(
     { date, user },
     { projection : { _id: 0, type: 0, date: 0, user: 0 } }

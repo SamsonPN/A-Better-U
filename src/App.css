@@ -1376,8 +1376,8 @@ STORY PAGE STUFF
 }
 
 #StoryStatHeader > p{
-  font-weight: 200;
   font-size: 5vh;
+  font-weight: 200;
   white-space: pre-line;
 }
 
@@ -1390,17 +1390,32 @@ STORY PAGE STUFF
 }
 
 .StoryStatListItem{
-  height: calc(100% / 6);
   width: 100%;
   display: flex;
   align-items: center;
   padding: 5px;
   box-sizing: border-box;
-  font-size: 3em;
+  font-size: 4vw;
+  font-weight: 200;
 }
 
 .StoryStatListItem:not(:last-child){
+  height: calc(90% / 4);
   border-bottom: 1px solid #1F0CAD;
+}
+
+.StoryStatListItem:last-child{
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.StoryStatListItem:last-child:hover{
+  color: white;
+  background-color: red;
 }
 
 #StoryTimeline{
@@ -1420,14 +1435,35 @@ STORY PAGE STUFF
   overflow: hidden;
 }
 
-#StorySubmitText, #StorySubmitText:focus{
-  resize: none;
-  border: 1px solid #1F0CAD;
-  height: 25vh;
+#StorySubmissionContent{
   width: 100%;
+  height: 25vh;
+  border: 1px solid #1F0CAD;
   box-sizing: border-box;
+}
+
+#StorySubmitText, #StorySubmitText:focus{
+  display: block;
+  resize: none;
+  outline: none;
+  height: 50%;
+  width: 100%;
+  border: none;
   font-size: 2em;
   font-weight: 200;
+}
+
+#StorySubmitMediaDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  width: 100%;
+}
+
+.StorySubmitMedia{
+  max-width: 100%;
+  max-height: 100%;
 }
 
 #StorySubmissionButtons{
@@ -1612,7 +1648,7 @@ STORY PAGE STUFF
   outline: none;
   resize: none;
   border: none;
-  height: 50%;
+  height: 30%;
   width: 100%;
   margin-bottom: 10px;
   padding-left: 3px;
@@ -1621,9 +1657,23 @@ STORY PAGE STUFF
   font-size: 2em;
 }
 
-#StoryModalBtnWrapper{
+#StoryModalMediaWrapper{
   width: 100%;
   height: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+.StoryModalMedia{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#StoryModalBtnWrapper{
+  width: 100%;
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;

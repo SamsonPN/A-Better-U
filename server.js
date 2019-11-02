@@ -10,9 +10,8 @@ const keys = require('./config/keys');
 const passportSetup = require('./config/passport-setup');
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
-const url = 'mongodb://localhost:27017/';
 const dbName = 'a-better-u';
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const authRouter = require('./Routers/AuthRouter');
 const workoutRouter = require('./Routers/WorkoutRouter');
 const nutritionRouter = require('./Routers/NutritionRouter');
@@ -20,7 +19,7 @@ const userRouter = require('./Routers/UserRouter');
 const storyRouter = require('./Routers/StoryRouter');
 
 app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
   keys: [keys.session.cookieKey]
 }));
 
@@ -60,11 +59,20 @@ app.use((req, res, next) => {
   next()
 });
 
+const isAuthenticated = (req, res, next) => {
+  if(req.user){
+    next();
+  }
+  else{
+    res.status(401).send({error: "Not authenticated!"});
+  }
+};
+
 // Routers for the workout, nutrition, and story pages and user information
 app.use('/auth', authRouter);
-app.use('/workout', workoutRouter);
-app.use('/nutrition', nutritionRouter);
-app.use('/user', userRouter);
-app.use('/story', storyRouter);
+app.use('/workout', isAuthenticated, workoutRouter);
+app.use('/nutrition', isAuthenticated, nutritionRouter);
+app.use('/user', isAuthenticated, userRouter);
+app.use('/story', isAuthenticated, storyRouter);
 
 module.exports.db = app.locals.db;

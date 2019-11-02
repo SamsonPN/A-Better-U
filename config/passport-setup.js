@@ -3,12 +3,13 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const keys = require('./keys');
 
-passport.serializeUser((id, done) => {
+passport.serializeUser((req, id, done) => {
   done(null, id);
 });
 
 passport.deserializeUser((req, id, done) => {
-  let {users, ObjectID} = req.app.locals;
+  let {db, ObjectID} = req.app.locals;
+  let users = db.collection('users');
   users.findOne( { _id: ObjectID(id) } )
     .then(user => {
       done(null, user)

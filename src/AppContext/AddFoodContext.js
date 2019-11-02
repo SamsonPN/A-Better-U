@@ -9,11 +9,9 @@ export class AddFoodProvider extends Component {
   AddFood = (name, ndbno, e) => {
       let checkbox = e.target.style;
       let newState;
-
       if (checkbox.backgroundColor === "" || checkbox.backgroundColor === "white"){
         checkbox.backgroundColor = '#1F0CAD';
         newState = [{"name": name, "ndbno": ndbno, "servings" : 1}];
-
         this.setState(previousState => ( {
           FoodAdded: previousState.FoodAdded.concat(newState)
         } ))
@@ -23,11 +21,9 @@ export class AddFoodProvider extends Component {
         newState = this.state.FoodAdded.filter((item) => {
           return item.name !== name
         })
-
         this.setState(previousState => ( {
           FoodAdded: newState,
         } ))
-
       }
     }
 
@@ -68,7 +64,6 @@ export class AddFoodProvider extends Component {
           showFavorite: false
         }, function(){
           this.HeartColor(false);
-          console.log(this.state.FoodSearch);
         })
       })
   }
@@ -84,7 +79,6 @@ export class AddFoodProvider extends Component {
     let {FoodSearch, showFavorite} = this.state;
     let img = e.target;
     let operation;
-
     if(img.src.indexOf('filled-in-heart') === -1){
       img.src = BlueHeart;
       operation = 'insert';
@@ -107,7 +101,6 @@ export class AddFoodProvider extends Component {
       item: { name, ndbno },
       field: "favFoods"
     }
-
     fetch(uri, {
       method: 'POST',
       headers:{
@@ -144,7 +137,6 @@ export class AddFoodProvider extends Component {
     let {FoodAdded} = this.state;
     let options = {month: "2-digit", day: "2-digit", year: "numeric"};
     let date = nutritionDate.toLocaleDateString("en-US", options);
-
     let requestObject = {
       "date": date,
       "meal": currentMeal,

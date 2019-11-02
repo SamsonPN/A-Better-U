@@ -3,13 +3,13 @@ const path = require('path');
 const crypto = require('crypto');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
+const Keys = require('../config/keys');
 
 const story = require('express').Router();
 
 const storage = new GridFsStorage({
-  url: 'mongodb://localhost:27017/a-better-u',
+  url: Keys.mongodb.dbURI,
   file: (req, file) => {
-    console.log('im in')
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
@@ -18,7 +18,7 @@ const storage = new GridFsStorage({
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          bucketName: 'storyMedia' //should match the collection name that you gave it!!!
+          bucketName: 'storyMedia'
         };
         resolve(fileInfo);
       });
@@ -92,7 +92,7 @@ story.put('/editStories', upload.single('file'), (req, res) => {
   )
     .catch(err => console.error(err))
   if(file && file.id !== oldFile.id){
-    gfs.remove({_id: oldFile, root: 'storyMedia'}, (err, gridStore) => {
+    gfs.remove({_id: ObjectID(oldFile.id), root: 'storyMedia'}, (err, gridStore) => {
       if(err){
         return res.status(404).json({
           err: err

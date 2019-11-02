@@ -7,6 +7,10 @@ export class StoryProvider extends Component {
     document.getElementById('file').value = [];
     document.getElementById('StoryMediaLabel').textContent = "Photo / Video";
     document.getElementById('StorySubmitText').value = "";
+    this.setState({
+      preview: "",
+      type: ""
+    })
   }
 
   DeleteStory = (story_id, file_id) => {
@@ -54,22 +58,26 @@ export class StoryProvider extends Component {
   }
 
   PutFileInLabel = (e) => {
-    let file = e.target.files[0];
+    let newFile = e.target.files[0];
+    let type = newFile.type;
     let label = e.target.nextElementSibling;
-    label.textContent = (file || {}).name || "Photo / Video";
+    label.textContent = (newFile || {}).name || "Photo / Video";
+    if(newFile){
+      let preview = URL.createObjectURL(newFile);
+      let view = e.target.parentElement.id === 'StoryModalBtnWrapper' ? "modal" : "submission";
+      this.setState({
+        preview,
+        type,
+        view
+      })
+    }
   }
 
   SaveChanges = (fileRef, textRef) => {
     let newFile = fileRef.files[0] || false;
     let newText = textRef.value;
-    let {editFile, editStory, editText, mediaTypes} = this.state;
+    let {editFile, editStory, editText} = this.state;
     let text = editText === newText ? editText : newText;
-    if(newFile){
-      if(mediaTypes.indexOf(newFile.type) === -1){
-        alert("Please upload a photo or a video only!");
-        return
-      }
-    }
     let uri = '/story/editStories';
     let formData = new FormData();
     formData.append('file', newFile);
@@ -82,21 +90,19 @@ export class StoryProvider extends Component {
     })
       .then(() => {
         this.GetStories();
+        URL.revokeObjectURL(this.state.preview);
+        this.setState({
+          preview: "",
+          type: ""
+        })
       })
     this.ToggleModal()
   }
 
   SubmitStory = (e) => {
-    let {mediaTypes} = this.state;
     let file = document.getElementById('file').files[0];
     let text = document.getElementById('StorySubmitText').value;
     if (file || text){
-      if(file){
-        if(mediaTypes.indexOf(file.type) === -1){
-          alert("Please upload a photo or a video only!");
-          return
-        }
-      }
       let uri = '/story/uploadStories';
       let formData = new FormData();
       formData.append('file', file);
@@ -106,8 +112,10 @@ export class StoryProvider extends Component {
         body: formData
       })
         .then(() => {
+          URL.revokeObjectURL(this.state.preview);
           this.ClearSubmissionForm();
           this.GetStories();
+          window.location.href = "http://localhost:3000/story"
        })
     }
   }
@@ -128,12 +136,12 @@ export class StoryProvider extends Component {
     user: {},
     stories: [],
     showModal: false,
+    preview: "",
+    type: "",
+    view: "",
     editFile: "",
     editStory: "",
     editText: "",
-    mediaTypes : ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/quicktime",
-                 "video/x-flv", "application/x-mpegURL", "video/MP2T", "video/3gpp",
-                 "video/x-msvideo", "video/x-ms-wmv"]
   }
 
   componentDidMount(){

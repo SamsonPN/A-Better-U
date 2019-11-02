@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import StoryStatView from './StoryStatView';
 import StoriesList from './StoriesList';
 import StoryModal from './StoryModal';
-import SubmissionButtons from './StorySubmissionButtons';
+import StorySubmission from './StorySubmission';
 import {StoryContext} from '../../AppContext/ExportContexts';
 
 class Story extends Component {
@@ -25,17 +25,3 @@ class Story extends Component {
 }
 
 export default Story;
-
-class StorySubmission extends Component {
-  render() {
-    return (
-      <div id="StorySubmission">
-        <textarea
-          id="StorySubmitText"
-          placeholder="Your Story starts today">
-        </textarea>
-        <SubmissionButtons />
-      </div>
-    );
-  }
-}

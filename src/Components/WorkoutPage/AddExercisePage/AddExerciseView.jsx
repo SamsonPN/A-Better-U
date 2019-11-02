@@ -7,6 +7,7 @@ import {WorkoutContext} from '../../../AppContext/ExportContexts';
 class AddExerciseView extends Component {
   static contextType = WorkoutContext;
   componentDidMount(){
+    this.GetExerciseTypes();
     let {currentRoutine, InsertNewRoutine} = this.context;
     if(Object.keys(currentRoutine).length === 0){
       InsertNewRoutine()
