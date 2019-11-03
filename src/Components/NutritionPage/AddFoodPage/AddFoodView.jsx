@@ -3,6 +3,7 @@ import AddFoodHeader from './AddFoodHeader.jsx';
 import AddFoodItemList from './AddFoodItemList.jsx';
 import {Link} from 'react-router-dom';
 import {AddFoodContext, NutritionContext} from '../../../AppContext/ExportContexts';
+import './AddFood.css';
 
 class AddFoodView extends Component {
   static contextType = AddFoodContext;

@@ -4,9 +4,9 @@ import logo from '../../assets/ABU-Icon.svg';
 class IconName extends Component {
   render() {
     return (
-      <div className="IconWrapper">
-        <img id="icon" src={logo} alt="Unable to load"/>
-        <p id="icon_name">A Better U</p>
+      <div id="IconWrapper">
+        <img id="Icon" src={logo} alt="Unable to load"/>
+        <p id="IconName">A Better U</p>
       </div>
     );
   }

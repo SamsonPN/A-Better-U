@@ -3,6 +3,7 @@ import RoutineHeader from './RoutineHeader';
 import RoutineList from './RoutineList';
 import RoutineFooter from './RoutineFooter';
 import {WorkoutContext} from '../../../AppContext/ExportContexts';
+import './Routine.css';
 
 class RoutineView extends Component {
   static contextType = WorkoutContext;

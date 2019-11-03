@@ -1,0 +1,341 @@
+#NutritionContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+#NutritionView{
+  height: 25vh;
+  width: 85vw;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid #1F0CAD;
+  margin-top: 2vh;
+}
+
+#CaloriesToday{
+  font-family: 'Nunito', sans-serif;
+  font-size: 5vw;
+}
+
+#NutritionViewMacroWrapper{
+  width: 100%;
+  height: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.macros{
+  font-family: 'Nunito', sans-serif;
+  font-size: 3em;
+  font-size: 3.5vw;
+}
+
+#NVButtonsWrapper{
+  width: 85vw;
+  height: 12vh;
+  display: flex;
+  flex-direction: column;
+  margin: 1vh;
+}
+
+.NVInnerWrapper{
+  width: 85vw;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NVButtons{
+  height: 5vh;
+  width: 42vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  background-color: white;
+  color: black;
+  font-family: 'Nunito',sans-serif;
+  font-size: 1em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.NVButtons:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+.NutritionMealDividers{
+  width: 85vw;
+  border: 1px solid black;
+  margin-bottom: 3vh;
+  box-shadow: 7px 7px 7px #707070;
+}
+
+.MealItemCollapsible{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.MealNameWrapper{
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+  background-color: #1F0CAD;
+}
+
+.MealNameWrapper > p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 200;
+  color: white;
+}
+
+.NutritionDownArrowImg{
+  height: 7vh;
+  width: 6vw;
+  margin-top: 1vh;
+  cursor: pointer;
+}
+
+.MealItemsWrapper{
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  height: auto;
+  width: 95%;
+}
+
+.AddFoodImgWrapper{
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-top: 1px solid black;
+  background-color: #1F0CAD;
+  cursor: pointer;
+}
+
+.AddFoodImgWrapper:hover{
+  opacity: 0.85;
+}
+
+.AddFoodImg{
+  height: 6vh;
+  width: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.NutritionMealItems{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #707070;
+  margin-bottom: 1vh;
+  cursor:pointer;
+}
+
+.NutritionMealItems > div{
+  display: flex;
+  align-items: flex-start;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.25em;
+}
+
+.NutritionMealItems > p{
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.25em;
+}
+
+.NutritionDeleteBtn{
+ height: 5vh;
+ margin-left: 2vh;
+ margin-top: 0.5vh;
+}
+
+.NutritionItemModal{
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+}
+
+.NutritionModalContent{
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  width: 50vw;
+  background-color: white;
+  border: 1px solid #1F0CAD;
+}
+
+.NutritionModalHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 1vh;
+  width: 100%;
+  min-height: 20%;
+  background-color: #1F0CAD;
+  color: white;
+  font-weight: 500;
+}
+
+.NutritionModalHeader > div{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.ModalServingDiv{
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  line-height: 1.5;
+}
+
+.NutritionModalTextArea{
+  resize: none;
+  border: none;
+  outline: none;
+  height: 70%;
+  width: 10%;
+  box-sizing: border-box;
+  font-size: 1em;
+  color: white;
+  text-align: center;
+  background-color: #1F0CAD;
+  border-bottom: 1px solid white;
+  line-height: 0.75;
+}
+
+.NutritionModalBody{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 70%;
+  overflow: auto;
+}
+
+.NutritionModalItems{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  height: 10%;
+  border-bottom: 1px solid #1F0CAD;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+}
+
+/*
+
+TOTAL NUTRIENTS MODAL
+
+*/
+
+#TotalsModal{
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  font-family: 'Nunito',sans-serif;
+}
+
+#TotalsModalContent{
+  overflow: auto;
+  height: 80%;
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  background-color: #1F0CAD;
+}
+
+#NutritionChart{
+  height: 100%;
+  width: 65%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#TotalsList{
+  overflow: auto;
+  width: 35%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+}
+
+#TotalsListHeader{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  font-weight: 200;
+  color: #1F0CAD;
+}
+
+.NutritionTotalRows{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  box-sizing: border-box;
+  align-items: center;
+  font-size: 1.25em;
+}
+
+.NutritionTotalRows:nth-child(even){
+  background-color: #1F0CAD;
+  color: white;
+}
+
+.EmptyNutrientMsg{
+  position: absolute;
+  top: 46%;
+  left: 34%;
+  color: white;
+  font-size: 2em;
+  font-weight: 200;
+}

@@ -1,0 +1,111 @@
+#AddFoodView{
+  height: 100vh;
+}
+
+#AddFoodHeader{
+  min-width: 100vw;
+  height: 25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid #1F0CAD;
+}
+
+#AddFoodHeader > h1{
+  font-family: 'Nunito',sans-serif;
+  font-size: 2.5em;
+  color: #1F0CAD;
+}
+
+#AddFoodSearch, #AddFoodSearch:focus{
+  resize: none;
+  border: 1px solid #1F0CAD;
+  height: 10vh;
+  width: 79.8vw;
+  font-family: 'Nunito',sans-serif;
+  font-size: 3em;
+  font-weight: 200;
+}
+
+#AddFoodButtonWrapper{
+  height: 10vh;
+  width: 80vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SortBtns{
+  width: 35vw;
+  height: 5vh;
+  border: 1px solid #1F0CAD;
+  font-family: 'Nunito',sans-serif;
+  font-size: 1.5em;
+  font-weight: 200;
+  overflow: auto;
+}
+
+.SortBtns:hover{
+  background-color: #1F0CAD;
+  color: white;
+  cursor: pointer;
+}
+
+#AddFoodCounter{
+  position: sticky;
+  bottom: 0vh;
+  left: 92vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 7vh;
+  width: 100vw;
+  border-top: 1px solid #1F0CAD;
+  color: #1F0CAD;
+  font-size: 2em;
+}
+
+#FavoriteFoodMsg{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#AddFoodItemList{
+  height: 68vh;
+  width: 100vw;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AddFoodItem{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5vh;
+  font-family: 'Nunito',sans-serif;
+  font-size: 1.5vw;
+  font-weight: 200;
+  font-style: italic;
+  cursor:pointer;
+}
+
+#AddFoodCheckboxWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.AddFoodCheckBox{
+  border: 1.5px solid black;
+  height: 25px;
+  width: 25px;
+  margin-bottom: 1.2vh;
+}
+
+.AddFoodFavorite{
+  height: 46.5px;
+  width: 52.5px;
+}

@@ -1,0 +1,285 @@
+#BMRCalculator{
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Nunito', sans-serif;
+}
+
+#BMRHeader{
+  overflow: auto;
+  height: 15vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: #1F0CAD;
+}
+
+#BMRHeader > h1{
+  height: 50%;
+  font-size: 3em;
+}
+
+#BMRHeader > p{
+  height: 50%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+#userInfoOuter{
+  height: 70vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userInfoColumn{
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.userInfoWrapper{
+  width: 40vw;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userTraits{
+  font-size: 3em;
+}
+
+.userTraitsAnswer{
+  border: 1px solid #707070;
+  height: 6vh;
+  width: 12vw;
+  resize:none;
+  opacity: 0.8;
+}
+
+#ftInWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  width: 12vw;
+}
+
+#feet, #inches{
+  width: 5vw;
+}
+
+.userTraitsAnswer:focus, .userTraitsAnswer,
+#feet:focus, #inches:focus,
+#feet, #inches
+{
+ outline: none;
+ font-weight: 200;
+ color: #1F0CAD;
+ font-size: 2em;
+}
+
+.BMRDropdownWrapper{
+  height: 6vh;
+  cursor: pointer;
+}
+
+.BMRDropdownWrapper:hover .BMRDropdownDiv{
+  background-color: #1f0cad;
+  color: white;
+  border:none;
+}
+
+.BMRDropdownDiv{
+  width: 12vw;
+  border: 1px solid #707070;
+  font-size: 1.65em;
+  font-weight: 200;
+  text-align: center;
+  color: #1F0CAD;
+}
+
+.BMRDropdownDiv:hover{
+  background-color: #1f0cad;
+  color: white;
+  border:none;
+}
+
+.BMRDropdown{
+  display:none;
+  text-decoration: none;
+  flex-direction: column;
+  border: 1px solid #1f0cad;
+  background-color: #1f0cad;
+}
+
+.BMRDropdownWrapper:hover .BMRDropdown{
+  display:flex;
+}
+
+.ActivityDropdownLi, .GoalDropdownLi{
+  font-weight: 200;
+  color: white;
+  border-top: 1px solid white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.ActivityDropdownLi:active, .GoalDropdownLi:active{
+  color: red;
+}
+
+.BMRButton{
+  overflow: auto;
+  position: fixed;
+  bottom: 4vh;
+  width: 11vw;
+  height: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  font-size: 2em;
+  text-decoration: none;
+  color: black;
+  cursor: pointer
+}
+
+.BMRButton:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+#BMRCalculateBtn{
+  right: 51vw;
+}
+
+#BMRFinishBtn{
+  right: 35vw;
+}
+
+#BMRModal{
+  position: absolute;
+  background-color: rgba(0,0,0,0.7);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+#BMRModalContent{
+  height: 50vh;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: #1F0CAD;
+  font-size: 5em;
+  font-weight: 200;
+}
+
+
+/*
+
+Macro Calculator for Nutrition Page
+
+*/
+#MacroCalculator{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Nunito',sans-serif;
+}
+
+#macroTitleWrapper{
+  min-width: 100vw;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  margin-bottom: 2vh;
+}
+
+#MacroTitle{
+  display: flex;
+  justify-content: center;
+  color: #1F0CAD;
+  font-size: 3em;
+}
+
+#macroInfoDiv{
+  width: 95vw;
+  white-space: pre-line;
+  border: 1px solid black;
+  font-size: 1.5em;
+  padding-left: 1vh;
+  margin-bottom: 1vh;
+}
+
+#macroBoxWrapper{
+  height: 45vh;
+  width: 95vw;
+  display: flex;
+  justify-content: space-around;
+}
+
+#macroValueSpecifier,
+.macroWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.macroPercentBox, .macroPercentBox:focus{
+  height: 7vh;
+  width: 10vw;
+  border: 1px solid #1F0CAD;
+  resize:none;
+  font-size: 2.5em;
+  color: #1F0CAD;
+  text-align: center;
+}
+
+#macroValueSpecifier > p,
+.macroWrapper > p{
+  font-size: 2em;
+  font-weight: 200;
+  color: #1F0CAD;
+}
+
+#MacroFinishButton{
+  position: fixed;
+  bottom: 5vh;
+  right: 2.5vw;
+  width: 11vw;
+  height: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  font-size: 2em;
+  text-decoration: none;
+}
+
+#MacroFinishButton:hover{
+  background-color: #1F0CAD;
+  color: white;
+}

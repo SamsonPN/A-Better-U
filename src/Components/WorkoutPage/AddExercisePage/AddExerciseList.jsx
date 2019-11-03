@@ -4,7 +4,6 @@ import {AddExerciseContext} from '../../../AppContext/ExportContexts';
 
 class AddExerciseList extends Component {
   static contextType = AddExerciseContext;
-
   render() {
     const exercises = this.context.exercises.map((exercise) =>
       <EItem

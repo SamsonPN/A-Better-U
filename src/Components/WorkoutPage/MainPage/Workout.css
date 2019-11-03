@@ -1,0 +1,209 @@
+#WoContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  min-height: 85vh;
+}
+
+#WoWrapper{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2vh;
+  width: 100%;
+  height: 6vh;
+}
+
+.WoDropdownDiv{
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.WoDropdownDiv:hover .WoViews{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.WoViews{
+  width: 30vw;
+  box-sizing: border-box;
+  border: 1px solid #1F0CAD;
+  font-family: 'Nunito', sans-serif;
+  font-size: 2em;
+  font-weight: 600;
+  text-align: center;
+  color: black;
+  cursor: pointer;
+}
+
+.WoViewsDropdown{
+  max-height: 25vh;
+  overflow: auto;
+  visibility: hidden;
+  display:flex;
+  flex-direction: column;
+  background-color: #1F0CAD;
+}
+
+.WoDropdownDiv:hover .WoViewsDropdown{
+  visibility: visible;
+}
+
+.WoDropdownItem{
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15em;
+  font-weight: 200;
+  color: white;
+  border-top: 1px solid white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.WoDropdownItem:active{
+  color: red;
+}
+
+.CurrentRoutineWorkouts{
+  width: 96.8vw;
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 3vh;
+  font-family: 'Nunito',sans-serif;
+}
+
+.CurrentRoutineWorkoutsTitle{
+  width: 90.1vw;
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vh;
+  border: 1px solid #1F0CAD;
+  padding: 1vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.CurrentRoutineWorkoutsTitle > p{
+  font-family: 'Nunito',sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 3em;
+  color: #1F0CAD;
+}
+
+.CurrentRoutineWorkoutsTitle > p:first-of-type{
+  margin-right: 3vh;
+}
+
+.CurrentRoutineItems{
+  width: 90vw;
+  min-height: 0vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  margin-bottom: 3vh;
+  box-shadow: 10px 10px 10px #707070;
+}
+
+.CurrentRoutineItemHeader{
+  width: 98.5%;
+  height: 9vh;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 3em;
+  font-weight: 200;
+  color: #1F0CAD;
+
+}
+
+.CurrentRoutineSetsReps{
+  width: 93.5%;
+  margin-bottom: 1vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.CurrentRoutineSetsReps:last-of-type{
+  margin-bottom: 3vh;
+}
+
+.CurrentRoutineSetsReps > p{
+  height: 10vh;
+  line-height: 1.9;
+  font-size: 3em;
+  font-weight: 200;
+  color: #1F0CAD;
+}
+
+.CurrentRoutineValues, .CurrentRoutineValues:focus{
+  resize: none;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 12vw;
+  height: 10vh;
+  border-bottom: 1px solid #1F0CAD;
+  text-align: center;
+  font-size: 3em;
+  font-weight: 200;
+  color: #1F0CAD;
+  line-height: 1.75;
+}
+
+.SetDeleteBtn{
+ height: 7vh;
+ margin-top: 3vh;
+ cursor: pointer;
+}
+
+.CurrentRoutineAddSet{
+  height: 10vh;
+  width: 100%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vh;
+  font-size: 2.25em;
+  font-weight: 200;
+  cursor: pointer;
+}
+
+.CurrentRoutineAddSet > p{
+  margin-right: 1.75vh;
+}
+
+.CurrentRoutineAddSet:hover > p{
+  color: #1F0CAD;
+  text-decoration: underline;
+}
+
+#WoIconWrapper{
+  width: 8.1vw;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+
+.WoBtns{
+  height: 8.5vh;
+  width: 100%;
+  cursor: pointer;
+}
+
+.WoBtns:hover{
+  opacity: 0.75;
+}

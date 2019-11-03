@@ -5,7 +5,6 @@ import Heart from '../assets/heart.svg';
 export const AddExerciseContext = React.createContext();
 
 export class AddExerciseProvider extends Component {
-
   FavoriteExercise = (e, exercise) => {
     let {name, type, muscle} = exercise;
     let {exercises, showFavorite} = this.state;
@@ -81,14 +80,14 @@ export class AddExerciseProvider extends Component {
 
   ResetCategories = () => {
     document.getElementsByClassName('AeViews')[0].textContent = 'Muscles';
-    document.getElementsByClassName('AeViews')[1].textContent = 'Exercise Type';
+    document.getElementsByClassName('AeViews')[1].textContent = 'Type';
   }
 
   SearchByCategory = () => {
     let bodyPart = document.getElementsByClassName('AeViews')[0].textContent;
     let eType = document.getElementsByClassName('AeViews')[1].textContent;
     let muscles = bodyPart === 'Muscles' ? '' : `muscle=${bodyPart}&`
-    let type = eType === 'Exercise Type' ? '' : `type=${eType}`
+    let type = eType === 'Type' ? '' : `type=${eType}`
     let uri = encodeURI('/workout/getExerciseByCategory?' + muscles + type);
     fetch(uri)
       .then(res => res.json())
@@ -129,6 +128,10 @@ export class AddExerciseProvider extends Component {
   ShowValue = (e, index) => {
     document.getElementsByClassName('AeViews')[index].textContent = e.target.textContent;
     this.SearchByCategory();
+  }
+
+  componentDidMount(){
+    this.GetExerciseTypes();
   }
 
   state = {

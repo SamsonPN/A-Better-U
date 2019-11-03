@@ -16,7 +16,7 @@ class ExerciseTypeOptions extends Component {
       <div className="AddExerciseOptions">
         <div
           className="AeViews">
-          Exercise Type
+          Type
         </div>
         <ul className="AeViewsDropdown">
           {typeItems}

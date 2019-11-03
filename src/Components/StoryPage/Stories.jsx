@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {StoryContext} from '../../AppContext/ExportContexts';
+import './Story.css';
+import './Stat.css';
 
 class Stories extends Component {
   static contextType = StoryContext;

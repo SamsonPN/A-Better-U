@@ -4,6 +4,7 @@ import CurrentRoutine from './CurrentRoutine';
 import CurrentWorkouts from './CurrentWorkouts';
 import WorkoutButtons from './WorkoutButtons';
 import {WorkoutContext} from '../../../AppContext/ExportContexts';
+import './Workout.css';
 
 class Workout extends Component {
   static contextType = WorkoutContext;

@@ -1,0 +1,169 @@
+#AddExerciseView{
+  width: 100%;
+  height: 100vh;
+  font-family: 'Nunito', sans-serif;
+}
+
+#AddExerciseHeader{
+  width: 100%;
+  height: 24vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+#AddExerciseName{
+  color: #1F0CAD;
+  font-size: 1.75em;
+}
+
+#ExerciseSearchBar, #ExerciseSearchBar:focus{
+  width: 80%;
+  height: 45%;
+  resize: none;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  font-size: 2em;
+}
+
+#AddExerciseOptionsWrapper{
+  width: 80%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.AddExerciseOptions{
+  height: 100%;
+  width: calc(80% / 4);
+  position: relative;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: 200;
+  cursor: pointer;
+}
+
+.AddExerciseOptions:hover .AeViews{
+  color: white;
+  background-color: #1F0CAD;
+  border: none;
+}
+
+.AeViews{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  font-size: 1.25em;
+  font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+}
+
+.AeViews:hover{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.AeViewsDropdown{
+  height: 30vh;
+  width: 100%;
+  overflow: auto;
+  visibility: hidden;
+  text-decoration: none;
+  display:flex;
+  flex-direction: column;
+  background-color: #1F0CAD;
+}
+
+.AddExerciseOptions:hover .AeViewsDropdown{
+  visibility: visible;
+}
+
+.AeOptionItem{
+  border-top: 1px solid white;
+  box-sizing: border-box;
+  font-size: 1.15em;
+  font-weight: 200;
+  color: white;
+  text-align: center;
+}
+
+.AeOptionItem:active{
+  color: red;
+}
+
+.AddExerciseBtn{
+  width: calc(80% / 4);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  font-size: 1.25em;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.AddExerciseBtn:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+#AddExerciseList{
+  height: 70vh;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.AddExerciseItem{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5vh;
+  font-size: 2em;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.AddExerciseCheckboxWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/*
+only change the height and not the width to vw;
+remove pixels!
+*/
+
+.AddExerciseCheckBox{
+  border: 1.5px solid black;
+  box-sizing: border-box;
+  height: 25px;
+  width: 25px;
+  margin-bottom: 1.2vh;
+  cursor: pointer;
+}
+
+.AddExerciseFavorite{
+  height: 46.5px;
+  width: 52.5px;
+}

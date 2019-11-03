@@ -8,8 +8,17 @@ class RoutineFooter extends Component {
     return (
       <div id="RoutineFooter">
         <Link
-          id="RoutineBtn" className="FooterBtns" to={`/workout/routineview/${collection}/${_id}`}>Routine</Link>
-        <Link id="ExerciseBtn" className="FooterBtns"to={`/workout/addroutine/${collection}/${_id}`}>Exercise</Link>
+          id="RoutineBtn"
+          className="FooterBtns"
+          to={`/workout/routineview/${collection}/${_id}`}>
+          Routine
+        </Link>
+        <Link
+          id="ExerciseBtn"
+          className="FooterBtns"
+          to={`/workout/addroutine/${collection}/${_id}`}>
+          Exercise
+        </Link>
       </div>
     );
   }

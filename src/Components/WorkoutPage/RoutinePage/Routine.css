@@ -1,0 +1,129 @@
+#RoutineView{
+  height: 100vh;
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+}
+
+#RoutineHeader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  width: 100vw;
+  border-bottom: 1px solid #1F0CAD;
+  background-color: white;
+  font-size: 1rem;
+}
+
+#RoutineHeaderWrapper{
+  width: 90%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#RoutineName{
+  width: 50%;
+  height: 70%;
+  resize: none;
+  border: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+ #RoutineName:focus, #RoutineName{
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  color: black;
+  font-size: 2.85em;
+}
+
+#RoutineFinish{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 200;
+  font-size: 3em;
+  text-decoration: none;
+  color: #1F0CAD;
+  cursor:pointer;
+}
+
+#RoutineFooter{
+  width: 100%;
+  height: 6vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  background-color: white;
+  font-size: 1rem;
+}
+
+.FooterBtns{
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 2em;
+  text-decoration: none;
+  text-align: center;
+  overflow: hidden;
+}
+
+.FooterBtns:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+
+.FooterBtns:active{
+  color: red;
+}
+
+#RoutineBtn{
+  border-right: 1px solid #1F0CAD;
+  box-sizing: border-box;
+}
+
+#RoutineList{
+  height:84vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  font-size: 1rem;
+}
+
+.RoutineLi{
+  width: 90vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1F0CAD;
+  margin-top: 5vh;
+}
+
+.RoutineLiInfo{
+  font-size: 2em;
+  font-weight: 200;
+}
+
+.RoutineLiDelBtn{
+  color: #6F0CAD;
+  cursor: pointer;
+}
+
+.EmptyRoutineMsg{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: wrap;
+  font-size: 2em;
+}

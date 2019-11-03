@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import TabWrapper from './HeaderTabWrapper';
 import IconName from './HeaderIconName';
-
+import TabWrapper from './HeaderTabWrapper';
+import './Header.css';
 
 class Header extends Component {
   render() {
     return (
-      <div id='header'>
+      <div id='Header'>
         <IconName />
         <TabWrapper/>
       </div>

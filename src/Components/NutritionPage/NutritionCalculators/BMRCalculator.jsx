@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import {LeftColumn, RightColumn} from './BMRColumns';
 import {CalculatorContext} from '../../../AppContext/ExportContexts';
+import './NutritionCalculators.css';
 
 class BMRCalculator extends Component {
   state = {

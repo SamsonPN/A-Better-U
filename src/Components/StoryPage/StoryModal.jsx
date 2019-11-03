@@ -13,7 +13,7 @@ class StoryModal extends Component {
     return (
       <StoryContext.Consumer>
         { ({ editText, PutFileInLabel, SaveChanges, ToggleModal }) => (
-          <div id="StoryModal" onClick={() => ToggleModal()} >
+          <div id="StoryModal">
             <div id="StoryModalContent" onClick={(e) => e.stopPropagation()}>
               <div id="StoryModalHeader">
                 <p>Edit Story</p>

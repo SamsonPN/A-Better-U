@@ -4,6 +4,7 @@ import NVBtns from './NutritionViewButtons';
 import Meals from './NutritionMealDividers';
 import Totals from './NutritionTotalsModal';
 import {NutritionContext} from '../../../AppContext/ExportContexts';
+import './Nutrition.css';
 
 class Nutrition extends Component {
   static contextType = NutritionContext;
