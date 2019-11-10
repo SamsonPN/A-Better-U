@@ -11,14 +11,13 @@ class WorkoutDropdownWrapper extends Component {
       <WorkoutContext.Consumer>
         { ({ ChangeWorkoutDate, workoutDate }) => (
           <div id="WoWrapper">
-            <DatePicker
-              selected={new Date(workoutDate)}
-              onSelect={(e) => ChangeWorkoutDate('Date', e)}
-              onChange={(e) => ChangeWorkoutDate('Date', e)}
-              className="WoViews"
-              withPortal
-              utcOffset
-            />
+              <DatePicker
+                selected={new Date(workoutDate)}
+                onChange={(e) => ChangeWorkoutDate('Date', e)}
+                className="WoViews"
+                withPortal
+                utcOffset
+              />
             <RoutineDropdown />
             <SavedDropdown />
           </div>

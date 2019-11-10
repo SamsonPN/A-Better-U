@@ -1,9 +1,6 @@
 #BMRCalculator{
-  z-index: 1;
-  position: absolute;
-  top: 0;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   font-family: 'Nunito', sans-serif;
@@ -19,6 +16,7 @@
   justify-content: center;
   margin-bottom: 10px;
   color: #1F0CAD;
+  font-size: 1rem;
 }
 
 #BMRHeader > h1{
@@ -38,6 +36,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1rem;
 }
 
 .userInfoColumn{
@@ -50,7 +49,7 @@
 }
 
 .userInfoWrapper{
-  width: 40vw;
+  width: 80%;
   display:flex;
   justify-content: space-between;
   align-items: center;
@@ -80,10 +79,7 @@
   width: 5vw;
 }
 
-.userTraitsAnswer:focus, .userTraitsAnswer,
-#feet:focus, #inches:focus,
-#feet, #inches
-{
+.userTraitsAnswer:focus, .userTraitsAnswer{
  outline: none;
  font-weight: 200;
  color: #1F0CAD;
@@ -103,7 +99,12 @@
 
 .BMRDropdownDiv{
   width: 12vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #707070;
+  box-sizing: border-box;
   font-size: 1.65em;
   font-weight: 200;
   text-align: center;
@@ -120,15 +121,16 @@
   display:none;
   text-decoration: none;
   flex-direction: column;
-  border: 1px solid #1f0cad;
-  background-color: #1f0cad;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  background-color: #1F0CAD;
 }
 
 .BMRDropdownWrapper:hover .BMRDropdown{
   display:flex;
 }
 
-.ActivityDropdownLi, .GoalDropdownLi{
+.BMRDropdownLi{
   font-weight: 200;
   color: white;
   border-top: 1px solid white;
@@ -136,20 +138,29 @@
   text-align: center;
 }
 
-.ActivityDropdownLi:active, .GoalDropdownLi:active{
+.BMRDropdownLi:active{
   color: red;
 }
 
-.BMRButton{
-  overflow: auto;
+#BMRButtonWrapper{
   position: fixed;
   bottom: 4vh;
-  width: 11vw;
   height: 7vh;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.BMRButton{
+  overflow: hidden;
+  height: 100%;
+  min-width: 15%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid #1F0CAD;
+  box-sizing: border-box;
   font-size: 2em;
   text-decoration: none;
   color: black;
@@ -161,12 +172,9 @@
   color: white;
 }
 
-#BMRCalculateBtn{
-  right: 51vw;
-}
-
 #BMRFinishBtn{
-  right: 35vw;
+  margin-left: 3%;
+  margin-right: 5%;
 }
 
 #BMRModal{
@@ -193,62 +201,65 @@
   font-weight: 200;
 }
 
-
 /*
 
 Macro Calculator for Nutrition Page
 
 */
+
 #MacroCalculator{
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Nunito',sans-serif;
 }
 
-#macroTitleWrapper{
-  min-width: 100vw;
+#MacroTitleWrapper{
+  width: 100vw;
   height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid black;
   margin-bottom: 2vh;
+  font-size: 1rem;
 }
 
-#MacroTitle{
+#MacroTitleWrapper > h1{
   display: flex;
   justify-content: center;
   color: #1F0CAD;
   font-size: 3em;
 }
 
-#macroInfoDiv{
+#MacroInfoDiv{
   width: 95vw;
   white-space: pre-line;
   border: 1px solid black;
-  font-size: 1.5em;
+  box-sizing: border-box;
+  font-size: 1.5rem;
   padding-left: 1vh;
   margin-bottom: 1vh;
 }
 
-#macroBoxWrapper{
+#MacroBoxWrapper{
   height: 45vh;
-  width: 95vw;
+  width: 100%;
   display: flex;
   justify-content: space-around;
 }
 
-#macroValueSpecifier,
-.macroWrapper{
+#MacroValueSpecifier,
+.MacroWrapper{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  font-size: 1rem;
 }
 
-.macroPercentBox, .macroPercentBox:focus{
+.MacroPercentBox, .MacroPercentBox:focus{
   height: 7vh;
   width: 10vw;
   border: 1px solid #1F0CAD;
@@ -258,23 +269,31 @@ Macro Calculator for Nutrition Page
   text-align: center;
 }
 
-#macroValueSpecifier > p,
-.macroWrapper > p{
+#MacroValueSpecifier > p,
+.MacroWrapper > p{
   font-size: 2em;
   font-weight: 200;
   color: #1F0CAD;
 }
 
+#MacroButtonWrapper{
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1rem;
+}
+
 #MacroFinishButton{
-  position: fixed;
-  bottom: 5vh;
-  right: 2.5vw;
-  width: 11vw;
-  height: 7vh;
+  min-width: 15%;
+  height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 2.5%;
   border: 1px solid #1F0CAD;
+  box-sizing: border-box;
   font-size: 2em;
   text-decoration: none;
 }

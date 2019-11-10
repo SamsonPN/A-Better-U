@@ -40,20 +40,22 @@ class BMRCalculator extends Component {
               <LeftColumn textareas={textareas}/>
               <RightColumn textareas={textareas}/>
             </div>
-            <button
-              className="BMRButton"
-              id="BMRCalculateBtn"
-              onClick={CalculateBMR}
-             >
-             Calculate
-            </button>
-            <Link
-              to="/nutrition"
-              className="BMRButton"
-              id="BMRFinishBtn"
-            >
-              Finish
-            </Link>
+            <div id="BMRButtonWrapper">
+              <button
+                className="BMRButton"
+                id="BMRCalculateBtn"
+                onClick={CalculateBMR}
+               >
+               Calculate
+              </button>
+              <Link
+                to="/nutrition"
+                className="BMRButton"
+                id="BMRFinishBtn"
+              >
+                Finish
+              </Link>
+            </div>
             {showModal ? <BMRModal/> : null }
           </div>
         )}

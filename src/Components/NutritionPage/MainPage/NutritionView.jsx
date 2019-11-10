@@ -13,16 +13,11 @@ class NutritionView extends Component {
           <CalculatorContext.Consumer>
             { ({ CalculateMacros, Calories }) => (
               <div id="NutritionView">
-                <p id="CaloriesToday">Calories Today:
-                  <span id="CaloriesConsumed"> {calories} </span>
-                  /
-                  <span id="TotalCalories"> {Calories}</span>
-                </p>
-
+                <p>Calories: <span>{calories} / {Calories}</span></p>
                 <div id="NutritionViewMacroWrapper">
-                  <p className="macros" id="protein">Protein: {protein} / {CalculateMacros('Protein')}g</p>
-                  <p className="macros" id="fat">Fat: {fat} / {CalculateMacros('Fat')}g</p>
-                  <p className="macros" id="carbs">Carbs: {carbs} / {CalculateMacros('Carbs')}g</p>
+                  <p id="protein">Protein: <span>{protein} / {CalculateMacros('Protein')}g</span></p>
+                  <p id="fat">Fat: <span>{fat} / {CalculateMacros('Fat')}g</span></p>
+                  <p id="carbs">Carbs: <span>{carbs} / {CalculateMacros('Carbs')}g</span></p>
                 </div>
               </div>
             )}

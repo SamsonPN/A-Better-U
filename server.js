@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 9000;
+const path = require('path');
 const cors = require('cors');
 const GridFs = require('gridfs-stream');
 const passport = require('passport');

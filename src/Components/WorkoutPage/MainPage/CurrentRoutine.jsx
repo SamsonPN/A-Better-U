@@ -11,6 +11,7 @@ class CurrentRoutine extends Component {
     const exerciseItems = exercises.map( (exercise, i) =>
       <RI
         key={exercise.name + exercise.type + exercise.muscle}
+        muscle={exercise.muscle}
         name={exercise.name}
         type={exercise.type}
         index={i}

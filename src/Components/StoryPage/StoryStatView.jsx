@@ -15,11 +15,10 @@ class StoryStatViewer extends Component {
             <p>{user.name}</p>
           </div>
           <div id="StoryStatList">
-            <p className="StoryStatListItem">Age: {userStats.age || ""}</p>
-            <p className="StoryStatListItem">Height: {`${userStats.feet || ""}' ${userStats.inches || ""}"`}</p>
-            <p className="StoryStatListItem">Weight: {userStats.weight || ""} lbs</p>
-            <p className="StoryStatListItem">Goal: {goal.name || ""}</p>
-            <a className="StoryStatListItem" href="http://localhost:9000/auth/logout">Logout</a>
+            <div className="StoryStatListItem">Age: {"\n"}{userStats.age || ""}</div>
+            <p className="StoryStatListItem">Height: {"\n"}{`${userStats.feet || ""}' ${userStats.inches || ""}"`}</p>
+            <p className="StoryStatListItem">Weight: {"\n"}{userStats.weight || ""} lbs</p>
+            <p className="StoryStatListItem">Goal: {"\n"}{goal.name || ""}</p>
           </div>
         </div>
       </div>

@@ -1,39 +1,41 @@
 #Story{
-  width: 100vw;
+  width: 100%;
   display: flex;
   font-family: 'Nunito', sans-serif;
 }
 
 #StoryStatView{
-  width: 30vw;
-  min-height: 100vh;
+  width: 30%;
+  /* min-height: 100vh; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1rem;
+  margin-top: 2.5vh;
 }
 
 #StoryStatContent{
+  /* min-height: 100vh; */
   width: 95%;
-  margin-top: 2.5vh;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
 }
 
 #StoryStatHeader{
   width: 100%;
-  height: 20%;
+  height: 20vh;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid #1F0CAD;
   box-sizing: border-box;
   overflow: hidden;
+  font-size: 1rem;
 }
 
 #StoryStatHeader > img{
-  height: 90%;
-  clip-path: circle(45%);
+  max-height: 90%;
+  max-width: 30%;
+  clip-path: circle(40%);
 }
 
 #StoryStatHeader > p{
@@ -43,14 +45,15 @@
 }
 
 #StoryStatList{
+  height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
-  height: 80%;
+  font-size: 1rem;
 }
 
 .StoryStatListItem{
+  height: calc(100% / 4);
   width: 100%;
   display: flex;
   align-items: center;
@@ -62,44 +65,30 @@
 }
 
 .StoryStatListItem:not(:last-child){
-  min-height: 20vh;
   border-bottom: 1px solid #1F0CAD;
 }
 
-.StoryStatListItem:last-child{
-  min-height: 10vh;
-  display: flex;
-  justify-content: center;
-  color: red;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.StoryStatListItem:last-child:hover{
-  color: white;
-  background-color: red;
+.StoryStatListItem > span{
+  white-space: nowrap;
 }
 
 #StoryTimeline{
+  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70vw;
+  margin-top: 2.5vh;
 }
 
 #StorySubmission{
   width: 95%;
-  height: 40vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
 #StorySubmissionContent{
   width: 100%;
-  height: 25vh;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
 }
@@ -108,7 +97,7 @@
   display: block;
   resize: none;
   outline: none;
-  height: 50%;
+  height: 25vh;
   width: 100%;
   border: none;
   font-family: 'Nunito', sans-serif;
@@ -117,11 +106,12 @@
 }
 
 #StorySubmitMediaDiv{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50%;
+  height: 10vh;
   width: 100%;
+  display: none;
+  align-items: center;
+  padding: 1px;
+  box-sizing: border-box;
 }
 
 .StorySubmitMedia{
@@ -223,10 +213,11 @@
 }
 
 .StoriesTextDiv{
-  margin: 2vh;
-  width: 98%;
-  min-height: 5vh;
   overflow: auto;
+  width: 100%;
+  max-height: 20vh;
+  padding: 5px;
+  box-sizing: border-box;
   font-size: 1.25em;
 }
 
@@ -364,3 +355,46 @@
   color: white;
   cursor: pointer;
 }
+
+/*
+
+MEDIA QUERIES
+
+ */
+
+ @media only screen and (max-width: 1188px){
+   #StoryStatHeader{
+     font-size: 0.8rem;
+   }
+   #StoryStatList{
+     font-size: 0.8rem;
+   }
+ }
+
+ @media only screen and (max-width: 998px){
+   #StoryStatHeader > img {
+     max-width: 40%;
+   }
+   .StoryStatListItem:not(:first-child){
+     white-space: pre;
+   }
+ }
+
+ @media only screen and (max-width: 790px){
+   #Story{
+     flex-direction: column;
+     align-items: center;
+   }
+   #StoryStatHeader{
+     min-height: 20vh;
+     border: none;
+     font-size: 0.8rem;
+   }
+   #StoryStatView,
+   #StoryTimeline{
+     width: 95%;
+   }
+   #StoryStatList{
+     display: none;
+   }
+ }

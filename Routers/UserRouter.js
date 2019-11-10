@@ -69,7 +69,7 @@ user.post('/insertFavorites', (req, res) => {
 })
 
 user.post('/deleteFavorites', (req, res) => {
-  let {users} = req.app.locals;
+  let {users, ObjectID} = req.app.locals;
   let { field, item} = req.body;
   users.updateOne(
     { _id: ObjectID(req.user._id) },

@@ -7,10 +7,10 @@ class IconName extends Component {
       <div id="IconWrapper">
         <img id="Icon" src={logo} alt="Unable to load"/>
         <p id="IconName">A Better U</p>
+        <a id="LogoutBtn" href="http://localhost:9000/auth/logout">Logout</a>
       </div>
     );
   }
-
 }
 
 export default IconName;

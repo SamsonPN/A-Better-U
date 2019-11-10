@@ -4,6 +4,7 @@
   align-items: center;
   width: 100vw;
   min-height: 85vh;
+  font-family: 'Nunito',sans-serif;
 }
 
 #WoWrapper{
@@ -11,14 +12,15 @@
   justify-content: space-around;
   margin-top: 2vh;
   width: 100%;
-  height: 6vh;
+  height: 6.5vh;
+  font-size: 1rem;
 }
 
 .WoDropdownDiv{
   position: relative;
   display: inline-block;
   height: 100%;
-  box-sizing: border-box;
+  width: 30vw;
 }
 
 .WoDropdownDiv:hover .WoViews{
@@ -28,9 +30,11 @@
 }
 
 .WoViews{
+  overflow: hidden;
   width: 30vw;
   box-sizing: border-box;
   border: 1px solid #1F0CAD;
+  box-sizing: border-box;
   font-family: 'Nunito', sans-serif;
   font-size: 2em;
   font-weight: 600;
@@ -40,9 +44,9 @@
 }
 
 .WoViewsDropdown{
-  max-height: 25vh;
   overflow: auto;
   visibility: hidden;
+  max-height: 25vh;
   display:flex;
   flex-direction: column;
   background-color: #1F0CAD;
@@ -53,13 +57,13 @@
 }
 
 .WoDropdownItem{
-  font-family: 'Nunito', sans-serif;
+  border-top: 1px solid white;
+  box-sizing: border-box;
+  text-decoration: none;
+  text-align: center;
   font-size: 1.15em;
   font-weight: 200;
   color: white;
-  border-top: 1px solid white;
-  text-decoration: none;
-  text-align: center;
 }
 
 .WoDropdownItem:active{
@@ -73,23 +77,23 @@
   flex-direction: column;
   align-items: flex-start;
   margin-top: 3vh;
-  font-family: 'Nunito',sans-serif;
 }
 
 .CurrentRoutineWorkoutsTitle{
-  width: 90.1vw;
+  width: 90vw;
   min-height: 10vh;
   display: flex;
   align-items: center;
-  margin-bottom: 1vh;
+  margin-bottom: 3vh;
   border: 1px solid #1F0CAD;
   padding: 1vh;
   box-sizing: border-box;
+  box-shadow: 10px 10px 10px #707070;
   overflow: hidden;
+  font-size: 1rem;
 }
 
 .CurrentRoutineWorkoutsTitle > p{
-  font-family: 'Nunito',sans-serif;
   font-weight: 900;
   font-style: italic;
   font-size: 3em;
@@ -109,21 +113,24 @@
   border: 1px solid #1F0CAD;
   margin-bottom: 3vh;
   box-shadow: 10px 10px 10px #707070;
+  box-sizing: border-box;
+  font-size: 1rem;
 }
 
 .CurrentRoutineItemHeader{
   width: 98.5%;
-  height: 9vh;
-  white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
+  min-height: 9vh;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.CurrentRoutineItemHeader > p{
+  height: 100%;
+  width: 100%;
   font-size: 3em;
   font-weight: 200;
   color: #1F0CAD;
-
 }
 
 .CurrentRoutineSetsReps{

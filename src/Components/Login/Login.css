@@ -1,13 +1,7 @@
-*{
-  margin: 0;
-  padding: 0;
-}
-
 #LoginPage{
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -20,14 +14,12 @@
 
 #LoginInfo{
   position: absolute;
-  height: 50vh;
-  width: 50vw;
+  min-width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
-
+  border-radius: 10px;
   background-color: rgba(0,0,0,0.9);
   color: white;
   font-family: 'Nunito', sans-serif;
@@ -35,39 +27,89 @@
   opacity: 0.925;
 }
 
+#SiteNameSlogan{
+  width: 100%;
+  font-size: 1rem;
+}
+
 #SiteNameSlogan > h1{
-  font-size: 8vw;
+  height: 80%;
+  font-size: 7.5em;
   font-weight: 200;
 }
 
 #SiteNameSlogan > p{
-  font-size: 1.5vw;
+  height: 20%;
+  font-size: 1.5em;
+}
+
+#LoginBtnWrapper{
+  height: 35%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #googleBtn{
+  height: 40px;
+  width: 227px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
-  height: 10vh;
-  width: 25vw;
-
+  border-radius: 3px;
+  margin-top: 1%;
+  margin-bottom: 1%;
   background-color: white;
   color: black;
-  opacity: black;
-  font-family: 'Helvetica';
-  font-size: 1.5vw;
-  border-radius: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  text-decoration: none;
   cursor: pointer;
 }
 
-#googleBtn:active{
-  background-color: #1F0CAD;
+#googleImg{
+  max-height: 100%;
+  width: 20%;
+  margin-right: 10%;
 }
 
-#GoogleImg{
-  height: 70%;
-  width: 20%;
-  margin-right: 2.5vw;
-  margin-left: 10px;
+.LoginBtns:active{
+  opacity: 0.8;
+}
+
+#fbBtn{
+  margin-bottom: 1%;
+}
+
+.fb-login-button{
+  pointer-events: none;
+}
+
+/*
+
+MEDIA QUERIES
+
+ */
+
+@media only screen and (max-width: 558px){
+  #SiteNameSlogan{
+    font-size: 0.8rem;
+  }
+}
+
+@media only screen and (max-width: 444px){
+  #SiteNameSlogan{
+    font-size: 0.6rem;
+  }
+}
+
+@media only screen and (max-width: 332px){
+  #LoginInfo{
+    width: 90%;
+  }
+  #SiteNameSlogan{
+    font-size: 0.45rem;
+  }
 }

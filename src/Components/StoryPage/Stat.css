@@ -1,0 +1,66 @@
+/* #StoryStatView{
+  width: 30%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.5vh;
+}
+
+#StoryStatContent{
+  min-height: 100vh;
+  width: 95%;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+}
+
+#StoryStatHeader{
+  width: 100%;
+  height: 20vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-size: 1rem;
+}
+
+#StoryStatHeader > img{
+  max-height: 90%;
+  max-width: 30%;
+  clip-path: circle(40%);
+}
+
+#StoryStatHeader > p{
+  font-size: 2.25em;
+  font-weight: 200;
+  white-space: pre-line;
+}
+
+#StoryStatList{
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.StoryStatListItem{
+  height: calc(100% / 4);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  box-sizing: border-box;
+  font-size: 3em;
+  font-weight: 200;
+  overflow: hidden;
+}
+
+.StoryStatListItem:not(:last-child){
+  border-bottom: 1px solid #1F0CAD;
+}
+
+.StoryStatListItem > span{
+  white-space: nowrap;
+} */

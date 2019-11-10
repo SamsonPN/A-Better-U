@@ -8,7 +8,7 @@ export class ActivityDropdown extends Component {
     const dropdownItems = levels.map(item =>
       <a
         key={item.name}
-        className="ActivityDropdownLi"
+        className="BMRDropdownLi"
         href="#!"
         onClick={() => HandleDropdownChange('activity', item)}
       >
@@ -33,7 +33,7 @@ export class GoalDropdown extends Component {
     const dropdownItems = goals.map(item =>
       <a
         key={item.name}
-        className="GoalDropdownLi"
+        className="BMRDropdownLi"
         href="#!"
         onClick={() => HandleDropdownChange('goal', item)}
       >

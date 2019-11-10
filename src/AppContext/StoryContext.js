@@ -59,16 +59,18 @@ export class StoryProvider extends Component {
 
   PutFileInLabel = (e) => {
     let newFile = e.target.files[0];
-    let type = newFile.type;
     let label = e.target.nextElementSibling;
     label.textContent = (newFile || {}).name || "Photo / Video";
     if(newFile){
+      let type = newFile.type;
       let preview = URL.createObjectURL(newFile);
       let view = e.target.parentElement.id === 'StoryModalBtnWrapper' ? "modal" : "submission";
+      document.getElementById('StorySubmitMediaDiv').style.display = "flex";
       this.setState({
         preview,
         type,
-        view
+        view,
+        file: newFile
       })
     }
   }
@@ -100,7 +102,7 @@ export class StoryProvider extends Component {
   }
 
   SubmitStory = (e) => {
-    let file = document.getElementById('file').files[0];
+    let {file} = this.state;
     let text = document.getElementById('StorySubmitText').value;
     if (file || text){
       let uri = '/story/uploadStories';
@@ -115,7 +117,8 @@ export class StoryProvider extends Component {
           URL.revokeObjectURL(this.state.preview);
           this.ClearSubmissionForm();
           this.GetStories();
-          window.location.href = "http://localhost:3000/story"
+          window.location.href = "http://localhost:3000/story";
+          document.getElementById('StorySubmitMediaDiv').style.display = "none";
        })
     }
   }
@@ -142,6 +145,7 @@ export class StoryProvider extends Component {
     editFile: "",
     editStory: "",
     editText: "",
+    file: false
   }
 
   componentDidMount(){

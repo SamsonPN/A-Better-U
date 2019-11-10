@@ -8,7 +8,7 @@ class MacroCalculator extends Component {
   componentDidMount(){
     this.context.GetGoals();
   }
-  
+
   render() {
     const macros = ["Protein", "Fat", "Carbs"].map( macro =>
       <MacroWrapper key={macro} macro={macro}/>
@@ -18,21 +18,23 @@ class MacroCalculator extends Component {
         { ({ goals, Calories, StoreMacros, link }) => (
           <div id="MacroCalculator">
             <MacroTitle calories={Calories}/>
-            <div id="macroBoxWrapper">
-              <div id="macroValueSpecifier">
+            <div id="MacroBoxWrapper">
+              <div id="MacroValueSpecifier">
                 <p>%</p>
                 <p>Macro</p>
                 <p>Grams</p>
               </div>
             {macros}
             </div>
-            <Link
-              to='/nutrition'
-              id="MacroFinishButton"
-              onClick={(e) => StoreMacros(e)}
-              >
-              Finish
-            </Link>
+            <div id="MacroButtonWrapper">
+              <Link
+                to='/nutrition'
+                id="MacroFinishButton"
+                onClick={(e) => StoreMacros(e)}
+                >
+                Finish
+              </Link>
+            </div>
           </div>
         )}
       </CalculatorContext.Consumer>
@@ -49,9 +51,9 @@ class MacroWrapper extends Component {
     const {CalculateMacros, SavePercentages} = this.context;
     const value = CalculateMacros(macro);
     return (
-      <div className="macroWrapper">
+      <div className="MacroWrapper">
         <textarea
-          className="macroPercentBox"
+          className="MacroPercentBox"
           onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
           onChange={(e) => SavePercentages(e, macro)}
           >
@@ -69,11 +71,11 @@ class MacroTitle extends Component {
     Total Calories: ${this.props.calories}\nCarbs: 45-65%\nFat: 20-35%\nProtein: 10-35%\n`;
     return (
       <React.Fragment>
-        <div id="macroTitleWrapper">
-          <h1 id="MacroTitle">Determine your Macros</h1>
+        <div id="MacroTitleWrapper">
+          <h1>Determine your Macros</h1>
         </div>
-        <div id="macroInfoDiv">
-          {text}
+        <div id="MacroInfoDiv">
+          <p>{text}</p>
           <p>
             <b>
               If total calories are 0,
