@@ -274,7 +274,7 @@
 
 #StoryModalContent{
   width: 50%;
-  height: 60%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -396,5 +396,14 @@ MEDIA QUERIES
    }
    #StoryStatList{
      display: none;
+   }
+   #StoryModalContent{
+     width: 70%;
+   }
+ }
+
+ @media only screen and (max-width: 412px){
+   #StoryModalContent{
+     width: 80%;
    }
  }
