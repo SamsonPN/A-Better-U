@@ -1,5 +1,6 @@
 "use strict";
 const workout = require('express').Router();
+const ObjectID = require('mongodb').ObjectID;
 
 // used by addexerciseview to return list of Muscles and Exercise types
 workout.get('/getExerciseTypes', (req,res) => {
@@ -50,12 +51,14 @@ workout.get('/getWorkouts', (req, res) => {
     .sort( { date : 1 } )
     .toArray()
     .then(result => res.json(result))
-    .catch(err => console.error(err))
+    .catch(err => {
+      res.status(404).send({err})
+    })
 })
 
 // used by the Date selector to grab the workout
 workout.get('/getWorkoutById', (req, res) => {
-  let { ObjectID, workouts } = req.app.locals;
+  let {workouts } = req.app.locals;
   workouts.findOne(
    { _id: ObjectID(req.query._id) } )
     .then(result => res.json(result))
@@ -64,7 +67,7 @@ workout.get('/getWorkoutById', (req, res) => {
 
 //used to update the exercise list for routines/workouts
 workout.post('/updateExercises', (req,res) => {
-  let { db, ObjectID } = req.app.locals;
+  let { db} = req.app.locals;
   let {_id, exercises, name, collectionName} = req.body;
   let collection = db.collection(collectionName);
   collection.updateOne(
@@ -77,20 +80,21 @@ workout.post('/updateExercises', (req,res) => {
 })
 
 // saves the workouts to the workout collection
-workout.post('/saveWorkout', (req, res) => {
+workout.put('/saveWorkout', (req, res) => {
   let {workouts} = req.app.locals;
-  let {name, date, exercises} = req.body;
+  let {name, date, exercises, _id} = req.body;
   let {user} = req.session.passport;
-  workouts.insertOne(
-    { name, date, user, exercises }
+  workouts.updateOne(
+    { _id: ObjectID(_id)},
+    {$set: {name, date, user, exercises } },
+    {upsert: true}
   )
-    .catch(err => console.error(err));
   res.end();
 })
 
 //deletes the current routine shown from either the routines or workout collections
 workout.delete('/deleteCurrentRoutine/:collectionName/:id', (req, res) => {
-  let { db, ObjectID } = req.app.locals;
+  let { db} = req.app.locals;
   let {collectionName, id} = req.params;
   let collection = db.collection(collectionName);
   collection.deleteOne(

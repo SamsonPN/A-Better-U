@@ -1,9 +1,9 @@
 "use strict";
 const user = require('express').Router();
-
+const ObjectID = require('mongodb').ObjectID;
 
 user.get('/getGoals', (req,res) => {
-  let {users, ObjectID} = req.app.locals;
+  let {users} = req.app.locals;
   users.findOne(
     { _id: ObjectID(req.user._id) },
     { projection : { _id: 0, type: 0, user: 0, favExercises: 0, favFoods: 0} } )
@@ -14,7 +14,7 @@ user.get('/getGoals', (req,res) => {
 
 //get favorites!
 user.get('/getFavorites', (req,res) => {
-  let {users, ObjectID} = req.app.locals;
+  let {users} = req.app.locals;
   users.findOne(
     { _id: ObjectID(req.user._id) },
     req.query
@@ -24,7 +24,7 @@ user.get('/getFavorites', (req,res) => {
 })
 
 user.get('/getUserInfo', (req, res) => {
-  let {ObjectID, users} = req.app.locals;
+  let {users} = req.app.locals;
   let {user} = req;
   users.findOne(
     { _id: ObjectID(user._id)}
@@ -34,7 +34,7 @@ user.get('/getUserInfo', (req, res) => {
 
 // updates the users' goals such as weight loss goals and macronutrient goals
 user.post('/updateMacroGoals', (req,res) => {
-  let {users, ObjectID} = req.app.locals;
+  let {users} = req.app.locals;
   users.updateOne(
     { _id: ObjectID(req.user._id) },
     { $set: {macros: req.body} },
@@ -45,7 +45,7 @@ user.post('/updateMacroGoals', (req,res) => {
 })
 
 user.post('/updateUserStats', (req,res) => {
-  let {users, ObjectID} = req.app.locals;
+  let {users} = req.app.locals;
   let {Calories, ...userStats} = req.body;
   users.updateOne(
     { _id: ObjectID(req.user._id) },
@@ -57,7 +57,7 @@ user.post('/updateUserStats', (req,res) => {
 })
 
 user.post('/insertFavorites', (req, res) => {
-  let {users, ObjectID} = req.app.locals;
+  let {users} = req.app.locals;
   let {field, item} = req.body;
   users.updateOne(
     { _id: ObjectID(req.user._id) },
@@ -69,7 +69,7 @@ user.post('/insertFavorites', (req, res) => {
 })
 
 user.post('/deleteFavorites', (req, res) => {
-  let {users, ObjectID} = req.app.locals;
+  let {users} = req.app.locals;
   let { field, item} = req.body;
   users.updateOne(
     { _id: ObjectID(req.user._id) },

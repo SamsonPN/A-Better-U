@@ -2,13 +2,14 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const keys = require('./keys');
+const ObjectID = require('mongodb').ObjectID;
 
 passport.serializeUser((req, id, done) => {
   done(null, id);
 });
 
 passport.deserializeUser((req, id, done) => {
-  let {db, ObjectID} = req.app.locals;
+  let {db} = req.app.locals;
   let users = db.collection('users');
   users.findOne( { _id: ObjectID(id) } )
     .then(user => {
@@ -23,7 +24,7 @@ passport.use(
   clientID: keys.google.clientID,
   clientSecret: keys.google.clientSecret
 }, (req, accessToken, refreshToken, profile, done) => {
-    let {users, ObjectID} = req.app.locals;
+    let {users} = req.app.locals;
     users.findOne( { user: profile.id} )
       .then(user => {
         if(user){
@@ -76,7 +77,7 @@ passport.use(
     clientSecret: keys.facebook.clientSecret,
   }, (req, accessToken, refreshToken, profile, done) => {
     console.log({facebook: profile});
-    let {users, ObjectID} = req.app.locals;
+    let {users} = req.app.locals;
     users.findOne( { user: profile.id} )
       .then(user => {
         if(user){

@@ -15,8 +15,8 @@ class AdditionalSetsReps extends Component {
   }
 
   render() {
-    const {index, sets, exercise}  = this.props;
-    const {DeleteSet, SaveSetValues, tab} = this.context;
+    const {exerciseIndex, setIndex, sets, workoutIndex}  = this.props;
+    const {DeleteSet, SaveSetValues} = this.context;
     const setValues = [
       { "placeholder" : "Type", "value": sets.Type},
       { "placeholder": "Weight", "value": sets.Weight},
@@ -28,25 +28,21 @@ class AdditionalSetsReps extends Component {
         className="CurrentRoutineValues"
         placeholder={item.placeholder}
         value={item.value}
-        onChange={ (e) => SaveSetValues(e, exercise , index)}
+        onChange={ (e) => SaveSetValues(e, workoutIndex, exerciseIndex, setIndex)}
         onKeyPress={this.InputValidation}
-        disabled={tab === 'Date' ? true : false}
         maxLength="10"
        />
     )
     return (
         <div className="CurrentRoutineSetsReps">
-          <p>{index + 1}</p>
-
+          <p>{setIndex + 1}</p>
           {setCategories}
-          {tab !== 'Date' ?
-            <img
-              className="SetDeleteBtn"
-              onClick={() => DeleteSet(exercise, index)}
-              src={DeleteBtn} alt='Delete button'
-            />
-            : null
-          }
+          <img
+            className="SetDeleteBtn"
+            onClick={() => DeleteSet(workoutIndex, exerciseIndex, setIndex)}
+            src={DeleteBtn}
+            alt='Delete button'
+          />
         </div>
     );
   }

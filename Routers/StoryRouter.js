@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Keys = require('../config/keys');
-
+const ObjectID = require('mongodb').ObjectID;
 const story = require('express').Router();
 
 const storage = new GridFsStorage({
@@ -41,7 +41,7 @@ story.get('/getStories', (req,res) => {
 //@route GET /image/:filename
 // @desc Display image
 story.get('/media/:id', (req, res) => {
-  let {gfs, ObjectID} = req.app.locals;
+  let {gfs} = req.app.locals;
   //gets filename from the url
   gfs.files.findOne({_id: ObjectID(req.params.id)}, (err, file) => {
     if(!file || file.length === 0){
@@ -57,7 +57,7 @@ story.get('/media/:id', (req, res) => {
 // @route POST /upload
 // @desc Uploads file to DB
 story.post('/uploadStories', upload.single('file'), (req, res) => {
-  let {date, ObjectID, stories, users} = req.app.locals;
+  let {date, stories, users} = req.app.locals;
   let text = req.body.text || "";
   let file = req.file ? req.file : false;
   users.findOne(
@@ -81,7 +81,7 @@ story.post('/uploadStories', upload.single('file'), (req, res) => {
 });
 
 story.put('/editStories', upload.single('file'), (req, res) => {
-  let {gfs, ObjectID, stories} = req.app.locals;
+  let {gfs, stories} = req.app.locals;
   let {_id, oldFile, text} = req.body;
   text = text || "";
   oldFile = JSON.parse(oldFile);
@@ -104,7 +104,7 @@ story.put('/editStories', upload.single('file'), (req, res) => {
 });
 
 story.delete('/deleteStory', (req, res) => {
-  let {gfs, ObjectID, stories} = req.app.locals;
+  let {gfs, stories} = req.app.locals;
   let { story_id, file_id } = req.query;
   stories.deleteOne( { _id : ObjectID(story_id) } )
     .catch(err => console.error(err))

@@ -7,15 +7,16 @@ class CurrentRoutineItems extends Component {
   static contextType = WorkoutContext;
 
   render() {
-    const {index, muscle, name, sets, type} = this.props;
+    const {index, muscle, name, sets, type, workoutIndex} = this.props;
     const {AddSet, tab} = this.context;
     const AddSets = sets.map( (item,i) =>
       <SetsReps
         key={item + i}
-        index={i}
+        setIndex={i}
         sets={item}
-        exercise={index}
+        exerciseIndex={index}
         tab={tab}
+        workoutIndex={workoutIndex}
       />
     )
     return (
@@ -24,12 +25,9 @@ class CurrentRoutineItems extends Component {
           <p>{type} {name} ({muscle})</p>
         </div>
         {AddSets}
-        {tab !== 'Date' ?
-          <div className="CurrentRoutineAddSet">
-            <p onClick={() => AddSet(index)}>Add Set</p>
-          </div>
-          : null
-        }
+        <div className="CurrentRoutineAddSet">
+          <p onClick={() => AddSet(index, workoutIndex)}>Add Set</p>
+        </div>
       </div>
     );
   }

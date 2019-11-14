@@ -35,18 +35,28 @@ export class WorkoutProvider extends Component {
     })
   }
 
-  AddSet = (index) => {
+  AddSet = (exerciseIndex, workoutIndex) => {
     let newSet = {
       'Type': '',
       'Weight': '',
       'Reps': ''
     }
-    let {currentRoutine} = this.state;
-    let newState = {...currentRoutine};
-    newState.exercises[index].sets.push(newSet)
+    let {currentRoutine, workouts} = this.state;
+    let newState;
+    let stateItem;
+    if(workoutIndex !== ""){
+      newState = workouts;
+      stateItem = 'workouts';
+      newState[workoutIndex].exercises[exerciseIndex].sets.push(newSet);
+    }
+    else{
+      newState = {...currentRoutine};
+      stateItem = 'currentRoutine';
+      newState.exercises[exerciseIndex].sets.push(newSet);
+    }
     this.setState(prevState => ({
       ...prevState,
-      currentRoutine: newState
+      [stateItem]: newState
     }))
   }
 
@@ -74,41 +84,48 @@ export class WorkoutProvider extends Component {
     })
   }
 
-  DeleteCurrentRoutine = () => {
-    let { currentRoutine, tab } = this.state;
-    let collection = tab === 'Saved' ? 'workout' : 'routine';
+  DeleteCurrentRoutine = (id) => {
+    let {tab} = this.state;
+    let collection = tab === 'Routine' ? 'routine' : 'workout';
     let confirm = window.confirm(`This ${collection} will no longer show up in the ${tab} tab. Continue?`);
+    collection += 's';
     if(confirm){
-      collection += 's';
-      let uri = `/workout/deleteCurrentRoutine/${collection}/${currentRoutine._id}`;
+      let uri = `/workout/deleteCurrentRoutine/${collection}/${id}`;
       fetch(uri, {
         method: 'DELETE',
       })
         .catch(err => console.error(err))
-
-      if(tab === 'Saved'){
-        this.setState({
-          currentRoutine: {}
-        }, function(){
-          this.FillSavedTab();
-        })
-      }
-      else {
-        this.setState(prevState => ({
-          routines: prevState.routines.filter(item => {return item._id !== currentRoutine._id}),
-          currentRoutine: {}
-        }))
-      }
+      // if(tab === 'Saved'){
+      //   this.setState({
+      //     currentRoutine: {}
+      //   }, function(){
+      //     this.FillSavedTab();
+      //   })
+      // }
+      this.setState(prevState => ({
+        [collection]: prevState[collection].filter(item => {return item._id !== id}),
+        currentRoutine: {}
+      }))
     }
   }
 
-  DeleteSet = (exercise, index, e) => {
-    let {currentRoutine} = this.state;
-    let newState = {...currentRoutine};
-    newState.exercises[exercise].sets.splice(index,1);
+  DeleteSet = (workoutIndex, exerciseIndex, setIndex) => {
+    let {currentRoutine, workouts} = this.state;
+    let newState;
+    let stateItem;
+    if(workoutIndex !== ""){
+      newState = workouts;
+      stateItem = 'workouts';
+      newState[workoutIndex].exercises[exerciseIndex].sets.splice(setIndex, 1);
+    }
+    else{
+      newState = {...currentRoutine};
+      stateItem = 'currentRoutine';
+      newState.exercises[exerciseIndex].sets.splice(setIndex,1);
+    }
     this.setState(prevState => ({
       ...prevState,
-      currentRoutine
+      [stateItem]: newState
     }))
   }
 
@@ -117,9 +134,16 @@ export class WorkoutProvider extends Component {
     fetch('/workout/getWorkouts')
       .then(res => res.json())
       .then(data => {
-        this.setState({
-          savedWorkouts: data
-        })
+        if(!data.error){
+          let test = [];
+          data.forEach(workout => {
+            test.push(new Date(workout.date));
+          })
+          this.setState({
+            savedWorkouts: data,
+            test
+          })
+        }
       })
   }
 
@@ -180,23 +204,34 @@ export class WorkoutProvider extends Component {
     })
   }
 
-  SaveSetValues = (e, exercise, index) => {
-    let {currentRoutine} = this.state;
-    let newState = {...currentRoutine};
+  SaveSetValues = (e, workoutIndex, exerciseIndex, setIndex) => {
+    let {currentRoutine, workouts} = this.state;
+    let newState;
+    let stateItem;
     let {placeholder, value} = e.target;
-    newState.exercises[exercise].sets[index][placeholder] = value;
-    this.setState({
-      currentRoutine: newState
-    })
+    if(workoutIndex !== ""){
+      newState = workouts;
+      stateItem = 'workouts';
+      newState[workoutIndex].exercises[exerciseIndex].sets[setIndex][placeholder] = value;
+    }
+    else{
+      newState = {...currentRoutine};
+      stateItem = 'currentRoutine';
+      newState.exercises[exerciseIndex].sets[setIndex][placeholder] = value;
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      [stateItem]: newState
+    }))
   }
 
-  SaveWorkout = () => {
-    let {currentRoutine, workoutDate} = this.state;
-    let requestObject = {...currentRoutine, "date" : workoutDate}
+  SaveWorkout = (workoutIndex) => {
+    let {currentRoutine, workouts, workoutDate} = this.state;
+    let requestObject = workoutIndex !== "" ? {...workouts[workoutIndex]} : {...currentRoutine, "date" : workoutDate}
     let confirm = window.confirm('Save this workout?')
     if(confirm){
       fetch('/workout/saveWorkout', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },

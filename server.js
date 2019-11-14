@@ -38,7 +38,6 @@ client.connect((err)=> {
   gfs.collection('storyMedia');
   app.locals.gfs = gfs;
   app.locals.db = db;
-  app.locals.ObjectID = Mongo.ObjectID;
   app.locals.exerciseList = db.collection('exerciseList');
   app.locals.nutrition = db.collection('nutrition');
   app.locals.routines = db.collection('routines');

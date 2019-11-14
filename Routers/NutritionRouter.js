@@ -2,7 +2,6 @@
 const {FDC_Key} = require('../src/API/API_Key');
 const nutrition = require('express').Router();
 const request = require('request');
-
 // grabs all food from the FoodData Central API
 nutrition.get('/searchFDC/:search', (req, res) => {
   let uri = `https://api.nal.usda.gov/fdc/v1/search/?api_key=${FDC_Key}`;

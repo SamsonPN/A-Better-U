@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import RI from './CurrentRoutineItems';
+import WorkoutButtons from './WorkoutButtons';
 
 class CurrentWorkouts extends Component {
+  componentDidMount(){
+    console.log(this.props.workout)
+  }
   render() {
-    const {workout} = this.props;
+    const {workout, workoutIndex} = this.props;
     const exerciseItems = workout.exercises.map( (exercise, i) =>
       <RI
         key={exercise.name + exercise.type + exercise.muscle}
@@ -12,13 +16,21 @@ class CurrentWorkouts extends Component {
         type={exercise.type}
         index={i}
         sets={exercise.sets}
+        workoutIndex={workoutIndex}
       />
     )
     return (
       <div className="CurrentRoutineWorkouts">
-        <div className="CurrentRoutineWorkoutsTitle">
+        <div className="CurrentRoutineWorkoutsHeader">
+          <div className="CurrentRoutineWorkoutsTitle">
             <p><span>Workout:</span> {workout.name}</p>
             <p><span>Date:</span> {workout.date}</p>
+          </div>
+          <WorkoutButtons
+            documentID={workout._id}
+            collection={"workouts"}
+            workoutIndex={workoutIndex}
+          />
         </div>
         {exerciseItems}
       </div>

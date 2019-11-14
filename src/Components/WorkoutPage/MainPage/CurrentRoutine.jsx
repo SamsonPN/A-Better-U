@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RI from './CurrentRoutineItems.jsx';
+import WorkoutButtons from './WorkoutButtons';
 import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class CurrentRoutine extends Component {
@@ -16,20 +17,30 @@ class CurrentRoutine extends Component {
         type={exercise.type}
         index={i}
         sets={exercise.sets}
+        workoutIndex={""}
       />
     )
     return (
-      <div className="CurrentRoutineWorkouts">
-        { exercises.length === 0 ?
+      <React.Fragment>
+        {exercises.length === 0 ?
           <p className="EmptyRoutineMsg">Please add a routine or choose one from the dropdown above</p>
           :
-          <div className="CurrentRoutineWorkoutsTitle">
-              <p>{collection}: {currentRoutine.name}</p>
-              <p>Date: {workoutDate}</p>
-          </div>
+          <div className="CurrentRoutineWorkouts">
+            <div className="CurrentRoutineWorkoutsHeader">
+              <div className="CurrentRoutineWorkoutsTitle">
+                <p>{collection}: {currentRoutine.name}</p>
+                <p>Date: {workoutDate}</p>
+              </div>
+              <WorkoutButtons
+                documentID={currentRoutine._id}
+                collection={"routines"}
+                workoutIndex={""}
+              />
+            </div>
+            {exerciseItems}
+        </div>
         }
-        {exerciseItems}
-      </div>
+     </React.Fragment>
     );
   }
 
