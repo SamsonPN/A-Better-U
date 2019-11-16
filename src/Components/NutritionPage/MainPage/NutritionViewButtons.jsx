@@ -18,7 +18,9 @@ class NutritionViewButtons extends Component {
                 onChange={(e) => ChangeNutritionDate(e)}
                 className="NVButtons"
                 withPortal
-                utcOffset/>
+                utcOffset
+                todayButton="Refresh"
+                />
               <button
                 className="NVButtons"
                 onClick={() => ToggleTotals()}>

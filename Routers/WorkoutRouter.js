@@ -46,6 +46,21 @@ workout.get('/getRoutines', (req, res) => {
 //used by workoutcontext.js to fill the Saved tab with workouts
 workout.get('/getWorkouts', (req, res) => {
   let {workouts} = req.app.locals;
+  let {user} = req.session.passport;
+  workouts.find(
+    { user },
+    { projection: { _id: 0, name: 0, user: 0, exercises: 0 } }
+  )
+    .sort( { date : 1 } )
+    .toArray()
+    .then(result => res.json(result))
+    .catch(err => {
+      res.status(404).send({err})
+    })
+})
+
+workout.get('/getWorkoutsByDate', (req, res) => {
+  let {workouts} = req.app.locals;
   let query = {...req.query, user: req.session.passport.user};
   workouts.find( query )
     .sort( { date : 1 } )

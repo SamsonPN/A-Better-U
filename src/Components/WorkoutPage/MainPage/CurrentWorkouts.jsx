@@ -3,9 +3,6 @@ import RI from './CurrentRoutineItems';
 import WorkoutButtons from './WorkoutButtons';
 
 class CurrentWorkouts extends Component {
-  componentDidMount(){
-    console.log(this.props.workout)
-  }
   render() {
     const {workout, workoutIndex} = this.props;
     const exerciseItems = workout.exercises.map( (exercise, i) =>
@@ -23,7 +20,7 @@ class CurrentWorkouts extends Component {
       <div className="CurrentRoutineWorkouts">
         <div className="CurrentRoutineWorkoutsHeader">
           <div className="CurrentRoutineWorkoutsTitle">
-            <p><span>Workout:</span> {workout.name}</p>
+            <p><span>Routine:</span> {workout.name}</p>
             <p><span>Date:</span> {workout.date}</p>
           </div>
           <WorkoutButtons

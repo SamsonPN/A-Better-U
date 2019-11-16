@@ -6,24 +6,26 @@
 
 #AddExerciseHeader{
   width: 100%;
-  height: 24vh;
+  height: 25vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-around;
+  align-items: center;
   border-bottom: 1px solid #1F0CAD;
+  padding: 5px;
   box-sizing: border-box;
   font-size: 1rem;
 }
 
 #AddExerciseName{
+  height: 20%;
   color: #1F0CAD;
-  font-size: 1.75em;
+  font-size: 1.5em;
 }
 
 #ExerciseSearchBar, #ExerciseSearchBar:focus{
   width: 80%;
-  height: 45%;
+  height: 35%;
   resize: none;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
@@ -34,14 +36,23 @@
 
 #AddExerciseOptionsWrapper{
   width: 80%;
-  height: 15%;
+  height: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.AddExerciseOptionsInner{
+  height: 45%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .AddExerciseOptions{
   height: 100%;
-  width: calc(80% / 4);
+  width: 49.5%;
   position: relative;
   display: inline-block;
   font-size: 1em;
@@ -67,6 +78,7 @@
   font-weight: 600;
   text-align: center;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .AeViews:hover{
@@ -104,7 +116,7 @@
 }
 
 .AddExerciseBtn{
-  width: calc(80% / 4);
+  width: 49.5%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -124,7 +136,7 @@
 }
 
 #AddExerciseList{
-  height: 70vh;
+  height: 69vh;
   width: 100%;
   overflow: auto;
   display: flex;
@@ -137,7 +149,8 @@
   width: 80%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.5vh;
+  align-items: baseline;
+  margin-bottom: 10px;
   font-size: 2em;
   font-weight: 200;
   font-style: italic;
@@ -148,11 +161,6 @@
   justify-content: space-between;
   align-items: center;
 }
-
-/*
-only change the height and not the width to vw;
-remove pixels!
-*/
 
 .AddExerciseCheckBox{
   border: 1.5px solid black;
@@ -166,4 +174,36 @@ remove pixels!
 .AddExerciseFavorite{
   height: 46.5px;
   width: 52.5px;
+}
+
+/*
+
+MEDIA QUERIES
+
+*/
+
+@media only screen and (max-width: 768px){
+  #ExerciseSearchBar,
+  #ExerciseSearchBar:focus,
+  #AddExerciseOptionsWrapper{
+    width: 95%;
+  }
+  .AddExerciseItem{
+    width: 93.5%;
+  }
+}
+
+@media only screen and (max-width: 484px){
+  .AddExerciseItem{
+    font-size: 1.75em
+  }
+}
+
+@media only screen and (max-width: 350px){
+  .AeViews{
+    font-size: 1.15em;
+  }
+  .AddExerciseItem{
+    font-size: 1.5em
+  }
 }

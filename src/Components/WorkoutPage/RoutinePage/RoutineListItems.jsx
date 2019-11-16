@@ -8,12 +8,14 @@ class RoutineListItems extends Component {
       <WorkoutContext.Consumer>
         { ({ RemoveExercise }) => (
           <div className="RoutineLi">
-            <p className="RoutineLiInfo">{type} {name} ({muscle})</p>
+            <p
+              className="RoutineLiInfo">
+              {type} {name} ({muscle})
+            </p>
             <p
               className="RoutineLiInfo
               RoutineLiDelBtn"
-              onClick={() => RemoveExercise({...this.props})}
-            >
+              onClick={() => RemoveExercise({...this.props})}>
               X
             </p>
           </div>

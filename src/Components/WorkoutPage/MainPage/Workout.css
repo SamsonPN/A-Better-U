@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  min-height: 85vh;
+  min-height: 0vh;
   font-family: 'Nunito',sans-serif;
 }
 
@@ -12,35 +12,42 @@
   justify-content: space-around;
   margin-top: 2vh;
   width: 100%;
-  height: 6.5vh;
+  max-height: 6.5vh;
   font-size: 1rem;
 }
 
 .WoDropdownDiv{
   position: relative;
   display: inline-block;
-  height: 100%;
   width: 30vw;
 }
 
-.WoDropdownDiv:hover > .WoViews, .WoViews:hover{
+.WoDropdownDiv:hover .WoViews{
   background-color: #1F0CAD;
   color: white;
   border:none;
 }
 
 .WoViews{
-  overflow: hidden;
   width: 30vw;
-  box-sizing: border-box;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
   font-family: 'Nunito', sans-serif;
   font-size: 2em;
   font-weight: 600;
   text-align: center;
+  white-space: nowrap;
   color: black;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.WoViews:hover{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
 }
 
 .WoViewsDropdown{
@@ -52,7 +59,7 @@
   background-color: #1F0CAD;
 }
 
-.WoDropdownDiv:hover > .WoViewsDropdown{
+.WoDropdownDiv:hover .WoViewsDropdown{
   visibility: visible;
 }
 
@@ -71,36 +78,32 @@
 }
 
 .CurrentRoutineWorkouts{
-  /* width: 96.8vw; */
   width: 96.7vw;
-  /* min-height: 50vh; */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 3.5vh 0 0 0vw;
+  margin-top: 3vh;
   border: 1px solid #1F0CAD;
   box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
   box-sizing: border-box;
 }
 
 .CurrentRoutineWorkoutsHeader{
-  width: 90vw;
+  width: 96.7vw;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
-  /* margin-bottom: 3vh; */
-  /* border: 1px solid #1F0CAD; */
   padding: 5px;
   box-sizing: border-box;
-  /* box-shadow: 10px 10px 10px #707070; */
   overflow: hidden;
   font-size: 1rem;
 }
 
 .CurrentRoutineWorkoutsTitle{
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  padding-left: 20px;
+  flex-direction: column;
+  padding-left: 19px;
   box-sizing: border-box;
 }
 
@@ -109,6 +112,9 @@
   font-style: italic;
   font-size: 3em;
   color: #1F0CAD;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .CurrentRoutineWorkoutsTitle > p:first-of-type{
@@ -116,14 +122,12 @@
 }
 
 .CurrentRoutineItems{
-  width: 90vw;
+  width: 96.7vw;
   min-height: 0vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-top: 1px solid #1F0CAD;
-  /* margin-bottom: 3vh; */
-  /* box-shadow: 10px 10px 10px #707070; */
   box-sizing: border-box;
   font-size: 1rem;
 }
@@ -150,10 +154,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.CurrentRoutineSetsReps:last-of-type{
-  margin-bottom: 3vh;
+  font-size: 1rem;
 }
 
 .CurrentRoutineSetsReps > p{
@@ -167,13 +168,14 @@
   resize: none;
   border: none;
   outline: none;
+  overflow: hidden;
   white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
   width: 12vw;
   height: 10vh;
   border-bottom: 1px solid #1F0CAD;
+  box-sizing: border-box;
   text-align: center;
+  text-overflow: ellipsis;
   font-size: 3em;
   font-weight: 200;
   color: #1F0CAD;
@@ -193,8 +195,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 2vh;
-  font-size: 2.25em;
+  font-size: 2.75em;
   font-weight: 200;
   cursor: pointer;
 }
@@ -230,7 +231,7 @@
 }
 
 #EditBtn{
-  width: 100%;
+  max-width: 15vh;
   height: 100%;
 }
 
@@ -240,4 +241,99 @@
   position: fixed;
   right: 0;
   bottom: 0;
+}
+
+/*
+
+MEDIA QUERIES
+change the line height of CurrentRoutineValues at each point and
+also might just use the text-overflow: ellipsis
+*/
+
+@media only screen and (min-height: 1000px){
+  #WoBtnsWrapper{
+    height: 8vh;
+  }
+  .CurrentRoutineSetsReps > p{
+    line-height: 3;
+  }
+  .CurrentRoutineValues, .CurrentRoutineValues:focus{
+    line-height: 3;
+  }
+}
+
+@media only screen and (min-height: 1250px){
+  .CurrentRoutineSetsReps > p{
+    line-height: 3.5;
+  }
+  .CurrentRoutineValues, .CurrentRoutineValues:focus{
+    line-height: 3.5;
+  }
+}
+
+@media only screen and (max-width: 1173px){
+  .CurrentRoutineSetsReps{
+    width: 98%;
+  }
+  .CurrentRoutineValues, .CurrentRoutineValues:focus{
+    width: 20vw;
+  }
+}
+
+@media only screen and (max-width: 618px){
+  #WoWrapper{
+    font-size: 0.7rem;
+    max-height: 4vh;
+  }
+  .CurrentRoutineWorkouts{
+    margin-top: 2.5vh;
+  }
+  .CurrentRoutineValues, .CurrentRoutineValues:focus{
+    font-size: 2.5em;
+  }
+}
+
+@media only screen and (max-width: 524px){
+  .CurrentRoutineItems{
+    font-size: 0.7rem;
+  }
+  .CurrentRoutineValues, .CurrentRoutineValues:focus{
+    font-size: 2em;
+    line-height: 2.75;
+  }
+  .CurrentRoutineSetsReps > p{
+    font-size: 2em;
+    line-height: 2.85;
+  }
+  .SetDeleteBtn{
+    padding-top: 10px;
+    box-sizing: border-box;
+  }
+}
+
+@media only screen and (max-width: 440px){
+  #WoWrapper{
+    font-size: 0.55rem;
+  }
+  .CurrentRoutineWorkouts{
+    margin-top: 2vh;
+  }
+  .CurrentRoutineWorkoutsHeader{
+    font-size: 0.75rem;
+  }
+}
+
+@media only screen and (max-width: 370px){
+  .CurrentRoutineItems{
+    font-size: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 342px){
+  #WoWrapper{
+    font-size: 0.5rem;
+  }
+  .CurrentRoutineWorkoutsHeader{
+    font-size: 0.65rem;
+  }
 }

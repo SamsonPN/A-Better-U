@@ -75,10 +75,9 @@ export class WorkoutProvider extends Component {
   }
 
   ChangeRoutineName = (e) => {
-    let name = e.target.value;
     let {currentRoutine} = this.state;
     let newState = {...currentRoutine};
-    newState.name = name;
+    newState.name = e.target.value;
     this.setState({
       currentRoutine: newState
     })
@@ -95,13 +94,6 @@ export class WorkoutProvider extends Component {
         method: 'DELETE',
       })
         .catch(err => console.error(err))
-      // if(tab === 'Saved'){
-      //   this.setState({
-      //     currentRoutine: {}
-      //   }, function(){
-      //     this.FillSavedTab();
-      //   })
-      // }
       this.setState(prevState => ({
         [collection]: prevState[collection].filter(item => {return item._id !== id}),
         currentRoutine: {}
@@ -130,21 +122,20 @@ export class WorkoutProvider extends Component {
   }
 
   // fetches and puts all saved workouts into saved tab
-  FillSavedTab = () => {
+  GetWorkouts = () => {
     fetch('/workout/getWorkouts')
       .then(res => res.json())
       .then(data => {
         if(!data.error){
-          let test = [];
+          let savedWorkouts = [];
           data.forEach(workout => {
-            test.push(new Date(workout.date));
+            savedWorkouts.push(new Date(workout.date));
           })
           this.setState({
-            savedWorkouts: data,
-            test
+            savedWorkouts
           })
         }
-      })
+     })
   }
 
   GetRoutines = () => {
@@ -159,7 +150,7 @@ export class WorkoutProvider extends Component {
 
   GetWorkoutsByDate = () => {
     let {workoutDate} = this.state;
-    let uri = `/workout/getWorkouts/?date=${workoutDate}`;
+    let uri = `/workout/getWorkoutsByDate/?date=${workoutDate}`;
     fetch(uri)
       .then(res => res.json())
       .then(data =>{
@@ -171,21 +162,29 @@ export class WorkoutProvider extends Component {
      })
   }
 
-  GetWorkoutById = (id) => {
-    let uri = `/workout/getWorkoutById?_id=${id}`;
-    fetch(uri)
-      .then(res => res.json())
-      .then(data =>{
-        this.setState({
-          currentRoutine: data,
-          tab: 'Saved'
-        })
-     })
+  // GetWorkoutById = (id) => {
+  //   let uri = `/workout/getWorkoutById?_id=${id}`;
+  //   fetch(uri)
+  //     .then(res => res.json())
+  //     .then(data =>{
+  //       this.setState({
+  //         currentRoutine: data,
+  //         tab: 'Routine'
+  //       })
+  //    })
+  // }
+
+  GetWorkoutByIndex = (workoutIndex) => {
+    let {workouts} = this.state;
+    this.setState({
+      currentRoutine: workouts[workoutIndex],
+      tab: 'Routine'
+    })
   }
 
   InsertNewRoutine = () => {
     let currentRoutine = {
-      name : "Routine Name",
+      name : "Routine",
       exercises: []
     }
     this.setState({
@@ -238,7 +237,7 @@ export class WorkoutProvider extends Component {
         body: JSON.stringify(requestObject)
       })
       alert(`Workout saved for ${workoutDate}`);
-      this.FillSavedTab();
+      this.GetWorkouts();
     }
   }
 
@@ -289,7 +288,7 @@ export class WorkoutProvider extends Component {
       workoutDate: today
     })
     this.GetRoutines();
-    this.FillSavedTab();
+    this.GetWorkouts();
   }
 
   state = {
@@ -297,7 +296,6 @@ export class WorkoutProvider extends Component {
     routines: [],
     workoutDate: new Date(),
     workouts: [],
-    routineName: 'Routine Name',
     savedWorkouts: [],
     tab: 'Routine'
   }

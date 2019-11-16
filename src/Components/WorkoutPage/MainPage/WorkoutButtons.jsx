@@ -8,7 +8,7 @@ class WorkoutButtons extends Component {
     const {collection, documentID, workoutIndex} = this.props;
     return (
       <WorkoutContext.Consumer>
-        { ({ ChangeWorkoutDate, DeleteCurrentRoutine, GetWorkoutById, SaveWorkout, tab }) => (
+        { ({ ChangeWorkoutDate, DeleteCurrentRoutine, GetWorkoutByIndex, SaveWorkout, tab }) => (
           <div id="WoBtnsWrapper">
             <img
               className="WoBtns"
@@ -20,7 +20,7 @@ class WorkoutButtons extends Component {
             <Link
               to={`/workout/routineview/${collection}/${documentID}`}
               className="WoBtns"
-              onClick={() => GetWorkoutById(documentID)}
+              onClick={() => collection !== 'routines' ? GetWorkoutByIndex(workoutIndex) : null }
               >
               <img
                 id="EditBtn"

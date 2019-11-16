@@ -13,7 +13,7 @@ class RoutineHeader extends Component {
             <div id="RoutineHeaderWrapper">
               <textarea
                 id="RoutineName"
-                placeholder={name || 'Routine Name'}
+                placeholder={name || 'Routine'}
                 onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
                 onChange={(e) => ChangeRoutineName(e)}
                 maxLength="25">

@@ -92,7 +92,7 @@
 }
 
 .BMRDropdownWrapper:hover .BMRDropdownDiv{
-  background-color: #1f0cad;
+  background-color: #1F0CAD;
   color: white;
   border:none;
 }
@@ -112,7 +112,7 @@
 }
 
 .BMRDropdownDiv:hover{
-  background-color: #1f0cad;
+  background-color: #1F0CAD;
   color: white;
   border:none;
 }

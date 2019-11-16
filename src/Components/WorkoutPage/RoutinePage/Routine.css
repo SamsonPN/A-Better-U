@@ -23,18 +23,15 @@
   align-items: center;
 }
 
-#RoutineName{
-  width: 50%;
-  height: 70%;
+#RoutineName, #RoutineName:focus{
   resize: none;
   border: none;
+  outline: none;
+  width: 50%;
+  height: 70%;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-}
-
- #RoutineName:focus, #RoutineName{
-  outline: none;
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-style: italic;
@@ -43,9 +40,10 @@
 }
 
 #RoutineFinish{
+  height: 70%;
   font-family: 'Nunito', sans-serif;
   font-weight: 200;
-  font-size: 3em;
+  font-size: 2.85em;
   text-decoration: none;
   color: #1F0CAD;
   cursor:pointer;
@@ -57,7 +55,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #1F0CAD;
+  border-top: 1px solid #1F0CAD;
   box-sizing: border-box;
   background-color: white;
   font-size: 1rem;
@@ -122,8 +120,66 @@
 .EmptyRoutineMsg{
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 50vw;
   transform: translate(-50%, -50%);
   white-space: wrap;
   font-size: 2em;
+}
+
+/*
+
+MEDIA QUERIES
+
+ */
+
+ /* at max-height: 1000, increase the font-size!*/
+ @media only screen and (min-height: 1000px){
+   #RoutineHeader{
+     font-size: 1.5rem;
+   }
+ }
+
+ @media only screen and (max-height: 600px){
+   #RoutineHeader{
+     height: 12vh;
+   }
+   #RoutineList{
+     height: 82vh;
+   }
+ }
+
+@media only screen and (max-width: 890px){
+  .EmptyRoutineMsg{
+    font-size: 1.75em;
+  }
+  .RoutineLi{
+    width: 95vw;
+  }
+}
+
+@media only screen and (max-width: 530px){
+  .EmptyRoutineMsg{
+    font-size: 1.5em;
+  }
+}
+
+@media only screen and (max-width: 452px){
+  .EmptyRoutineMsg{
+    font-size: 1.25em;
+  }
+  .RoutineLiInfo{
+    font-size: 1.75em;
+  }
+}
+
+@media only screen and (max-width: 375px){
+  #RoutineHeader{
+    font-size: 0.9rem;
+  }
+  #RoutineHeaderWrapper{
+    width: 95%;
+  }
+  .RoutineLiInfo{
+    font-size: 1.5em;
+  }
 }

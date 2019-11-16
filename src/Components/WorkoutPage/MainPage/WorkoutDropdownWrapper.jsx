@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import SavedDropdown from './WorkoutSavedDropdown.jsx';
+// import SavedDropdown from './WorkoutSavedDropdown.jsx';
 import RoutineDropdown from './WorkoutRoutineDropdown.jsx';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,7 +11,7 @@ class WorkoutDropdownWrapper extends Component {
   render() {
     return (
       <WorkoutContext.Consumer>
-        { ({ ChangeWorkoutDate, workoutDate, test }) => (
+        { ({ ChangeWorkoutDate, savedWorkouts, workoutDate }) => (
           <div id="WoWrapper">
               <DatePicker
                 selected={new Date(workoutDate)}
@@ -20,7 +20,8 @@ class WorkoutDropdownWrapper extends Component {
                 className="WoViews"
                 withPortal
                 utcOffset
-                highlightDates={test}
+                highlightDates={savedWorkouts}
+                todayButton="Refresh"
               />
             <RoutineDropdown />
             <Link

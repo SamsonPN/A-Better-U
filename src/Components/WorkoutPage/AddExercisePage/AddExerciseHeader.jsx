@@ -18,21 +18,24 @@ class AddExerciseHeader extends Component {
             </textarea>
 
             <div id="AddExerciseOptionsWrapper">
-              <BodyOptions />
-              <EtOptions />
-              <div
-                className="AddExerciseBtn"
-                onClick={() => ResetCategories()}
-                >
-                Reset
-              </div>
-              <div
-                className="AddExerciseBtn"
-                onClick={() => GetFavorites()}
-              >
-              Favorites
+                <div className="AddExerciseOptionsInner">
+                    <BodyOptions />
+                    <EtOptions />
+                </div>
+                <div className="AddExerciseOptionsInner">
+                    <div
+                      className="AddExerciseBtn"
+                      onClick={() => ResetCategories()}>
+                      Reset
+                    </div>
+                    <div
+                      className="AddExerciseBtn"
+                      onClick={() => GetFavorites()}>
+                      Saved
+                    </div>
+                </div>
             </div>
-            </div>
+
           </div>
         )}
       </AddExerciseContext.Consumer>
