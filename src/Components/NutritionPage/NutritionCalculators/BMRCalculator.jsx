@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import {LeftColumn, RightColumn} from './BMRColumns';
+import {TopRow, MiddleRow, BottomRow} from './BMRRows';
 import {CalculatorContext} from '../../../AppContext/ExportContexts';
-import './NutritionCalculators.css';
+import './BMR.css';
 
 class BMRCalculator extends Component {
   state = {
@@ -32,31 +32,36 @@ class BMRCalculator extends Component {
 
     return (
       <CalculatorContext.Consumer>
-        { ({ CalculateBMR, showModal, StoreBMR }) => (
+        { ({ BMR, CalculateBMR, showModal, StoreBMR }) => (
           <div id="BMRCalculator">
             <BMRTitle />
-            <hr/>
             <div id="userInfoOuter">
-              <LeftColumn textareas={textareas}/>
-              <RightColumn textareas={textareas}/>
+              <TopRow
+                textareas={textareas}/>
+              <MiddleRow
+                textareas={textareas}/>
+              <BottomRow
+                textareas={textareas}/>
             </div>
+            <p
+              id="BMRValue"
+              className="userTraits">
+              Calories: {BMR}
+            </p>
             <div id="BMRButtonWrapper">
               <button
                 className="BMRButton"
                 id="BMRCalculateBtn"
-                onClick={CalculateBMR}
-               >
-               Calculate
+                onClick={CalculateBMR}>
+                Calculate
               </button>
               <Link
                 to="/nutrition"
                 className="BMRButton"
-                id="BMRFinishBtn"
-              >
+                id="BMRFinishBtn">
                 Finish
               </Link>
             </div>
-            {showModal ? <BMRModal/> : null }
           </div>
         )}
       </CalculatorContext.Consumer>
@@ -76,26 +81,11 @@ class BMRTitle extends Component {
           of calories that you expend while at rest.
           Using this rate, we will be able to estimate your calorie
           needs and adjust them according to your fitness goals.
-          <b> Please press Calculate first to register your BMR to our servers.</b>
+        </p>
+        <p>
+          <b>Please press Calculate first to register your BMR to our servers.</b>
         </p>
       </div>
-    );
-  }
-}
-
-class BMRModal extends Component {
-  render() {
-    return (
-      <CalculatorContext.Consumer>
-        { ({ BMR, ToggleModal }) => (
-          <div id="BMRModal" onClick={ToggleModal}>
-            <div id="BMRModalContent">
-              <p>Your goal is:</p>
-              <p>{BMR} calories!</p>
-            </div>
-          </div>
-        )}
-      </CalculatorContext.Consumer>
     );
   }
 }

@@ -1,0 +1,74 @@
+#TotalsModal{
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  font-family: 'Nunito',sans-serif;
+}
+
+#TotalsModalContent{
+  overflow: auto;
+  height: 80%;
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  background-color: #1F0CAD;
+}
+
+#NutritionChart{
+  height: 100%;
+  width: 65%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#TotalsList{
+  overflow: auto;
+  width: 35%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+}
+
+#TotalsListHeader{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  font-weight: 200;
+  color: #1F0CAD;
+}
+
+.NutritionTotalRows{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  box-sizing: border-box;
+  align-items: center;
+  font-size: 1.25em;
+}
+
+.NutritionTotalRows:nth-child(even){
+  background-color: #1F0CAD;
+  color: white;
+}
+
+.EmptyNutrientMsg{
+  position: absolute;
+  top: 46%;
+  left: 34%;
+  color: white;
+  font-size: 2em;
+  font-weight: 200;
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import {CalculatorContext} from '../../../AppContext/ExportContexts';
+import './Macro.css';
 
 class MacroCalculator extends Component {
   static contextType = CalculatorContext;
@@ -19,11 +20,6 @@ class MacroCalculator extends Component {
           <div id="MacroCalculator">
             <MacroTitle calories={Calories}/>
             <div id="MacroBoxWrapper">
-              <div id="MacroValueSpecifier">
-                <p>%</p>
-                <p>Macro</p>
-                <p>Grams</p>
-              </div>
             {macros}
             </div>
             <div id="MacroButtonWrapper">
@@ -54,9 +50,9 @@ class MacroWrapper extends Component {
       <div className="MacroWrapper">
         <textarea
           className="MacroPercentBox"
+          placeholder="%"
           onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
-          onChange={(e) => SavePercentages(e, macro)}
-          >
+          onChange={(e) => SavePercentages(e, macro)}>
         </textarea>
         <p>{macro}</p>
         <p>{isNaN(value) ? 0 : value}g</p>
@@ -67,12 +63,12 @@ class MacroWrapper extends Component {
 
 class MacroTitle extends Component {
   render() {
-    const text = `Recommended percentage of total calories for each macronutrient:
+    const text = `Recommended percentages:
     Total Calories: ${this.props.calories}\nCarbs: 45-65%\nFat: 20-35%\nProtein: 10-35%\n`;
     return (
       <React.Fragment>
         <div id="MacroTitleWrapper">
-          <h1>Determine your Macros</h1>
+          Determine your Macros
         </div>
         <div id="MacroInfoDiv">
           <p>{text}</p>

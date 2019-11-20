@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Chart from './NutritionTotalsChart';
 import {NutritionContext} from '../../../AppContext/ExportContexts';
+import './NutritionModal.css';
 
 class NutritionTotals extends Component {
   static contextType = NutritionContext;

@@ -16,7 +16,6 @@ export class CalculatorProvider extends Component {
       alert("Please fill out all entries with appropriate data");
     }
     else {
-      this.ToggleModal()
       this.setState({
         BMR: Math.round(BMR)
       });
@@ -98,12 +97,6 @@ export class CalculatorProvider extends Component {
     }
   }
 
-  ToggleModal = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }))
-  }
-
   state = {
     percentages: {
       Protein: 0,
@@ -132,8 +125,7 @@ export class CalculatorProvider extends Component {
       {name: "Moderate", value: 1.76},
       {name: "Vigorous", value: 2.25}
     ],
-    BMR: 0,
-    showModal: false
+    BMR: 0
   }
 
   render() {

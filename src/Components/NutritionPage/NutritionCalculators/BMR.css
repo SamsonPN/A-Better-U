@@ -1,0 +1,233 @@
+#BMRCalculator{
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Nunito', sans-serif;
+}
+
+#BMRHeader{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #1F0CAD;
+  padding: 5px;
+  box-sizing: border-box;
+  color: #1F0CAD;
+  font-size: 1rem;
+  flex: 0.5;
+}
+
+#BMRHeader > h1{
+  height: 50%;
+  font-size: 2.75em;
+}
+
+#BMRHeader > p{
+  width: 100%;
+}
+
+#userInfoOuter{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1rem;
+  flex: 3;
+}
+
+.userInfoRow{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.userInfoWrapper{
+  min-width: 45%;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userTraits{
+  font-size: 3em;
+}
+
+.userTraitsAnswer{
+  resize:none;
+  overflow: hidden;
+  border: 1px solid #707070;
+  height: 6vh;
+  width: 12vw;
+  opacity: 0.8;
+}
+
+#ftInWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  width: 12vw;
+}
+
+#feet, #inches{
+  width: 5vw;
+}
+
+.userTraitsAnswer:focus, .userTraitsAnswer{
+ outline: none;
+ font-weight: 200;
+ color: #1F0CAD;
+ font-size: 2em;
+}
+
+.BMRDropdownWrapper{
+  height: 6vh;
+  cursor: pointer;
+}
+
+.BMRDropdownWrapper:hover .BMRDropdownDiv{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.BMRDropdownDiv{
+  min-width: 12vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #707070;
+  box-sizing: border-box;
+  font-size: 1.65em;
+  font-weight: 200;
+  text-align: center;
+  color: #1F0CAD;
+}
+
+.BMRDropdownDiv:hover{
+  background-color: #1F0CAD;
+  color: white;
+  border:none;
+}
+
+.BMRDropdown{
+  overflow: auto;
+  max-height: 15vh;
+  display:none;
+  text-decoration: none;
+  flex-direction: column;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  background-color: #1F0CAD;
+}
+
+.BMRDropdownWrapper:hover .BMRDropdown{
+  display:flex;
+}
+
+.BMRDropdownLi{
+  font-weight: 200;
+  color: white;
+  border-top: 1px solid white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.BMRDropdownLi:active{
+  color: red;
+}
+
+#BMRValue{
+  width: 80.5%;
+  font-size: 3em;
+  z-index: -1;
+}
+
+#BMRButtonWrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0.25;
+}
+
+.BMRButton{
+  overflow: hidden;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #1F0CAD;
+  box-sizing: border-box;
+  font-size: 2em;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.BMRButton:hover{
+  background-color: #1F0CAD;
+  color: white;
+}
+/*
+
+MEDIA QUERIES
+
+ */
+
+@media only screen and (min-height: 1000px){
+  .userTraitsAnswer,
+  .BMRDropdownWrapper{
+    height: 4.5vh;
+  }
+}
+
+ @media only screen and (max-width: 832px){
+   .userInfoRow{
+     height: 33%;
+     width: 97%;
+     flex-direction: column;
+   }
+   .userInfoRow:last-child{
+     flex-direction: column-reverse;
+   }
+   .userInfoWrapper{
+     height: 50%;
+   }
+   .userTraitsAnswer,
+   #ftInWrapper{
+     width: 25vw;
+   }
+   #feet, #inches{
+     width: 9vw;
+   }
+   .BMRDropdownDiv{
+     min-width: 25vw;
+   }
+   #BMRValue{
+     width: 97%;
+   }
+ }
+
+ @media only screen and (max-width: 450px){
+   #BMRHeader > h1 {
+     font-size: 2em;
+   }
+   .userTraitsAnswer,
+   #ftInWrapper{
+     width: 28vw;
+   }
+   #feet, #inches{
+     width: 12vw;
+   }
+   #BMRHeader > p:first-of-type{
+     display: none;
+   }
+ }
