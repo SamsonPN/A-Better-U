@@ -58,7 +58,7 @@ class NutritionChart extends Component {
         scale : {
           ticks: {
             beginAtZero: true,
-            stepSize: 10,
+            stepSize: 25,
             backdropColor: "rgba(31,12,173, 1)"
           },
           gridLines: {

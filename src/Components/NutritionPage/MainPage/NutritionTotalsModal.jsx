@@ -5,6 +5,17 @@ import './NutritionModal.css';
 
 class NutritionTotals extends Component {
   static contextType = NutritionContext;
+  Escape = (e) => {
+    if(e.key === 'Escape'){
+      this.context.ToggleTotals();
+    }
+  }
+  componentDidMount(){
+    document.addEventListener("keydown", this.Escape, false);
+  }
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.Escape, false);
+  }
   render() {
     const {nutrientList, ToggleTotals} = this.context;
     const nutrientItems = nutrientList.map(nutrient =>
@@ -16,18 +27,17 @@ class NutritionTotals extends Component {
       />
     )
     return (
-      <div id="TotalsModal" onClick={() => ToggleTotals()}>
+      <div id="TotalsModal" onClick={(e) => ToggleTotals(e)}>
         <div id="TotalsModalContent" onClick={(e) => e.stopPropagation()}>
           { nutrientList.length === 0 ?
             <p className="EmptyNutrientMsg">Please add foods to see total nutrients!</p>
-            :
-            <React.Fragment>
-              <Chart />
-              <div id="TotalsList">
-                <div id="TotalsListHeader">Nutrient Totals</div>
-                {nutrientItems}
-              </div>
-            </React.Fragment>
+            : <React.Fragment>
+                <Chart />
+                <div id="TotalsList">
+                  <div id="TotalsListHeader">Nutrient Totals</div>
+                  {nutrientItems}
+                </div>
+              </React.Fragment>
           }
         </div>
       </div>

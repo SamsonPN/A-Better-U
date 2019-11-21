@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from './NutritionItemModal.jsx';
+import Modal from './NutritionMealModal.jsx';
 import DeleteBtn from '../../../assets/delete-food-button.svg';
 import {NutritionContext} from '../../../AppContext/ExportContexts';
 

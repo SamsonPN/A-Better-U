@@ -126,9 +126,9 @@ export class NutritionProvider extends Component {
   FillNutrients = (nutrients, food, servings) => {
     food.forEach(nutrient => {
       let {name, value, unit} = nutrient;
-      servings = parseInt(servings);
+      servings = parseFloat(servings);
       servings = isNaN(servings) ? 0 : servings;
-      let newValue = Math.round( parseInt(value) * servings );
+      let newValue = Math.round( parseFloat(value) * servings );
       if(nutrients[name]){
         nutrients[name].name = name;
         nutrients[name].value += newValue;

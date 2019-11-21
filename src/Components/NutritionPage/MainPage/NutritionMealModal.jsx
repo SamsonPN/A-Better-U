@@ -15,14 +15,12 @@ class NutritionItemModal extends Component {
       />
     )
     const nutrients = reports[ndbno].nutrients[0].measures[0];
-
     return (
       <NutritionContext.Consumer>
         { ({ SaveServing, UpdateServings }) => (
-          <div className="NutritionItemModal" onClick={() => showModal(SaveServing(meal, ndbno, this.inputElement))}>
+          <div className="NutritionMealModal" onClick={() => showModal(SaveServing(meal, ndbno, this.inputElement))}>
             <div className="NutritionModalContent" onClick={(e) => e.stopPropagation()}>
               <div className="NutritionModalHeader">
-                <div>
                   <p>{name}</p>
                   {nutrients !== undefined ?
                     <p>
@@ -39,14 +37,15 @@ class NutritionItemModal extends Component {
                        onChange={(e) => UpdateServings(e, meal, ndbno)}
                        onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
                        ref={element => this.inputElement = element}
-                     >
+                       maxLength="4">
                      </textarea>
                   </div>
-                </div>
               </div>
+
               <div className="NutritionModalBody">
                 {nutrition_info}
               </div>
+
             </div>
           </div>
         )}
