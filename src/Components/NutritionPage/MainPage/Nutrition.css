@@ -282,6 +282,7 @@
 MEDIA QUERIES
 
 */
+
 @media only screen and (max-width: 1242px){
   #NutritionViewMacroWrapper > p{
     display: flex;
@@ -332,20 +333,28 @@ MEDIA QUERIES
     font-size: 0.65rem;
   }
 }
-@media only screen and (max-height: 400px){
-  .NVInnerWrapper{
-    font-size: 0.75rem;
-  }
-}
-@media only screen and (min-height: 1000px){
-  .NVInnerWrapper{
-    font-size: 1.25rem;
-  }
-}
 
 @media only screen and (max-height: 500px){
   .NutritionModalContent{
     height: 70vh;
     width: 80vw;
+  }
+  #NVButtonsWrapper{
+    height: 20vh;
+  }
+  .NVInnerWrapper{
+    font-size: 1.1rem;
+  }
+}
+
+@media only screen and (max-height: 320px){
+  .NVInnerWrapper{
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (min-height: 1000px){
+  .NVInnerWrapper{
+    font-size: 1.25rem;
   }
 }

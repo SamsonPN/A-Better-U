@@ -126,7 +126,7 @@ export class AddExerciseProvider extends Component {
   }
 
   ShowValue = (e, index) => {
-    document.getElementsByClassName('AeViews')[index].textContent = e.target.textContent;
+    document.getElementsByClassName('AeViews')[index].childNodes[0].textContent = e.target.textContent;
     this.SearchByCategory();
   }
 

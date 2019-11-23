@@ -1,5 +1,5 @@
 #RoutineView{
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   font-family: 'Nunito', sans-serif;
 }
@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  align-items: baseline;
   height: 10vh;
   width: 100vw;
   border-bottom: 1px solid #1F0CAD;
@@ -134,21 +135,7 @@ MEDIA QUERIES
  */
 
  /* at max-height: 1000, increase the font-size!*/
- @media only screen and (min-height: 1000px){
-   #RoutineHeader{
-     font-size: 1.5rem;
-   }
- }
-
- @media only screen and (max-height: 600px){
-   #RoutineHeader{
-     height: 12vh;
-   }
-   #RoutineList{
-     height: 82vh;
-   }
- }
-
+ 
 @media only screen and (max-width: 890px){
   .EmptyRoutineMsg{
     font-size: 1.75em;
@@ -185,9 +172,30 @@ MEDIA QUERIES
   }
 }
 
+@media only screen and (max-height: 600px){
+  #RoutineHeader{
+    height: 12vh;
+  }
+  #RoutineList{
+    height: 82vh;
+  }
+}
+
 @media only screen and (max-height: 500px){
   .EmptyRoutineMsg{
     top: 75vh;
     font-size: 1.3em;
+  }
+  #RoutineHeader{
+    height: 22.5vh;
+  }
+  #RoutineFooter{
+    height: 12.5vh;
+  }
+}
+
+@media only screen and (min-height: 1000px){
+  #RoutineHeader{
+    font-size: 1.5rem;
   }
 }

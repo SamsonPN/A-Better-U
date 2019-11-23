@@ -29,7 +29,6 @@
   resize: none;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
-  font-family: 'Nunito', sans-serif;
   font-weight: 200;
   font-size: 2em;
 }
@@ -76,26 +75,34 @@
   box-sizing: border-box;
   font-size: 1.25em;
   font-weight: 600;
-  text-align: center;
   overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.AeViews > p{
+  min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .AeViews:hover{
   background-color: #1F0CAD;
   color: white;
-  border:none;
 }
 
 .AeViewsDropdown{
   height: 30vh;
   width: 100%;
   overflow: auto;
-  visibility: hidden;
-  text-decoration: none;
+  overflow-x: hidden;
   display:flex;
   flex-direction: column;
   background-color: #1F0CAD;
+  visibility: hidden;
+  text-decoration: none;
 }
 
 .AddExerciseOptions:hover .AeViewsDropdown{
@@ -149,7 +156,7 @@
   width: 80%;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 10px;
   font-size: 2em;
   font-weight: 200;
@@ -182,7 +189,7 @@ MEDIA QUERIES
 
 */
 
-@media only screen and (max-width: 768px){
+@media only screen and (max-width: 1050px){
   #ExerciseSearchBar,
   #ExerciseSearchBar:focus,
   #AddExerciseOptionsWrapper{
@@ -191,11 +198,23 @@ MEDIA QUERIES
   .AddExerciseItem{
     width: 93.5%;
   }
+  .AddExerciseOptions{
+    font-size: 1.5em;
+  }
+  .AddExerciseBtn{
+    font-size: 1.75em;
+  }
+  #AddExerciseName{
+    font-size: 2.25em;
+  }
 }
 
 @media only screen and (max-width: 484px){
   .AddExerciseItem{
     font-size: 1.75em
+  }
+  #AddExerciseName{
+    font-size: 2em;
   }
 }
 
@@ -205,5 +224,29 @@ MEDIA QUERIES
   }
   .AddExerciseItem{
     font-size: 1.5em
+  }
+  #AddExerciseHeader{
+    height: 35vh;
+  }
+}
+
+@media only screen and (max-height: 550px){
+  #AddExerciseHeader{
+    height: 50vh;
+  }
+  #AddExerciseName{
+    font-size: 2em;
+  }
+}
+
+@media only screen and (min-height: 1000px){
+  #AddExerciseName{
+    font-size: 2.5em;
+  }
+}
+
+@media only screen and (min-height: 1200px){
+  #AddExerciseName{
+    font-size: 3em;
   }
 }

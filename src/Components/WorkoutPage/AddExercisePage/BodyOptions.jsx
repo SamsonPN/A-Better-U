@@ -17,7 +17,7 @@ class BodyOptions extends Component {
       <div className="AddExerciseOptions">
         <div
           className="AeViews">
-          Muscles
+          <p>Muscles</p>
         </div>
         <ul className="AeViewsDropdown">
           {muscleItems}

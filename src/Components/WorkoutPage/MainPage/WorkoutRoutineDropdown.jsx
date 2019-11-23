@@ -16,7 +16,9 @@ class WorkoutRoutineDropdown extends Component {
 
     return (
       <div className="WoDropdownDiv">
-        <div className="WoViews">Routine</div>
+        <div className="WoViews">
+          Routine
+        </div>
         <ul className="WoViewsDropdown">
           {routineItems}
         </ul>

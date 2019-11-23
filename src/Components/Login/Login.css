@@ -62,11 +62,37 @@
   margin-top: 1%;
   margin-bottom: 1%;
   background-color: white;
-  color: black;
   font-family: 'Roboto', sans-serif;
+  color: black;
   font-size: 1em;
   text-decoration: none;
   cursor: pointer;
+}
+
+#fbBtn{
+  height: 40px;
+  width: 227px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 3px;
+font-family: 'Roboto', sans-serif;
+  background-color: #1971E2;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.05em;
+}
+
+#fbImg{
+  max-height: 60%;
+  margin-left: 12px;
+  margin-right: 10px;
+}
+
+#fbBtnText{
+  white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
 #googleImg{
@@ -81,10 +107,6 @@
 
 #fbBtn{
   margin-bottom: 1%;
-}
-
-.fb-login-button{
-  pointer-events: none;
 }
 
 /*

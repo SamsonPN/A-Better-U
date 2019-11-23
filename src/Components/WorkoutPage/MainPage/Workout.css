@@ -50,6 +50,7 @@
 
 .WoViewsDropdown{
   overflow: auto;
+  overflow-x: hidden;
   max-height: 25vh;
   display:flex;
   display: none;
