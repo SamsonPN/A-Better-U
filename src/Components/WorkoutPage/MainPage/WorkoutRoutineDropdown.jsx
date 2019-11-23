@@ -37,8 +37,7 @@ class RoutineDropdownItem extends Component {
           <a
             className="WoDropdownItem"
             href='#!'
-            onClick={() => ShowRoutine({...this.props}, 'Routine')}
-          >
+            onClick={() => ShowRoutine({...this.props}, 'Routine')}>
             {name}
           </a>
         )}

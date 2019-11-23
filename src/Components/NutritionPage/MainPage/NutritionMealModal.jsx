@@ -3,6 +3,20 @@ import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class NutritionItemModal extends Component {
   static contextType = NutritionContext;
+  Escape = (e) => {
+    if(e.key === 'Escape'){
+      let {meal, ndbno, showModal} = this.props;
+      let serving = document.getElementById(meal + ndbno);
+      showModal();
+      this.context.SaveServing(meal, ndbno, serving);
+    }
+  }
+  componentDidMount(){
+    document.addEventListener("keydown", this.Escape, false);
+  }
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.Escape, false);
+  }
   render() {
     const {meal, name, ndbno, servings, showModal} = this.props;
     const {reports} = this.context;
@@ -32,6 +46,7 @@ class NutritionItemModal extends Component {
                   <div className="ModalServingDiv">
                      <p>Servings: </p>
                      <textarea
+                       id={meal + ndbno}
                        className="NutritionModalTextArea"
                        defaultValue={servings !== '' ? servings : 0}
                        onChange={(e) => UpdateServings(e, meal, ndbno)}

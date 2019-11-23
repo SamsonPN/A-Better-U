@@ -3,16 +3,14 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  min-height: 0vh;
   font-family: 'Nunito',sans-serif;
 }
 
 #WoWrapper{
   display: flex;
   justify-content: space-around;
-  margin-top: 2vh;
+  margin: 2vh 0 2vh;
   width: 100%;
-  max-height: 6.5vh;
   font-size: 1rem;
 }
 
@@ -20,6 +18,7 @@
   position: relative;
   display: inline-block;
   width: 30vw;
+  height: 0vh;
 }
 
 .WoDropdownDiv:hover .WoViews{
@@ -29,38 +28,37 @@
 }
 
 .WoViews{
+  overflow: hidden;
   width: 30vw;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
-  font-family: 'Nunito', sans-serif;
   font-size: 2em;
   font-weight: 600;
   text-align: center;
   white-space: nowrap;
   color: black;
   cursor: pointer;
-  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  text-decoration: none;
 }
 
 .WoViews:hover{
   background-color: #1F0CAD;
   color: white;
-  border:none;
 }
 
 .WoViewsDropdown{
   overflow: auto;
-  visibility: hidden;
   max-height: 25vh;
   display:flex;
+  display: none;
   flex-direction: column;
   background-color: #1F0CAD;
 }
 
 .WoDropdownDiv:hover .WoViewsDropdown{
-  visibility: visible;
+  display: flex;
 }
 
 .WoDropdownItem{
@@ -68,7 +66,7 @@
   box-sizing: border-box;
   text-decoration: none;
   text-align: center;
-  font-size: 1.15em;
+  font-size: 1.5em;
   font-weight: 200;
   color: white;
 }
@@ -82,14 +80,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 3vh;
+  margin-bottom: 2vh;
   border: 1px solid #1F0CAD;
   box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
   box-sizing: border-box;
 }
 
 .CurrentRoutineWorkoutsHeader{
-  width: 96.7vw;
+  width: 100%;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -117,6 +115,12 @@
   text-overflow: ellipsis;
 }
 
+.CurrentRoutineWorkoutsTitle > p > span{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .CurrentRoutineWorkoutsTitle > p:first-of-type{
   margin-right: 3vh;
 }
@@ -134,10 +138,10 @@
 
 .CurrentRoutineItemHeader{
   width: 98.5%;
-  min-height: 9vh;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex: 1;
 }
 
 .CurrentRoutineItemHeader > p{
@@ -149,17 +153,17 @@
 }
 
 .CurrentRoutineSetsReps{
+  height: 10vh;
   width: 93.5%;
-  margin-bottom: 1vh;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   font-size: 1rem;
+  flex: 1;
 }
 
 .CurrentRoutineSetsReps > p{
-  height: 10vh;
-  line-height: 1.9;
+  height: 100%;
   font-size: 3em;
   font-weight: 200;
 }
@@ -170,26 +174,24 @@
   outline: none;
   overflow: hidden;
   white-space: nowrap;
-  width: 12vw;
-  height: 10vh;
-  border-bottom: 1px solid #1F0CAD;
-  box-sizing: border-box;
   text-align: center;
+  height: 90%;
   text-overflow: ellipsis;
   font-size: 3em;
   font-weight: 200;
   color: #1F0CAD;
-  line-height: 1.75;
+  text-decoration: underline;
+  flex: 1;
 }
 
 .SetDeleteBtn{
- height: 7vh;
- margin-top: 3vh;
- cursor: pointer;
+  height: 80%;
+  display: flex;
+  align-self: center;
+  cursor: pointer;
 }
 
 .CurrentRoutineAddSet{
-  height: 10vh;
   width: 100%;
   display:flex;
   flex-direction: column;
@@ -198,10 +200,7 @@
   font-size: 2.75em;
   font-weight: 200;
   cursor: pointer;
-}
-
-.CurrentRoutineAddSet > p{
-  margin-right: 1.75vh;
+  flex: 0.75;
 }
 
 .CurrentRoutineAddSet:hover > p{
@@ -215,15 +214,11 @@
 }
 
 .WoBtns{
-  max-width: 15vh;
+  max-width: 15vw;
   display: flex;
-  justify-content: flex;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
-}
-
-.WoBtns:not(:last-child){
- margin-right: 3vh;
 }
 
 .WoBtns:hover{
@@ -231,11 +226,12 @@
 }
 
 #EditBtn{
-  max-width: 15vh;
+  width: 100%;
   height: 100%;
 }
 
 #AddRoutineBtn{
+  display: none;
   height: 10vh;
   min-width: 8vw;
   position: fixed;
@@ -246,50 +242,56 @@
 /*
 
 MEDIA QUERIES
-change the line height of CurrentRoutineValues at each point and
-also might just use the text-overflow: ellipsis
+
 */
-
-@media only screen and (min-height: 1000px){
-  #WoBtnsWrapper{
-    height: 8vh;
-  }
-  .CurrentRoutineSetsReps > p{
-    line-height: 3;
-  }
-  .CurrentRoutineValues, .CurrentRoutineValues:focus{
-    line-height: 3;
-  }
-}
-
-@media only screen and (min-height: 1250px){
-  .CurrentRoutineSetsReps > p{
-    line-height: 3.5;
-  }
-  .CurrentRoutineValues, .CurrentRoutineValues:focus{
-    line-height: 3.5;
-  }
-}
 
 @media only screen and (max-width: 1173px){
   .CurrentRoutineSetsReps{
     width: 98%;
   }
-  .CurrentRoutineValues, .CurrentRoutineValues:focus{
-    width: 20vw;
-  }
 }
 
 @media only screen and (max-width: 618px){
   #WoWrapper{
-    font-size: 0.7rem;
-    max-height: 4vh;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+  }
+  #WoWrapper > div:first-child{
+    order: 1;
+    flex: 1;
+  }
+  #WoWrapper > a{
+    display: none;
+  }
+  #WoWrapper > .WoDropdownDiv{
+    order: 2;
+    flex: 1;
   }
   .CurrentRoutineWorkouts{
-    margin-top: 2.5vh;
+    width: 100%;
+  }
+  .WoDropdownDiv,
+  .WoViews{
+    width: 100vw;
+  }
+  .CurrentRoutineItemHeader,
+  .CurrentRoutineItems,
+  .CurrentRoutineSetsReps{
+    width: 100%;
+  }
+  .CurrentRoutineWorkoutsTitle{
+    padding: 0;
   }
   .CurrentRoutineValues, .CurrentRoutineValues:focus{
     font-size: 2.5em;
+  }
+  #AddRoutineBtn{
+    display: inline;
+  }
+  #WoBtnsWrapper{
+    justify-content: space-around;
   }
 }
 
@@ -299,27 +301,34 @@ also might just use the text-overflow: ellipsis
   }
   .CurrentRoutineValues, .CurrentRoutineValues:focus{
     font-size: 2em;
-    line-height: 2.75;
+  }
+  .CurrentRoutineWorkoutsTitle > p{
+    display: flex;
+    flex-direction: column;
+  }
+  .CurrentRoutineSetsReps{
+    height: 9vh;
   }
   .CurrentRoutineSetsReps > p{
     font-size: 2em;
-    line-height: 2.85;
   }
   .SetDeleteBtn{
-    padding-top: 10px;
-    box-sizing: border-box;
+    height: 70%;
   }
 }
 
 @media only screen and (max-width: 440px){
-  #WoWrapper{
-    font-size: 0.55rem;
-  }
-  .CurrentRoutineWorkouts{
-    margin-top: 2vh;
-  }
   .CurrentRoutineWorkoutsHeader{
     font-size: 0.75rem;
+  }
+  .CurrentRoutineSetsReps > p{
+    align-self: center;
+  }
+  .SetDeleteBtn{
+    height: 70%;
+  }
+  .CurrentRoutineAddSet{
+    font-size: 3.5em;
   }
 }
 
@@ -327,13 +336,37 @@ also might just use the text-overflow: ellipsis
   .CurrentRoutineItems{
     font-size: 0.5rem;
   }
+  .SetDeleteBtn{
+    align-self: center;
+  }
 }
 
 @media only screen and (max-width: 342px){
-  #WoWrapper{
-    font-size: 0.5rem;
-  }
   .CurrentRoutineWorkoutsHeader{
     font-size: 0.65rem;
+  }
+}
+
+@media only screen and (max-height: 500px){
+  .CurrentRoutineSetsReps{
+    height: 20vh;
+  }
+  #WoBtnsWrapper{
+    height: 15vh;
+  }
+}
+
+@media only screen and (min-height: 1000px){
+  #WoBtnsWrapper{
+    height: 8vh;
+  }
+}
+
+@media only screen and (min-height: 1250px){
+  .CurrentRoutineSetsReps{
+    height: 7vh;
+  }
+  .CurrentRoutineAddSet{
+    font-size: 3em;
   }
 }

@@ -6,7 +6,6 @@
 
 #StoryStatView{
   width: 30%;
-  /* min-height: 100vh; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,7 +13,6 @@
 }
 
 #StoryStatContent{
-  /* min-height: 100vh; */
   width: 95%;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
@@ -22,13 +20,14 @@
 
 #StoryStatHeader{
   width: 100%;
-  height: 20vh;
+  min-height: 0vh;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid #1F0CAD;
   box-sizing: border-box;
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 1rem;
 }
 
@@ -45,7 +44,6 @@
 }
 
 #StoryStatList{
-  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,7 +51,6 @@
 }
 
 .StoryStatListItem{
-  height: calc(100% / 4);
   width: 100%;
   display: flex;
   align-items: center;
@@ -62,6 +59,7 @@
   font-size: 3em;
   font-weight: 200;
   overflow: hidden;
+  flex: 1;
 }
 
 .StoryStatListItem:not(:last-child){
@@ -100,18 +98,19 @@
   height: 25vh;
   width: 100%;
   border: none;
-  font-family: 'Nunito', sans-serif;
   font-size: 2em;
   font-weight: 200;
 }
 
 #StorySubmitMediaDiv{
-  height: 10vh;
+  height: 15vh;
   width: 100%;
   display: none;
   align-items: center;
+  justify-content: center;
   padding: 1px;
   box-sizing: border-box;
+  background-color: black;
 }
 
 .StorySubmitMedia{
@@ -137,10 +136,11 @@
 }
 
 .inputLabel{
+  overflow: auto;
   height: 67.5%;
   min-width: 30%;
-  white-space: nowrap;
-  overflow: auto;
+  max-width: 50%;
+  width: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,6 +148,7 @@
   padding: 2px;
   box-sizing: border-box;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .inputLabel:hover{
@@ -194,7 +195,7 @@
 
 .StoriesHeader{
   width: 100%;
-  height: 10vh;
+  height: 8vh;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -209,6 +210,7 @@
 
 .StoriesHeader > img{
   max-height: 100%;
+  max-width: 30%;
   clip-path: circle(40%);
 }
 
@@ -261,7 +263,7 @@
 }
 
 #StoryModal{
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -304,7 +306,7 @@
   border: none;
   height: 25%;
   width: 100%;
-  padding-left: 3px;
+  padding: 0px 10px 0px;
   border-bottom: 1px solid #707070;
   box-sizing: border-box;
   font-weight: 200;
@@ -333,6 +335,7 @@
   align-items: center;
   border-top: 1px solid #707070;
   box-sizing: border-box;
+  font-size: 1rem;
 }
 
 #StoryModalBtnWrapper > label{
@@ -402,8 +405,69 @@ MEDIA QUERIES
    }
  }
 
- @media only screen and (max-width: 412px){
+ @media only screen and (max-width: 415px){
    #StoryModalContent{
      width: 80%;
+   }
+   .StoriesButtonWrapper > button,
+   #StorySubmitBtn{
+     min-width: 20vw;
+   }
+   #StoryModalBtnWrapper{
+     justify-content: space-between;
+     padding: 0 5px 0;
+     box-sizing: border-box;
+   }
+   #StoryModalBtnWrapper > button,
+   #StoryModalBtnWrapper > .inputLabel{
+     min-width: 45%;
+   }
+ }
+
+ @media only screen and (max-height: 500px){
+   #StoryStatHeader > img{
+     max-width: 20%;
+   }
+   .StoriesHeader{
+     height: 14vh;
+   }
+   .StoriesButtonWrapper > button{
+     height: 6.5vh;
+   }
+   #StorySubmitMediaDiv{
+     height: 15vh;
+   }
+   #StorySubmissionButtons{
+     height: 12.5vh;
+   }
+   #StoryModalContent{
+     height: 60%;
+   }
+ }
+
+ @media only screen and (min-height: 1000px){
+   .StoriesHeader{
+     font-size: 1.75em;
+   }
+   .StoriesButtonWrapper > button{
+     height: 3vh;
+   }
+   #StorySubmissionButtons{
+     height: 5vh;
+   }
+   #StorySubmitText, #StorySubmitText:focus{
+     height: 15vh;
+   }
+ }
+
+ @media only screen and (min-height: 1200px){
+   #StoryModalContent{
+     width: 70%;
+   }
+   #StoryModalHeader{
+     font-size: 2.5em;
+   }
+   #StoryModalBtnWrapper{
+     font-size: 1.5rem;
    }
  }

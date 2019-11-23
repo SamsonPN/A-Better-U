@@ -13,7 +13,7 @@ class AddFoodHeader extends Component {
             <textarea id="AddFoodSearch"
               onClick={(e) => e.target.value = ""}
               onKeyPress={(e) => SearchFood(e)}
-              placeholder="Search for a food item">
+              placeholder="Search">
             </textarea>
             <SortBtns />
           </div>

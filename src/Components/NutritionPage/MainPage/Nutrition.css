@@ -240,7 +240,9 @@
   border: none;
   outline: none;
   height: 60%;
-  min-width: 10%;
+  min-width: 15%;
+  max-width: 15%;
+  width: 15%;
   margin-left: 10px;
   font-size: 1em;
   border: 1px solid white;
@@ -295,6 +297,10 @@ MEDIA QUERIES
   .MealItemsWrapper{
     font-size: 0.85rem;
   }
+  .NutritionModalContent{
+    height: 60vh;
+    width: 80vw;
+  }
 }
 
 @media only screen and (max-width: 554px){
@@ -334,5 +340,12 @@ MEDIA QUERIES
 @media only screen and (min-height: 1000px){
   .NVInnerWrapper{
     font-size: 1.25rem;
+  }
+}
+
+@media only screen and (max-height: 500px){
+  .NutritionModalContent{
+    height: 70vh;
+    width: 80vw;
   }
 }

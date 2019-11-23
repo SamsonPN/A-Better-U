@@ -8,7 +8,7 @@ class AdditionalSetsReps extends Component {
   InputValidation = (e) => {
     let placeholder = e.target.placeholder;
     let input = parseInt(e.key);
-    if(placeholder !== "Type" && e.key !== '.' && isNaN(input)){
+    if(placeholder !== "type" && e.key !== '.' && isNaN(input)){
       e.preventDefault()
       alert("Numbers only please!")
     }
@@ -18,9 +18,9 @@ class AdditionalSetsReps extends Component {
     const {exerciseIndex, setIndex, sets, workoutIndex}  = this.props;
     const {DeleteSet, SaveSetValues} = this.context;
     const setValues = [
-      { "placeholder" : "Type", "value": sets.Type},
-      { "placeholder": "Weight", "value": sets.Weight},
-      { "placeholder": "Reps", "value": sets.Reps}
+      { "placeholder" : "type", "value": sets.Type, "maxLength": 10},
+      { "placeholder": "lbs", "value": sets.Weight, "maxLength": 4},
+      { "placeholder": "reps", "value": sets.Reps, "maxLength": 4}
     ]
     const setCategories = setValues.map( item =>
       <textarea
@@ -30,7 +30,7 @@ class AdditionalSetsReps extends Component {
         value={item.value}
         onChange={ (e) => SaveSetValues(e, workoutIndex, exerciseIndex, setIndex)}
         onKeyPress={this.InputValidation}
-        maxLength="10"
+        maxLength={item.maxLength}
        />
     )
     return (

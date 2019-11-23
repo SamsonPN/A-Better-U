@@ -7,8 +7,8 @@ class AddFoodSortButtons extends Component {
       <AddFoodContext.Consumer>
         { ({ GetFavorites, GetRecents }) => (
           <div id="AddFoodButtonWrapper">
-            <button className="SortBtns" onClick={() => GetRecents()}>Recent</button>
-            <button className="SortBtns" onClick={() => GetFavorites()}>Favorites</button>
+            <button className="AddFoodSortBtns" onClick={() => GetRecents()}>Recent</button>
+            <button className="AddFoodSortBtns" onClick={() => GetFavorites()}>Favorites</button>
           </div>
         )}
       </AddFoodContext.Consumer>

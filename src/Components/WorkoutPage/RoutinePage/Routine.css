@@ -120,7 +120,7 @@
 .EmptyRoutineMsg{
   position: absolute;
   top: 50%;
-  left: 50vw;
+  left: 52.5vw;
   transform: translate(-50%, -50%);
   white-space: wrap;
   font-size: 2em;
@@ -182,5 +182,12 @@ MEDIA QUERIES
   }
   .RoutineLiInfo{
     font-size: 1.5em;
+  }
+}
+
+@media only screen and (max-height: 500px){
+  .EmptyRoutineMsg{
+    top: 75vh;
+    font-size: 1.3em;
   }
 }

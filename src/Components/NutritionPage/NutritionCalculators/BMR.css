@@ -176,6 +176,7 @@
   background-color: #1F0CAD;
   color: white;
 }
+
 /*
 
 MEDIA QUERIES
@@ -189,7 +190,7 @@ MEDIA QUERIES
   }
 }
 
- @media only screen and (max-width: 832px){
+ @media only screen and (max-width: 832px), screen and (min-height: 1200px){
    .userInfoRow{
      height: 33%;
      width: 97%;
@@ -216,6 +217,13 @@ MEDIA QUERIES
    }
  }
 
+ @media only screen and (min-height: 1200px){
+   .userTraits,
+   #BMRValue{
+     font-size: 4em;
+   }
+ }
+
  @media only screen and (max-width: 450px){
    #BMRHeader > h1 {
      font-size: 2em;
@@ -229,5 +237,12 @@ MEDIA QUERIES
    }
    #BMRHeader > p:first-of-type{
      display: none;
+   }
+ }
+
+ @media only screen and (max-height: 500px){
+   .userTraitsAnswer,
+   .BMRDropdownWrapper{
+     height: 10vh;
    }
  }

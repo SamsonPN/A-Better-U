@@ -7,6 +7,6 @@ html, body {
   padding: 0;
 }
 
-textarea{
+textarea, button, input{
   font-family: inherit;
 }

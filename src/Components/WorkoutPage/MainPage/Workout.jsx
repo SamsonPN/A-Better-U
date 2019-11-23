@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-// import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import WoWrapper from './WorkoutDropdownWrapper';
 import CurrentRoutine from './CurrentRoutine';
 import CurrentWorkouts from './CurrentWorkouts';
 import {WorkoutContext} from '../../../AppContext/ExportContexts';
-// import {Add} from '../../../assets/ExportWorkoutBtns';
 import './Workout.css';
+import {Add} from '../../../assets/ExportWorkoutBtns';
 
 class Workout extends Component {
   static contextType = WorkoutContext;
@@ -19,7 +19,7 @@ class Workout extends Component {
       <div id="WoContainer">
         <WoWrapper />
         { tab === 'Date' ? WorkoutList : <CurrentRoutine /> }
-      {/*<Link
+        <Link
           to="/workout/routineview/routines/new">
           <img
             id="AddRoutineBtn"
@@ -28,7 +28,7 @@ class Workout extends Component {
             alt="Add Routine Button"
             title="Add a routine"
             />
-        </Link>*/}
+        </Link>
       </div>
     );
   }

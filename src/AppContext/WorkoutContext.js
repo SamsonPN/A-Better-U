@@ -162,18 +162,6 @@ export class WorkoutProvider extends Component {
      })
   }
 
-  // GetWorkoutById = (id) => {
-  //   let uri = `/workout/getWorkoutById?_id=${id}`;
-  //   fetch(uri)
-  //     .then(res => res.json())
-  //     .then(data =>{
-  //       this.setState({
-  //         currentRoutine: data,
-  //         tab: 'Routine'
-  //       })
-  //    })
-  // }
-
   GetWorkoutByIndex = (workoutIndex) => {
     let {workouts} = this.state;
     this.setState({
@@ -208,6 +196,8 @@ export class WorkoutProvider extends Component {
     let newState;
     let stateItem;
     let {placeholder, value} = e.target;
+    placeholder  = placeholder === "lbs" ? "Weight" : placeholder;
+    placeholder = placeholder[0].toUpperCase() + placeholder.slice(1);
     if(workoutIndex !== ""){
       newState = workouts;
       stateItem = 'workouts';

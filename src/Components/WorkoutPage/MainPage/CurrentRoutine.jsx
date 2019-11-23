@@ -28,8 +28,8 @@ class CurrentRoutine extends Component {
           <div className="CurrentRoutineWorkouts">
             <div className="CurrentRoutineWorkoutsHeader">
               <div className="CurrentRoutineWorkoutsTitle">
-                <p>{collection}: {currentRoutine.name}</p>
-                <p>Date: {workoutDate}</p>
+                <p>{collection}: <span>{currentRoutine.name}</span></p>
+                <p><span>Date:</span> {workoutDate}</p>
               </div>
               <WorkoutButtons
                 documentID={currentRoutine._id}
