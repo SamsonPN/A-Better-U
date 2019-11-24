@@ -18,7 +18,12 @@ class RoutineHeader extends Component {
                 onChange={(e) => ChangeRoutineName(e)}
                 maxLength="25">
               </textarea>
-              <Link id="RoutineFinish" to="/workout" onClick={() => StoreExercises(collection)}>Finish</Link>
+              <Link
+                id="RoutineFinish"
+                to="/workout"
+                onClick={() => StoreExercises(collection)}>
+                Finish
+              </Link>
             </div>
           </div>
     );

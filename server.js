@@ -74,5 +74,3 @@ app.use('/workout', isAuthenticated, workoutRouter);
 app.use('/nutrition', isAuthenticated, nutritionRouter);
 app.use('/user', isAuthenticated, userRouter);
 app.use('/story', isAuthenticated, storyRouter);
-
-module.exports.db = app.locals.db;

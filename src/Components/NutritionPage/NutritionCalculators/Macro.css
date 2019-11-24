@@ -4,6 +4,8 @@
   flex-direction: column;
   align-items: center;
   font-family: 'Nunito',sans-serif;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 #MacroTitleWrapper{
@@ -34,25 +36,33 @@
   height: 45vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
   flex: 3;
 }
 
 .MacroWrapper{
-  height: 90%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   font-size: 1rem;
 }
 
+.MacroWrapper > div{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
 .MacroPercentBox, .MacroPercentBox:focus{
   overflow: hidden;
   resize:none;
-  height: 7vh;
-  width: 10vw;
+  width: 50%;
+  height: 50%;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
   font-size: 2.5em;
@@ -64,9 +74,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
+  font-size: 2.5em;
   font-weight: 200;
   color: #1F0CAD;
+  flex: 1;
 }
 
 #MacroButtonWrapper{
@@ -101,10 +112,53 @@ MEDIA QUERIES
 
  */
 
+ @media only screen and (max-width: 768px){
+   .MacroPercentBox, .MacroPercentBox:focus{
+     width: 90%;
+   }
+ }
+
+ @media only screen and (max-width: 522px){
+   #MacroTitleWrapper{
+     font-size: 2.5em;
+   }
+   #MacroBoxWrapper{
+     justify-content: space-between;
+   }
+ }
+
+ @media only screen and (max-width: 418px){
+   #MacroTitleWrapper{
+     font-size: 2em;
+   }
+   #MacroBoxWrapper{
+     flex-direction: row;
+   }
+   .MacroWrapper{
+     flex-direction: column;
+     justify-content: space-between;
+     height: 100%;
+   }
+ }
+
+ @media only screen and (max-width: 341px){
+   #MacroTitleWrapper{
+     font-size: 1.75em;
+   }
+   .MacroWrapper{
+     font-size: 0.9rem;
+   }
+ }
 
  @media only screen and (max-height: 600px){
-   #MacroInfoDiv > p:first-child{
+   #MacroInfoDiv{
      display: none;
+   }
+ }
+
+ @media only screen and (max-height: 500px){
+   #MacroCalculator{
+     height: 120vh;
    }
  }
 
@@ -125,32 +179,5 @@ MEDIA QUERIES
    }
    #MacroFinishButton{
      font-size: 3em;
-   }
- }
-
- @media only screen and (max-width: 768px){
-   .MacroPercentBox, .MacroPercentBox:focus{
-     width: 90%;
-   }
- }
-
- @media only screen and (max-width: 522px){
-   #MacroTitleWrapper{
-     font-size: 2.5em;
-   }
-   #MacroBoxWrapper{
-     justify-content: space-between;
-   }
- }
-
- @media only screen and (max-width: 418px){
-   #MacroTitleWrapper{
-     font-size: 2em;
-   }
- }
-
- @media only screen and (max-width: 341px){
-   #MacroTitleWrapper{
-     font-size: 1.75em;
    }
  }

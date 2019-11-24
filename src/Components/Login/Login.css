@@ -76,7 +76,8 @@
   justify-content: flex-start;
   align-items: center;
   border-radius: 3px;
-font-family: 'Roboto', sans-serif;
+  margin-bottom: 1%;
+  font-family: 'Roboto', sans-serif;
   background-color: #1971E2;
   color: white;
   font-weight: 700;
@@ -103,10 +104,6 @@ font-family: 'Roboto', sans-serif;
 
 .LoginBtns:active{
   opacity: 0.8;
-}
-
-#fbBtn{
-  margin-bottom: 1%;
 }
 
 /*

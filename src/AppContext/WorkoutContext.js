@@ -246,11 +246,28 @@ export class WorkoutProvider extends Component {
     })
   }
 
+/*
+sets: [{
+  Type: '',
+  Weight: '',
+  Reps: ''
+}]
+*/
   StoreExercises = (collectionName) => {
     let {currentRoutine} = this.state;
     let {exercises} = currentRoutine;
-    let requestObject = {...currentRoutine, collectionName};
+    if(collectionName === 'routines'){
+      (exercises || []).forEach(exercise => {
+        exercise.sets = [{
+          Type: '',
+          Weight: '',
+          Reps: ''
+        }]
+      })
+    }
+    currentRoutine.exercises = exercises;
     if( (exercises || []).length !== 0 ){
+      let requestObject = {...currentRoutine, collectionName};
       fetch('/workout/updateExercises', {
         method: 'POST',
         mode: 'same-origin',
@@ -271,12 +288,12 @@ export class WorkoutProvider extends Component {
   }
 
   componentDidMount(){
-    let date = new Date();
-    let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    let today = date.toLocaleDateString("en-US", options);
-    this.setState({
-      workoutDate: today
-    })
+    // let date = new Date();
+    // let options = {month: "2-digit", day: "2-digit", year: "numeric"};
+    // let today = date.toLocaleDateString("en-US", options);
+    // this.setState({
+    //   workoutDate: today
+    // })
     this.GetRoutines();
     this.GetWorkouts();
   }
@@ -284,7 +301,7 @@ export class WorkoutProvider extends Component {
   state = {
     currentRoutine: {},
     routines: [],
-    workoutDate: new Date(),
+    workoutDate: (new Date()).toLocaleDateString("en-US", {month: "2-digit", day: "2-digit", year: "numeric"}),
     workouts: [],
     savedWorkouts: [],
     tab: 'Routine'

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import Img from 'react-image';
 import {StoryContext} from '../../AppContext/ExportContexts';
 import './Story.css';
-import './Stat.css';
+import Spinner from '../../assets/ajax-loader.gif';
 
 class Stories extends Component {
   static contextType = StoryContext;
@@ -9,9 +10,6 @@ class Stories extends Component {
     const userID = this.context.user.user;
     const {date, file, story, text, user} = this.props;
     const media = `/story/media/${file.id}`;
-    const image = <img className="StoriesMedia" src={media} alt="None shown"/>;
-    const video = <video className="StoriesMedia" width="500px" controls src={media} alt="None Shown"></video>;
-    const tag = (file.mimetype || "").includes("image") ? image : video;
     return (
       <StoryContext.Consumer>
         { ({ DeleteStory, ToggleModal }) => (
@@ -30,7 +28,20 @@ class Stories extends Component {
 
                 {file ?
                   <div className="StoriesMediaDiv">
-                    {tag}
+                    { (file.mimetype || "").includes("image") ?
+                      <Img
+                        className="StoriesMedia"
+                        src={media}
+                        loader={ <img src={Spinner} alt="AJAX loader"/> }
+                        />
+                      : <video
+                          className="StoriesMedia"
+                          width="500px"
+                          controls
+                          src={media}
+                          alt="None Shown">
+                        </video>
+                    }
                   </div>
                   : null
                 }

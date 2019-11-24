@@ -48,12 +48,15 @@ class MacroWrapper extends Component {
     const value = CalculateMacros(macro);
     return (
       <div className="MacroWrapper">
-        <textarea
-          className="MacroPercentBox"
-          placeholder="%"
-          onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
-          onChange={(e) => SavePercentages(e, macro)}>
-        </textarea>
+        <div>
+          <textarea
+            className="MacroPercentBox"
+            placeholder="%"
+            onKeyPress={(e) => e.key === 'Enter' ? e.preventDefault() : null}
+            onChange={(e) => SavePercentages(e, macro)}
+            maxLength="3">
+          </textarea>
+        </div>
         <p>{macro}</p>
         <p>{isNaN(value) ? 0 : value}g</p>
       </div>

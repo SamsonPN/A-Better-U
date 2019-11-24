@@ -19,7 +19,6 @@ export class StoryProvider extends Component {
       let storyParam = `?story_id=${story_id}`;
       let fileParam = file_id ? `&file_id=${file_id}` : "";
       let uri = '/story/deleteStory' + storyParam + fileParam;
-
       fetch(uri, {
         method: "DELETE",
         headers: {
@@ -101,7 +100,7 @@ export class StoryProvider extends Component {
     this.ToggleModal()
   }
 
-  SubmitStory = (e) => {
+  SubmitStory = () => {
     let {file} = this.state;
     let text = document.getElementById('StorySubmitText').value;
     if (file || text){

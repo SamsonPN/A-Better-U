@@ -9,63 +9,45 @@ import Story from './Components/StoryPage/StoryPage';
 import {
   StoryProvider,
   NutritionProvider,
-   AddFoodProvider,
-   WorkoutProvider,
-   AddExerciseProvider,
-   CalculatorProvider
+  AddFoodProvider,
+  WorkoutProvider,
+  AddExerciseProvider,
+  CalculatorProvider
  } from './AppContext/ExportContexts';
 
 class App extends Component {
   render() {
     return (
       <Router>
-          <div id="App">
-            <Route exact path="/" component={Login}/>
-
-            {/*WORKOUT ROUTES*/}
-            <AddExerciseProvider>
+        <div id="App">
+          <Route exact path="/" component={Login}/>
+          <Route exact path = {["/workout", "/nutrition", "/story"]}component={Header} />
+          {/*WORKOUT ROUTES*/}
+          <AddExerciseProvider>
              <WorkoutProvider>
-                <Route exact path="/workout" render={props => (
-                  <React.Fragment>
-                    <Header/>
-                    <Workout
-                    />
-                  </React.Fragment>
-                 )} />
+               <Route exact path="/workout" component={Workout} />
                <Route exact path="/workout/routineview/:collection/:id" render={props => (<RoutineView {...props}/>) }/>
                <Route exact path="/workout/addroutine/:collection/:id" render={props => ( <AddExerciseView {...props}/>) }/>
              </WorkoutProvider>
             </AddExerciseProvider>
-
-           {/*NUTRITION ROUTES*/}
-           <CalculatorProvider>
-             <NutritionProvider>
-               <AddFoodProvider>
-                   <Route exact path="/nutrition" render={props => (
-                     <React.Fragment>
-                       <Header />
-                       <Nutrition />
-                     </React.Fragment>
-                   )} />
-                 <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
-                       <AddFoodView {...props}/>
+          {/*NUTRITION ROUTES*/}
+          <CalculatorProvider>
+               <NutritionProvider>
+                 <AddFoodProvider>
+                   <Route exact path="/nutrition" component={Nutrition} />
+                   <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
+                       <AddFoodView {...props} />
                      )}/>
-               </AddFoodProvider>
+                </AddFoodProvider>
               </NutritionProvider>
-             <Route exact path="/nutrition/bmrcalculator" component={BMR} />
-             <Route exact path="/nutrition/macrocalculator" component={Macro} />
-           </CalculatorProvider>
-
-           {/*STORY ROUTES*/}
+              <Route exact path="/nutrition/bmrcalculator" component={BMR} />
+              <Route exact path="/nutrition/macrocalculator" component={Macro} />
+             </CalculatorProvider>
+          {/*STORY ROUTES*/}
           <StoryProvider>
-            <Route exact path="/story" render={props => (
-              <React.Fragment>
-                <Header/>
-                <Story/>
-              </React.Fragment>
-             )} />
+             <Route exact path = "/story" component={Story} />
           </StoryProvider>
-          </div>
+        </div>
       </Router>
     );
   }

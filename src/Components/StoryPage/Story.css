@@ -391,7 +391,7 @@ MEDIA QUERIES
    #StoryStatHeader{
      min-height: 20vh;
      border: none;
-     font-size: 0.8rem;
+     font-size: 1.75rem;
    }
    #StoryStatView,
    #StoryTimeline{
