@@ -136,7 +136,6 @@
 }
 
 .inputLabel{
-  overflow: auto;
   height: 67.5%;
   min-width: 30%;
   max-width: 50%;
@@ -149,6 +148,13 @@
   box-sizing: border-box;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.inputLabel > span{
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .inputLabel:hover{
@@ -217,17 +223,18 @@
 .StoriesTextDiv{
   overflow: auto;
   width: 100%;
-  max-height: 20vh;
+  height: 15vh;
   padding: 5px;
   box-sizing: border-box;
   font-size: 1.25em;
 }
 
 .StoriesMediaDiv{
+  min-height: 20vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
   background-color: black;
   border-top: 1px solid #707070;
   box-sizing: border-box;
@@ -294,6 +301,7 @@
   background-color: #1F0CAD;
   color: white;
   font-size: 2em;
+  /* flex: 0.5; */
 }
 
 #StoryModalHeader > p:nth-child(even){
@@ -311,6 +319,7 @@
   box-sizing: border-box;
   font-weight: 200;
   font-size: 2em;
+  flex: 1;
 }
 
 #StoryModalMediaWrapper{
@@ -319,6 +328,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom: 1px solid #707070;
+  box-sizing: border-box;
   background-color: black;
 }
 
@@ -333,7 +344,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #707070;
   box-sizing: border-box;
   font-size: 1rem;
 }
@@ -345,12 +355,14 @@
 #StoryModalBtnWrapper > button{
   height: 67.5%;
   min-width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #1F0CAD;
   box-sizing: border-box;
   margin-left: 2.5%;
   font-size: 1em;
   cursor: pointer;
-  background-color: white;
 }
 
 #StoryModalBtnWrapper > button:hover{
@@ -438,10 +450,10 @@ MEDIA QUERIES
      height: 15vh;
    }
    #StorySubmissionButtons{
-     height: 12.5vh;
+     height: 13vh;
    }
    #StoryModalContent{
-     height: 60%;
+     height: 80%;
    }
  }
 

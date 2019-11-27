@@ -1,32 +1,20 @@
 "use strict";
-const path = require('path');
-const crypto = require('crypto');
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
+const cloudinary = require('cloudinary').v2;
 const Keys = require('../config/keys');
 const ObjectID = require('mongodb').ObjectID;
 const story = require('express').Router();
 
-const storage = new GridFsStorage({
-  url: Keys.mongodb.dbURI,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          return reject(err);
-        }
-        const filename = buf.toString('hex') + path.extname(file.originalname);
-        const fileInfo = {
-          filename: filename,
-          bucketName: 'storyMedia'
-        };
-        resolve(fileInfo);
-      });
-    });
-  }
-});
+cloudinary.config({
+  cloud_name: Keys.cloudinary.cloudName,
+  api_key: Keys.cloudinary.clientID,
+  api_secret: Keys.cloudinary.clientSecret
+})
 
-const upload = multer({ storage });
+function CloudinaryDestroy(public_id, resource_type){
+  cloudinary.uploader.destroy(public_id, { resource_type })
+    .then(result => console.log(result))
+    .catch(err => console.error(err))
+}
 
 story.get('/getStories', (req,res) => {
   let {stories} = req.app.locals;
@@ -37,34 +25,15 @@ story.get('/getStories', (req,res) => {
     .catch( err => console.error(err))
 })
 
-//need to use readStream to show the files
-//@route GET /image/:filename
-// @desc Display image
-story.get('/media/:id', (req, res) => {
-  let {gfs} = req.app.locals;
-  //gets filename from the url
-  gfs.files.findOne({_id: ObjectID(req.params.id)}, (err, file) => {
-    if(!file || file.length === 0){
-      return res.status(404).json({
-        err: 'No file exists'
-      });
-    }
-    const readstream = gfs.createReadStream(file.filename);
-    readstream.pipe(res);
-  });
-});
-
-// @route POST /upload
-// @desc Uploads file to DB
-story.post('/uploadStories', upload.single('file'), (req, res) => {
-  let {date, stories, users} = req.app.locals;
-  let text = req.body.text || "";
-  let file = req.file ? req.file : false;
-  users.findOne(
-    { _id: ObjectID(req.session.passport.user)}
-  )
+story.post('/uploadCloudinary', (req, res) => {
+  let {date, stories} = req.app.locals;
+  let {text} = req.body;
+  let {user, name, picture} = req.user;
+  cloudinary.uploader.upload(req.files.file.path, {
+    resource_type: "auto"
+  })
     .then(result => {
-      let {name, picture, user} = result;
+      let {public_id, resource_type, secure_url} = result;
       stories.insertOne({
         user: {
           user,
@@ -72,50 +41,93 @@ story.post('/uploadStories', upload.single('file'), (req, res) => {
           picture
         },
         text,
-        file,
+        file: {
+          public_id,
+          resource_type,
+          secure_url
+        },
         date
       })
-        .catch(err => console.error(err))
+      res.status(201).send({result})
     })
-  res.end()
+    .catch(err => {
+      res.status(500).send({err})
+    })
+})
+
+story.post('/uploadText', (req, res) => {
+  let {date, stories} = req.app.locals;
+  let {user, name, picture} = req.user;
+  let {file, text} = req.body;
+  stories.insertOne({
+    user: {
+      user,
+      name,
+      picture
+    },
+    text,
+    file,
+    date
+  })
+    .catch(err => {
+      res.status(500).send({err})
+    })
+  res.sendStatus(201)
+})
+
+story.post('/editCloudinary', (req, res) => {
+  let {stories} = req.app.locals;
+  let {_id, oldFile, text} = req.body;
+  oldFile = JSON.parse(oldFile);
+  console.log(oldFile)
+  cloudinary.uploader.upload(req.files.file.path, {
+    resource_type: "auto"
+  })
+    .then(result => {
+      let {public_id, resource_type, secure_url} = result;
+      stories.updateOne(
+        { _id: ObjectID(_id) },
+        {$set: {
+          text,
+          file: {
+            public_id,
+            resource_type,
+            secure_url
+            }
+          }
+        }
+      )
+        .catch(err => {
+          res.status(500).send({err})
+        })
+      res.status(201).send({result})
+    })
+    .catch(err => {
+      res.status(500).send({err})
+    })
+  CloudinaryDestroy(oldFile.public_id, oldFile.resource_type);
 });
 
-story.put('/editStories', upload.single('file'), (req, res) => {
-  let {gfs, stories} = req.app.locals;
-  let {_id, oldFile, text} = req.body;
-  text = text || "";
-  oldFile = JSON.parse(oldFile);
-  let file = req.file ? req.file : oldFile;
+story.post('/editText', (req, res) => {
+  let {stories} = req.app.locals;
+  let { _id, text } = req.body;
   stories.updateOne(
-    { _id : ObjectID(_id) },
-    {$set: { text, file} }
+    { _id: ObjectID(_id) },
+    {$set: { text } }
   )
-    .catch(err => console.error(err))
-  if(file && file.id !== oldFile.id){
-    gfs.remove({_id: ObjectID(oldFile.id), root: 'storyMedia'}, (err, gridStore) => {
-      if(err){
-        return res.status(404).json({
-          err: err
-        });
-      }
+    .catch(err => {
+      res.status(500).send({ err })
     })
-  }
-  res.end()
-});
+  res.status(200).send(`Update successful for story: ${_id}`);
+})
 
 story.delete('/deleteStory', (req, res) => {
-  let {gfs, stories} = req.app.locals;
-  let { story_id, file_id } = req.query;
+  let {stories} = req.app.locals;
+  let { story_id, public_id, resource_type } = req.query;
   stories.deleteOne( { _id : ObjectID(story_id) } )
     .catch(err => console.error(err))
-  if(file_id){
-    gfs.remove({_id: ObjectID(file_id), root: 'storyMedia'}, (err, gridStore) => {
-      if(err){
-        return res.status(404).json({
-          err: err
-        });
-      }
-    })
+  if(public_id){
+    CloudinaryDestroy(public_id, resource_type);
   }
   res.end()
 })

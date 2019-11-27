@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {StoryContext} from '../../AppContext/ExportContexts';
+import Img from 'react-image';
+import DefaultPicture from '../../assets/default-profile-pic.jpg';
 
 class StoryStatViewer extends Component {
   static contextType = StoryContext;
@@ -11,7 +13,10 @@ class StoryStatViewer extends Component {
       <div id="StoryStatView">
         <div id="StoryStatContent">
           <div id="StoryStatHeader">
-            <img src={user.picture} alt="PFP" />
+            <Img
+              src={user.picture}
+              loader={ <img src={DefaultPicture} alt="pfp"/> }
+            />
             <p>{user.name}</p>
           </div>
           <div id="StoryStatList">

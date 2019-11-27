@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
+import Img from 'react-image';
+import Spinner from './Spinner';
 import {StoryContext} from '../../AppContext/ExportContexts';
 
 class StoryModal extends Component {
   static contextType = StoryContext;
+  componentDidMount(){
+    let {editFile} = this.context;
+    document.getElementById('StoryModalMediaWrapper').style.display = editFile ? 'flex' : 'none';
+  }
   render() {
     const {editFile, preview, type} = this.context;
-    const src = preview !== "" ? preview : `/story/media/${editFile.id}`;
-    const contentType = preview !== "" ? type : editFile.mimetype;
-    const img = <img className="StoryModalMedia" src={src} alt="No file chosen"/>;
+    const src = preview !== "" ? preview : editFile.secure_url;
+    const contentType = preview !== "" ? type : editFile.resource_type;
+    const img = <Img className="StoryModalMedia" src={src} loader={<Spinner/>}/>;
     const video = <video className="StoryModalMedia" controls src={src}></video>;
     const media = (contentType || "").includes("image") ? img : video;
     return (
@@ -24,9 +30,11 @@ class StoryModal extends Component {
                 defaultValue={editText}
                 ref={textRef => this.textRef = textRef}>
               </textarea>
+
               <div id="StoryModalMediaWrapper">
-                { editFile !== false || preview !== "" ? media : null }
+                {media}
               </div>
+
               <div id="StoryModalBtnWrapper">
                 <input
                   type="file"
@@ -34,18 +42,18 @@ class StoryModal extends Component {
                   id="modalFile"
                   className="inputFile"
                   onChange={(e) => PutFileInLabel(e)}
-                  ref={fileRef => this.fileRef = fileRef}>
+                  >
                 </input>
                 <label
                   htmlFor="modalFile"
                   id="StoryModalLabel"
                   className="inputLabel">
-                  Photo / Video
+                  <span>Photo / Video</span>
                 </label>
                 <button
                   id="StoryModalSaveBtn"
-                  onClick={() => SaveChanges(this.fileRef, this.textRef)}>
-                  Save
+                  onClick={() => SaveChanges(this.textRef)}>
+                  <span>Save</span>
                 </button>
               </div>
             </div>

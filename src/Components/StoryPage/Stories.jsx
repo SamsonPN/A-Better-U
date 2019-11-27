@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import Img from 'react-image';
+import Spinner from './Spinner';
 import {StoryContext} from '../../AppContext/ExportContexts';
 import './Story.css';
-import Spinner from '../../assets/ajax-loader.gif';
 
 class Stories extends Component {
   static contextType = StoryContext;
   render() {
     const userID = this.context.user.user;
     const {date, file, story, text, user} = this.props;
-    const media = `/story/media/${file.id}`;
     return (
       <StoryContext.Consumer>
-        { ({ DeleteStory, ToggleModal }) => (
+        { ({ DeleteStory, showModal, ToggleModal }) => (
           <React.Fragment>
             <div className="Stories">
                 <div className="StoriesHeader">
@@ -25,20 +24,19 @@ class Stories extends Component {
                   </div>
                   : null
                 }
-
                 {file ?
                   <div className="StoriesMediaDiv">
-                    { (file.mimetype || "").includes("image") ?
+                    { (file.resource_type || "").includes("image") ?
                       <Img
                         className="StoriesMedia"
-                        src={media}
-                        loader={ <img src={Spinner} alt="AJAX loader"/> }
+                        src={file.secure_url}
+                        loader={<Spinner/>}
                         />
                       : <video
                           className="StoriesMedia"
                           width="500px"
                           controls
-                          src={media}
+                          src={file.secure_url}
                           alt="None Shown">
                         </video>
                     }
@@ -50,7 +48,7 @@ class Stories extends Component {
               {userID === user.user ?
                 <React.Fragment>
                   <button onClick={() => ToggleModal(story, file, text)}>Edit</button>
-                  <button onClick={() => DeleteStory(story, file.id)}>Delete</button>
+                  <button onClick={() => DeleteStory(story, file)}>Delete</button>
                 </React.Fragment>
               : null
               }
@@ -61,7 +59,6 @@ class Stories extends Component {
       </StoryContext.Consumer>
     );
   }
-
 }
 
 export default Stories;

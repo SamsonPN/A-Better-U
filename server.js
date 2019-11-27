@@ -2,16 +2,14 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 9000;
-const path = require('path');
+const formData = require('express-form-data');
 const cors = require('cors');
-const GridFs = require('gridfs-stream');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 const passportSetup = require('./config/passport-setup');
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
-const dbName = 'a-better-u';
 const client = new MongoClient(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const authRouter = require('./Routers/AuthRouter');
 const workoutRouter = require('./Routers/WorkoutRouter');
@@ -24,7 +22,7 @@ app.use(cookieSession({
   keys: [keys.session.cookieKey]
 }));
 
-app.enable('trust proxy');
+app.use(formData.parse());
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -32,11 +30,7 @@ app.use(cors());
 
 client.connect((err)=> {
   console.log('Successfully connected to the server')
-  const db = client.db(dbName);
-  let gfs;
-  gfs = GridFs(db, Mongo);
-  gfs.collection('storyMedia');
-  app.locals.gfs = gfs;
+  const db = client.db('a-better-u');
   app.locals.db = db;
   app.locals.exerciseList = db.collection('exerciseList');
   app.locals.nutrition = db.collection('nutrition');

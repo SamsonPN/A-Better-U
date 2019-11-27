@@ -7,17 +7,18 @@ export class StoryProvider extends Component {
     document.getElementById('file').value = [];
     document.getElementById('StoryMediaLabel').textContent = "Photo / Video";
     document.getElementById('StorySubmitText').value = "";
+    document.getElementById('StorySubmitMediaDiv').style.display = "none";
     this.setState({
       preview: "",
       type: ""
     })
   }
 
-  DeleteStory = (story_id, file_id) => {
+  DeleteStory = (story_id, file) => {
     let confirm = window.confirm('Do you want to delete this story?');
     if(confirm){
       let storyParam = `?story_id=${story_id}`;
-      let fileParam = file_id ? `&file_id=${file_id}` : "";
+      let fileParam = file ? `&public_id=${file.public_id}&resource_type=${file.resource_type}` : "";
       let uri = '/story/deleteStory' + storyParam + fileParam;
       fetch(uri, {
         method: "DELETE",
@@ -59,75 +60,104 @@ export class StoryProvider extends Component {
   PutFileInLabel = (e) => {
     let newFile = e.target.files[0];
     let label = e.target.nextElementSibling;
-    label.textContent = (newFile || {}).name || "Photo / Video";
+    label.childNodes[0].textContent = (newFile || {}).name || "Photo / Video";
+    let {preview} = this.state;
+    if(preview){
+      URL.revokeObjectURL(this.state.preview)
+    }
     if(newFile){
-      let type = newFile.type;
       let preview = URL.createObjectURL(newFile);
       let view = e.target.parentElement.id === 'StoryModalBtnWrapper' ? "modal" : "submission";
-      document.getElementById('StorySubmitMediaDiv').style.display = "flex";
+      document.getElementById('StorySubmitMediaDiv').style.display = view === 'submission' ? 'flex' : 'none';
       this.setState({
         preview,
-        type,
+        type: newFile.type,
         view,
         file: newFile
       })
     }
   }
 
-  SaveChanges = (fileRef, textRef) => {
-    let newFile = fileRef.files[0] || false;
+  SaveChanges = (textRef) => {
     let newText = textRef.value;
-    let {editFile, editStory, editText} = this.state;
-    let text = editText === newText ? editText : newText;
-    let uri = '/story/editStories';
-    let formData = new FormData();
-    formData.append('file', newFile);
-    formData.append('oldFile', JSON.stringify(editFile));
-    formData.append('_id', editStory);
-    formData.append('text', text);
-    fetch(uri, {
-      method: 'PUT',
-      body: formData
-    })
-      .then(() => {
-        this.GetStories();
-        URL.revokeObjectURL(this.state.preview);
-        this.setState({
-          preview: "",
-          type: ""
-        })
-      })
-    this.ToggleModal()
-  }
-
-  SubmitStory = () => {
-    let {file} = this.state;
-    let text = document.getElementById('StorySubmitText').value;
-    if (file || text){
-      let uri = '/story/uploadStories';
+    let {editFile, editStory, editText, file, preview} = this.state;
+    if(file){
+      if( file.size / 1000000 > 10){
+        alert('This file is pretty large so it will take a bit of time to be uploaded!')
+      }
       let formData = new FormData();
       formData.append('file', file);
-      formData.append('text', text);
-      fetch(uri, {
+      formData.append('oldFile', JSON.stringify(editFile));
+      formData.append('_id', editStory);
+      formData.append('text', newText);
+      fetch('/story/editCloudinary', {
         method: 'POST',
         body: formData
       })
         .then(() => {
-          URL.revokeObjectURL(this.state.preview);
-          this.ClearSubmissionForm();
           this.GetStories();
-          window.location.href = "http://localhost:3000/story";
-          document.getElementById('StorySubmitMediaDiv').style.display = "none";
-       })
+          URL.revokeObjectURL(preview);
+          this.ClearSubmissionForm()
+        })
     }
+    else if (newText !== editText){
+      fetch('/story/editText', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ _id: editStory, text: newText })
+      })
+        .then(() => {
+          this.GetStories();
+        })
+    }
+    this.ToggleModal()
   }
 
-  ToggleModal = (story_id, file, story_text) => {
+  SubmitStory = () => {
+    let {file, preview} = this.state;
+    let text = document.getElementById('StorySubmitText').value;
+    if(file){
+      if( file.size / 1000000 > 10){
+        alert('This file is pretty large so it will take a bit of time to be uploaded!')
+      }
+      let formData = new FormData();
+      formData.append('file', file);
+      formData.append('text', text);
+      fetch('/story/uploadCloudinary', {
+        method: 'POST',
+        body: formData
+      })
+        .then(() => {
+        URL.revokeObjectURL(preview);
+        this.GetStories();
+        })
+        .catch(err => console.error(err))
+    }
+    else if (text){
+      fetch('/story/uploadText', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ file: false, text })
+      })
+        .then(() => {
+          this.GetStories()
+        })
+        .catch(err => console.error(err))
+    }
+    this.ClearSubmissionForm();
+  }
+
+  ToggleModal = (story, file, text) => {
     this.setState(prevState => ({
       showModal: !prevState.showModal,
-      editStory: story_id !== undefined ? story_id : "",
-      editFile: file !== undefined ? file : "",
-      editText: story_text !== undefined ? story_text : ""
+      editStory: story ? story : "",
+      editFile: file ? file : "",
+      editText: text ? text : "",
+      file: false
     }), function(){
       let {showModal} = this.state;
       document.body.style.overflow = showModal ? 'hidden' : 'auto';
