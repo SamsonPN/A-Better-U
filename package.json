@@ -19,7 +19,8 @@
     "react-image": "^2.2.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "serverless-http": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
