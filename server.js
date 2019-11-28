@@ -6,16 +6,11 @@ const formData = require('express-form-data');
 const cors = require('cors');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
-const keys = require('./config/keys');
-const passportSetup = require('./config/passport-setup');
+const {keys, passportSetup} = require('./config/ExportConfig');
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
 const client = new MongoClient(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
-const authRouter = require('./Routers/AuthRouter');
-const workoutRouter = require('./Routers/WorkoutRouter');
-const nutritionRouter = require('./Routers/NutritionRouter');
-const userRouter = require('./Routers/UserRouter');
-const storyRouter = require('./Routers/StoryRouter');
+const {authRouter, workoutRouter, nutritionRouter, userRouter, storyRouter} = require('./Routers/ExportRouters');
 
 app.use(cookieSession({
   maxAge: 7 * 24 * 60 * 60 * 1000,

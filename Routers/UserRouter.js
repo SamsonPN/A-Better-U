@@ -10,6 +10,9 @@ user.get('/getGoals', (req,res) => {
     .then(result => {
       res.json(result)
     })
+    .catch(err => {
+      res.status(500).send({err})
+    })
 })
 
 //get favorites!
@@ -20,7 +23,9 @@ user.get('/getFavorites', (req,res) => {
     req.query
   )
     .then(result => res.json(result))
-    .catch(err => console.error(err))
+    .catch(err => {
+      res.status(500).send({err})
+    })
 })
 
 user.get('/getUserInfo', (req, res) => {
@@ -29,7 +34,10 @@ user.get('/getUserInfo', (req, res) => {
   users.findOne(
     { _id: ObjectID(user._id)}
   )
-   .then(user => res.json(user));
+   .then(user => res.json(user))
+   .catch(err => {
+     res.status(500).send({err})
+   })
 })
 
 // updates the users' goals such as weight loss goals and macronutrient goals
@@ -40,8 +48,12 @@ user.post('/updateMacroGoals', (req,res) => {
     { $set: {macros: req.body} },
     {upsert : true}
   )
-    .catch(err => console.error(error))
-  res.end()
+  .then(result => {
+    res.status(200).send(result.result)
+  })
+  .catch(err => {
+    res.status(500).send({err})
+  })
 })
 
 user.post('/updateUserStats', (req,res) => {
@@ -52,8 +64,12 @@ user.post('/updateUserStats', (req,res) => {
     { $set: {Calories, userStats } },
     {upsert : true}
   )
-    .catch(err => console.error(error))
-  res.end()
+    .then(result => {
+      res.status(200).send(result.result)
+    })
+    .catch(err => {
+      res.status(500).send({err})
+    })
 })
 
 user.post('/insertFavorites', (req, res) => {
@@ -64,8 +80,12 @@ user.post('/insertFavorites', (req, res) => {
     { $addToSet: { [field]: item } },
     { upsert: true }
   )
-    .catch(err => console.error(err))
-  res.end();
+  .then(result => {
+    res.status(201).send(result.result)
+  })
+  .catch(err => {
+    res.status(500).send({err})
+  })
 })
 
 user.post('/deleteFavorites', (req, res) => {
@@ -75,7 +95,12 @@ user.post('/deleteFavorites', (req, res) => {
     { _id: ObjectID(req.user._id) },
     { $pull: { [field] : item } }
   )
-    .catch(err => console.error(err))
+  .then(() => {
+    res.status(200).send(result.result)
+  })
+  .catch(err => {
+    res.status(500).send({err})
+  })
   res.end();
 })
 

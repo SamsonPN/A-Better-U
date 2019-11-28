@@ -8,11 +8,6 @@ import './Nutrition.css';
 
 class Nutrition extends Component {
   static contextType = NutritionContext;
-
-  componentDidMount(){
-    this.context.FetchFood();
-  }
-
   render() {
     const {showTotals} = this.context;
     const meals = ["Breakfast", "Lunch", "Dinner", "Snacks"].map(meal =>

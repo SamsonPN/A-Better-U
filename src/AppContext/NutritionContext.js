@@ -221,6 +221,12 @@ export class NutritionProvider extends Component {
    })
   }
 
+  componentDidMount(){
+    if(window.location.pathname !== '/'){
+      this.FetchFood()
+    }
+  }
+
   state = {
     nutritionDate: new Date(),
     Breakfast : [],

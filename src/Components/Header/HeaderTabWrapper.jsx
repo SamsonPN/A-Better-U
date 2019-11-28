@@ -5,9 +5,9 @@ class TabWrapper extends Component {
   render() {
     return (
       <div id="TabWrapper">
-        <Link to="/story" className="tabs">Story</Link>
-        <Link to="/nutrition" className="tabs">Nutrition</Link>
-        <Link to="/workout" className="tabs">Workout</Link>
+        <Link to="/story" id="/story" className="tabs">Story</Link>
+        <Link to="/nutrition" id="/nutrition" className="tabs">Nutrition</Link>
+        <Link to="/workout" id="/workout" className="tabs">Workout</Link>
       </div>
     );
   }

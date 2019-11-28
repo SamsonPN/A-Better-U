@@ -7,6 +7,9 @@ workout.get('/getExerciseTypes', (req,res) => {
   let {exerciseList} = req.app.locals;
   exerciseList.findOne( { "record" : "Exercise Types"} )
     .then(result => res.json(result))
+    .catch( err => {
+      res.status(404).send({err})
+    })
 })
 
 // returns all exercises categorized by Muscle and Exercise tabs
@@ -16,8 +19,10 @@ workout.get('/getExerciseByCategory', (req,res) => {
     .sort( { "name": 1} )
     .toArray()
     .then(items => {res.json(items)})
-    .catch( err => console.error(err))
-})
+    .catch( err => {
+      res.status(404).send({err})
+    })
+  })
 
 //used by addexerciseview to return exercises via search bar
 workout.get('/getExerciseBySearch/:search', (req, res) => {
@@ -28,8 +33,10 @@ workout.get('/getExerciseBySearch/:search', (req, res) => {
     .sort( { name: 1} )
     .toArray()
     .then(items => {res.json(items)})
-    .catch( err => console.error(err))
-})
+    .catch( err => {
+      res.status(404).send({err})
+    })
+ })
 
 // used by workoutcontext.js to fill the Routine tab
 workout.get('/getRoutines', (req, res) => {
@@ -40,7 +47,9 @@ workout.get('/getRoutines', (req, res) => {
     .sort( { name : 1 } )
     .toArray()
     .then(items => res.json(items))
-    .catch(err => console.error(err))
+    .catch( err => {
+      res.status(404).send({err})
+    })
 })
 
 //used by workoutcontext.js to fill the Saved tab with workouts
@@ -77,7 +86,9 @@ workout.get('/getWorkoutById', (req, res) => {
   workouts.findOne(
    { _id: ObjectID(req.query._id) } )
     .then(result => res.json(result))
-    .catch(err => console.error(err))
+    .catch(err => {
+      res.status(404).send({err})
+    })
 })
 
 //used to update the exercise list for routines/workouts
@@ -90,8 +101,12 @@ workout.post('/updateExercises', (req,res) => {
     {$set: { name, exercises } },
     {upsert: true}
   )
-    .catch(err => console.error(err))
-  res.end();
+  .then(result => {
+    res.status(200).send(result.result)
+  })
+  .catch(err => {
+    res.status(500).send({err})
+  })
 })
 
 // saves the workouts to the workout collection
@@ -104,7 +119,12 @@ workout.put('/saveWorkout', (req, res) => {
     {$set: {name, date, user, exercises } },
     {upsert: true}
   )
-  res.end();
+    .then(result => {
+      res.status(200).send(result.result)
+    })
+    .catch(err => {
+      res.status(500).send({err})
+    })
 })
 
 //deletes the current routine shown from either the routines or workout collections
@@ -115,8 +135,12 @@ workout.delete('/deleteCurrentRoutine/:collectionName/:id', (req, res) => {
   collection.deleteOne(
     { _id: ObjectID(req.params.id) }
   )
-    .catch(err => console.error(err))
-  res.end();
+    .then(() => {
+      res.sendStatus(204)
+    })
+    .catch(err => {
+      res.status(500).send({err})
+    })
 })
 
 module.exports = workout;

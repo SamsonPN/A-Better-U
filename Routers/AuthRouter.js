@@ -15,7 +15,7 @@ Auth.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 })
 
 Auth.get('/facebook', passport.authenticate('facebook', {
-  scope: ['user_friends']
+  scope: 'user_friends'
 }));
 
 Auth.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {

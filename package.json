@@ -45,6 +45,7 @@
   },
   "proxy": "http://localhost:9000/",
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "nodemon": "^1.19.3"
   }
 }

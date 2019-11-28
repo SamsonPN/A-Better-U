@@ -2,6 +2,7 @@
 const {FDC_Key} = require('../src/API/API_Key');
 const nutrition = require('express').Router();
 const request = require('request');
+
 // grabs all food from the FoodData Central API
 nutrition.get('/searchFDC/:search', (req, res) => {
   let uri = `https://api.nal.usda.gov/fdc/v1/search/?api_key=${FDC_Key}`;
@@ -13,7 +14,7 @@ nutrition.get('/searchFDC/:search', (req, res) => {
       'Content-Type': 'application/json'
     },
     json: true
-  }, function(error, response, body){
+  }, (error, response, body) => {
     res.json(body)
   })
 });
@@ -26,7 +27,7 @@ nutrition.get('/detailsFDC/:id', (req, res) => {
     headers:{
       'Content-Type': 'application/json'
     },
-  }, function(error, response, body){
+  }, (error, response, body) => {
     res.json(body)
   })
 });
@@ -41,7 +42,9 @@ nutrition.get('/getFood/:date', (req,res) => {
     { projection : { _id: 0, type: 0, date: 0, user: 0 } }
   )
   .then(result => {res.json(result)})
-  .catch(err => console.error(`Failed to find documents ${err}`))
+  .catch( err => {
+    res.status(404).send({err})
+  })
 })
 
 nutrition.get('/getRecents', (req, res) => {
@@ -62,7 +65,10 @@ nutrition.get('/getRecents', (req, res) => {
     .sort({ _id: -1})
     .limit(1)
     .toArray()
-    .then(result => res.json(result));
+    .then(result => res.json(result))
+    .catch( err => {
+      res.status(404).send({err})
+    })
 })
 
 // inserts all recorded food items into the database
@@ -72,11 +78,17 @@ nutrition.post('/createNutritionDocument', (req, res) => {
   let {user} = req.session.passport;
   nutrition.insertOne({
     user,
-    date: req.body.date,
+    date,
     Breakfast: [],
     Lunch: [],
     Dinner: [],
     Snacks: []
+  })
+  .then(result => {
+    res.status(201).send(result.result)
+  })
+  .catch( err => {
+    res.status(500).send({err})
   })
   res.end()
 })
@@ -89,8 +101,12 @@ nutrition.post('/insertFood', (req,res) => {
     { date, user },
     { $addToSet: { [meal]: { $each: FoodAdded } } }
   )
-    .catch(err => console.error(`Failed to insert item: ${err}`))
-  res.end()
+    .then(result => {
+      res.status(201).send(result.result)
+    })
+    .catch(err => {
+      res.status(500).send({ err })
+    })
 })
 
 nutrition.post('/updateServings', (req, res) => {
@@ -101,8 +117,12 @@ nutrition.post('/updateServings', (req, res) => {
     { date, [meal + ".ndbno"] : ndbno, user },
     { $set: { [meal + ".$.servings"] : servings } }
   )
-   .catch(err => console.error(err))
-  res.end()
+    .then(result => {
+      res.status(201).send(result.result)
+    })
+    .catch( err => {
+      res.status(500).send({err})
+    })
 })
 
 // deletes any food items from the database that the user deleted in the client
@@ -114,9 +134,12 @@ nutrition.delete('/deleteFood', (req,res) => {
     { date, user },
     { $pull: { [meal] : { ndbno } } }
   )
-    .catch(err => console.error(err))
-
-  res.end()
+    .then(result => {
+      res.status(201).send(result.result)
+    })
+    .catch( err => {
+      res.status(500).send({err})
+    })
 })
 
 module.exports = nutrition;

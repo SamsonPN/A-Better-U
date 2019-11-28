@@ -21,28 +21,29 @@ class App extends Component {
       <Router>
         <div id="App">
           <Route exact path="/" component={Login}/>
-          <Route exact path = {["/workout", "/nutrition", "/story"]}component={Header} />
+          <Route exact path = {["/workout", "/nutrition", "/story"]}  component={Header} />
+
           {/*WORKOUT ROUTES*/}
           <AddExerciseProvider>
-             <WorkoutProvider>
-               <Route exact path="/workout" component={Workout} />
-               <Route exact path="/workout/routineview/:collection/:id" render={props => (<RoutineView {...props}/>) }/>
-               <Route exact path="/workout/addroutine/:collection/:id" render={props => ( <AddExerciseView {...props}/>) }/>
-             </WorkoutProvider>
-            </AddExerciseProvider>
+           <WorkoutProvider>
+             <Route exact path="/workout" component={Workout} />
+             <Route exact path="/workout/routineview/:collection/:id" render={props => (<RoutineView {...props}/>) }/>
+             <Route exact path="/workout/addroutine/:collection/:id" render={props => ( <AddExerciseView {...props}/>) }/>
+           </WorkoutProvider>
+          </AddExerciseProvider>
+
           {/*NUTRITION ROUTES*/}
           <CalculatorProvider>
-               <NutritionProvider>
-                 <AddFoodProvider>
-                   <Route exact path="/nutrition" component={Nutrition} />
-                   <Route exact path={"/nutrition/addfood/:meal"} render={props =>(
-                       <AddFoodView {...props} />
-                     )}/>
-                </AddFoodProvider>
-              </NutritionProvider>
-              <Route exact path="/nutrition/bmrcalculator" component={BMR} />
-              <Route exact path="/nutrition/macrocalculator" component={Macro} />
-             </CalculatorProvider>
+            <NutritionProvider>
+               <AddFoodProvider>
+                 <Route exact path="/nutrition" component={Nutrition} />
+                 <Route exact path={"/nutrition/addfood/:meal"} render={props => (<AddFoodView {...props} />) }/>
+              </AddFoodProvider>
+            </NutritionProvider>
+            <Route exact path="/nutrition/bmrcalculator" component={BMR} />
+            <Route exact path="/nutrition/macrocalculator" component={Macro} />
+          </CalculatorProvider>
+
           {/*STORY ROUTES*/}
           <StoryProvider>
              <Route exact path = "/story" component={Story} />
@@ -51,7 +52,6 @@ class App extends Component {
       </Router>
     );
   }
-
 }
 
 export default App;

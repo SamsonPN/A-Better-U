@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import {NutritionContext, CalculatorContext} from '../../../AppContext/ExportContexts';
 
 class NutritionView extends Component {
-  static contextType = CalculatorContext;
-  componentDidMount(){
-    this.context.GetGoals();
-  }
   render() {
     return (
       <NutritionContext.Consumer>

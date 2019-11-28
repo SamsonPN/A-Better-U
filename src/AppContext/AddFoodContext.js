@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import {Key} from '../API/API_Key';
 import Heart from '../assets/heart.svg';
 import BlueHeart from '../assets/filled-in-heart.svg';
+import {NutritionContext} from './ExportContexts';
 
 export const AddFoodContext = React.createContext();
 
 export class AddFoodProvider extends Component {
+  static contextType = NutritionContext;
+
   AddFood = (name, ndbno, e) => {
       let checkbox = e.target.style;
       let newState;
@@ -152,6 +155,10 @@ export class AddFoodProvider extends Component {
         },
         body: JSON.stringify(requestObject)
       })
+        .then(res => res.json())
+        .then(data => {
+          this.context.FetchFood();
+        })
         .catch(err => console.log(err))
     }
   }
@@ -165,9 +172,13 @@ export class AddFoodProvider extends Component {
   render() {
     const {state, ...methods} = this;
     return (
-      <AddFoodContext.Provider value ={{...methods, ...state}}>
-        {this.props.children}
-      </AddFoodContext.Provider>
+      <NutritionContext.Consumer>
+        {({ FetchFood  }) => (
+          <AddFoodContext.Provider value ={{...methods, ...state, FetchFood}}>
+            {this.props.children}
+          </AddFoodContext.Provider>
+        )}
+      </NutritionContext.Consumer>
     );
   }
 

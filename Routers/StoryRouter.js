@@ -20,9 +20,14 @@ story.get('/getStories', (req,res) => {
   let {stories} = req.app.locals;
   stories.find()
     .sort( { date: -1, _id: -1} )
+    .limit(50)
     .toArray()
-    .then(items => { res.json(items) } )
-    .catch( err => console.error(err))
+    .then(items => {
+      res.json(items)
+    })
+    .catch( err => {
+      res.status(404).send({err})
+    })
 })
 
 story.post('/uploadCloudinary', (req, res) => {
@@ -97,9 +102,6 @@ story.post('/editCloudinary', (req, res) => {
           }
         }
       )
-        .catch(err => {
-          res.status(500).send({err})
-        })
       res.status(201).send({result})
     })
     .catch(err => {
@@ -115,21 +117,27 @@ story.post('/editText', (req, res) => {
     { _id: ObjectID(_id) },
     {$set: { text } }
   )
+    .then(() => {
+      res.status(200).send(`Update successful for story: ${_id}`);
+    })
     .catch(err => {
       res.status(500).send({ err })
     })
-  res.status(200).send(`Update successful for story: ${_id}`);
 })
 
 story.delete('/deleteStory', (req, res) => {
   let {stories} = req.app.locals;
   let { story_id, public_id, resource_type } = req.query;
   stories.deleteOne( { _id : ObjectID(story_id) } )
-    .catch(err => console.error(err))
+    .then(() => {
+      res.sendStatus(204)
+    })
+    .catch( err => {
+      res.status(500).send({err})
+    })
   if(public_id){
     CloudinaryDestroy(public_id, resource_type);
   }
-  res.end()
 })
 
 module.exports = story;

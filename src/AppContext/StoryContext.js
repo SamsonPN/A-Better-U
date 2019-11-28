@@ -78,27 +78,41 @@ export class StoryProvider extends Component {
     }
   }
 
+  CheckFileSize = (file) => {
+    let fileSize = file.size / 1000000;
+    let upload = true;
+    if( fileSize > 10 && fileSize < 50){
+      alert('This file is pretty large so it will take a bit of time to be uploaded!')
+    }
+    else if ( fileSize > 50){
+      alert('Sorry, the file is too large! Please choose another one!')
+      upload = false;
+    }
+    return upload;
+  }
+
   SaveChanges = (textRef) => {
     let newText = textRef.value;
     let {editFile, editStory, editText, file, preview} = this.state;
     if(file){
-      if( file.size / 1000000 > 10){
-        alert('This file is pretty large so it will take a bit of time to be uploaded!')
-      }
-      let formData = new FormData();
-      formData.append('file', file);
-      formData.append('oldFile', JSON.stringify(editFile));
-      formData.append('_id', editStory);
-      formData.append('text', newText);
-      fetch('/story/editCloudinary', {
-        method: 'POST',
-        body: formData
-      })
-        .then(() => {
-          this.GetStories();
-          URL.revokeObjectURL(preview);
-          this.ClearSubmissionForm()
+      let upload = this.CheckFileSize(file);
+      if(upload){
+        let formData = new FormData();
+        formData.append('file', file);
+        formData.append('oldFile', JSON.stringify(editFile));
+        formData.append('_id', editStory);
+        formData.append('text', newText);
+        fetch('/story/editCloudinary', {
+          method: 'POST',
+          body: formData
         })
+          .then(() => {
+            this.GetStories();
+            URL.revokeObjectURL(preview);
+            this.ClearSubmissionForm()
+          })
+          .catch(err => console.error(err))
+       }
     }
     else if (newText !== editText){
       fetch('/story/editText', {
@@ -119,21 +133,21 @@ export class StoryProvider extends Component {
     let {file, preview} = this.state;
     let text = document.getElementById('StorySubmitText').value;
     if(file){
-      if( file.size / 1000000 > 10){
-        alert('This file is pretty large so it will take a bit of time to be uploaded!')
-      }
-      let formData = new FormData();
-      formData.append('file', file);
-      formData.append('text', text);
-      fetch('/story/uploadCloudinary', {
-        method: 'POST',
-        body: formData
-      })
-        .then(() => {
-        URL.revokeObjectURL(preview);
-        this.GetStories();
+      let upload = this.CheckFileSize(file);
+      if(upload){
+        let formData = new FormData();
+        formData.append('file', file);
+        formData.append('text', text);
+        fetch('/story/uploadCloudinary', {
+          method: 'POST',
+          body: formData
         })
-        .catch(err => console.error(err))
+          .then(() => {
+          URL.revokeObjectURL(preview);
+          this.GetStories();
+          })
+          .catch(err => console.error(err))
+       }
     }
     else if (text){
       fetch('/story/uploadText', {

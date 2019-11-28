@@ -22,7 +22,7 @@ class NutritionMealDividers extends Component {
 
   render() {
     const {FoodAdded, meal} = this.props;
-    const meal_Items = FoodAdded.map((item) =>
+    const meal_Items = (FoodAdded || []).map((item) =>
         <MealItems
           key={item.name}
           meal={meal}

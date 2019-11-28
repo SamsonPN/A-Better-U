@@ -9,11 +9,14 @@ passport.serializeUser((req, id, done) => {
 });
 
 passport.deserializeUser((req, id, done) => {
-  let {db} = req.app.locals;
-  let users = db.collection('users');
+  let {users} = req.app.locals;
   users.findOne( { _id: ObjectID(id) } )
     .then(user => {
       done(null, user)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send({err});
     })
 });
 
@@ -81,11 +84,9 @@ passport.use(
     users.findOne( { user: profile.id} )
       .then(user => {
         if(user){
-          // if user exists
           done(null, user._id);
         }
         else{
-          // if user doesn't exist, add it to user collection
           let picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
           users.insertOne({
             user: profile.id,

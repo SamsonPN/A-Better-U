@@ -26,6 +26,9 @@ export class CalculatorProvider extends Component {
         },
         body: JSON.stringify({ Calories: BMR, ...this.state.user })
       })
+      .then(() => {
+        this.GetGoals();
+      })
       .catch(err => console.error(err))
     }
   }
@@ -95,6 +98,10 @@ export class CalculatorProvider extends Component {
       })
       .catch(err => console.error(err))
     }
+  }
+
+  componentDidMount(){
+    this.GetGoals();
   }
 
   state = {
