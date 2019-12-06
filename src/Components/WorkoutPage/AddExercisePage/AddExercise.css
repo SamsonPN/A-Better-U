@@ -211,10 +211,16 @@ MEDIA QUERIES
 
 @media only screen and (max-width: 484px){
   .AddExerciseItem{
-    font-size: 1.75em
+    font-size: 1.75em;
   }
   #AddExerciseName{
     font-size: 2em;
+  }
+  .AddExerciseOptions{
+    font-size: 1.25em;
+  }
+  .AddExerciseBtn{
+    font-size: 1.5em;
   }
 }
 

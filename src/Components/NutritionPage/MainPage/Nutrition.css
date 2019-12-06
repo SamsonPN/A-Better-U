@@ -230,27 +230,26 @@
 .ModalServingDiv{
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
   width: 100%;
-  flex: 1;
+  height: 30%;
 }
 
 .NutritionModalTextArea{
   resize: none;
   border: none;
   outline: none;
-  height: 60%;
   min-width: 15%;
   max-width: 15%;
   width: 15%;
+  height: 100%;
   margin-left: 10px;
   font-size: 1em;
-  border: 1px solid white;
   padding: 2px;
   box-sizing: border-box;
   background-color: #1F0CAD;
   color: white;
-  text-align: center;
+  text-decoration: underline;
 }
 
 .NutritionModalBody{

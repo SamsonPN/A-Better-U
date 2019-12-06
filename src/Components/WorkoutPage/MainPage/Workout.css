@@ -8,9 +8,9 @@
 
 #WoWrapper{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin: 2vh 0 2vh;
-  width: 100%;
+  width: 96.7vw;
   font-size: 1rem;
 }
 
@@ -41,6 +41,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   text-decoration: none;
+  background-color: white;
 }
 
 .WoViews:hover{
@@ -127,7 +128,7 @@
 }
 
 .CurrentRoutineItems{
-  width: 96.7vw;
+  width: 100%;
   min-height: 0vh;
   display: flex;
   flex-direction: column;
@@ -160,7 +161,6 @@
   justify-content: space-between;
   align-items: flex-start;
   font-size: 1rem;
-  flex: 1;
 }
 
 .CurrentRoutineSetsReps > p{
@@ -216,7 +216,7 @@
 }
 
 .WoBtns{
-  max-width: 15vw;
+  width: 7vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -258,18 +258,22 @@ MEDIA QUERIES
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin: 0;
+    margin-top: 1px;
   }
   #WoWrapper > div:first-child{
     order: 1;
     flex: 1;
   }
-  #WoWrapper > a{
-    display: none;
-  }
   #WoWrapper > .WoDropdownDiv{
     order: 2;
     flex: 1;
+  }
+  #WoWrapper > a{
+    display: none;
+  }
+  .WoViews{
+    border: none;
+    border-bottom: 1px solid #1F0CAD;
   }
   .CurrentRoutineWorkouts{
     width: 100%;

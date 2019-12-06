@@ -7,6 +7,10 @@ import {WorkoutContext} from '../../../AppContext/ExportContexts';
 
 class WorkoutDropdownWrapper extends Component {
   static contextType = WorkoutContext;
+  componentDidMount() {
+    const datePickers = document.getElementsByClassName("react-datepicker__input-container");
+    Array.from(datePickers).forEach((el => el.childNodes[0].setAttribute("readOnly", true)))
+  }
   render() {
     return (
       <WorkoutContext.Consumer>

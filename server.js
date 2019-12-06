@@ -2,7 +2,6 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 9000;
-const serverless = require('serverless-http');
 const formData = require('express-form-data');
 const cors = require('cors');
 const passport = require('passport');
@@ -64,5 +63,3 @@ app.use('/workout', isAuthenticated, workoutRouter);
 app.use('/nutrition', isAuthenticated, nutritionRouter);
 app.use('/user', isAuthenticated, userRouter);
 app.use('/story', isAuthenticated, storyRouter);
-
-module.exports.handler = serverless(app);

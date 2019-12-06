@@ -5,6 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import {NutritionContext} from '../../../AppContext/ExportContexts';
 
 class NutritionViewButtons extends Component {
+  componentDidMount() {
+    const datePickers = document.getElementsByClassName("react-datepicker__input-container");
+    Array.from(datePickers).forEach((el => el.childNodes[0].setAttribute("readOnly", true)))
+  }
   render() {
     return (
       <NutritionContext.Consumer>

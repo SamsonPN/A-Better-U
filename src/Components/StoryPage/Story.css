@@ -180,7 +180,6 @@
   cursor: pointer;
 }
 
-
 #StoriesList{
   width: 100%;
   display: flex;
@@ -301,7 +300,6 @@
   background-color: #1F0CAD;
   color: white;
   font-size: 2em;
-  /* flex: 0.5; */
 }
 
 #StoryModalHeader > p:nth-child(even){
@@ -417,6 +415,17 @@ MEDIA QUERIES
    }
  }
 
+ @media only screen and (max-width: 500px){
+   #StoryStatHeader{
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+   }
+   #StoryStatHeader > p{
+     font-size: 1.75em;
+   }
+ }
+
  @media only screen and (max-width: 415px){
    #StoryModalContent{
      width: 80%;
@@ -432,7 +441,16 @@ MEDIA QUERIES
    }
    #StoryModalBtnWrapper > button,
    #StoryModalBtnWrapper > .inputLabel{
-     min-width: 45%;
+     min-width: 50%;
+   }
+   #StoryMediaLabel{
+     min-width: 45vw;
+   }
+ }
+
+ @media only screen and (max-width: 370px){
+   #StoryStatHeader > p{
+     font-size: 1.5em;
    }
  }
 
