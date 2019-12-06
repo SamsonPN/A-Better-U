@@ -19,12 +19,15 @@ class StoryStatViewer extends Component {
             />
             <p>{user.name}</p>
           </div>
-          <div id="StoryStatList">
-            <div className="StoryStatListItem">Age: {"\n"}{userStats.age || ""}</div>
-            <p className="StoryStatListItem">Height: {"\n"}{`${userStats.feet || ""}' ${userStats.inches || ""}"`}</p>
-            <p className="StoryStatListItem">Weight: {"\n"}{userStats.weight || ""} lbs</p>
-            <p className="StoryStatListItem">Goal: {"\n"}{goal.name || ""}</p>
-          </div>
+          {userStats.age ?
+            <div id="StoryStatList">
+              <div className="StoryStatListItem">Age: {"\n"}{userStats.age || ""}</div>
+              <p className="StoryStatListItem">Height: {"\n"}{`${userStats.feet || ""}' ${userStats.inches || ""}"`}</p>
+              <p className="StoryStatListItem">Weight: {"\n"}{userStats.weight || ""} lbs</p>
+              <p className="StoryStatListItem">Goal: {"\n"}{goal.name || ""}</p>
+            </div>
+            : null
+          }
         </div>
       </div>
     );

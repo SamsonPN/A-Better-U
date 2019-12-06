@@ -24,7 +24,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-bottom: 1px solid #1F0CAD;
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -55,15 +54,12 @@
   display: flex;
   align-items: center;
   padding: 5px;
+  border-top: 1px solid #1F0CAD;
   box-sizing: border-box;
   font-size: 3em;
   font-weight: 200;
   overflow: hidden;
   flex: 1;
-}
-
-.StoryStatListItem:not(:last-child){
-  border-bottom: 1px solid #1F0CAD;
 }
 
 .StoryStatListItem > span{
@@ -402,6 +398,7 @@ MEDIA QUERIES
      min-height: 20vh;
      border: none;
      font-size: 1.75rem;
+     text-align: center;
    }
    #StoryStatView,
    #StoryTimeline{
