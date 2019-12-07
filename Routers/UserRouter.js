@@ -104,5 +104,4 @@ user.post('/deleteFavorites', (req, res) => {
   res.end();
 })
 
-
 module.exports = user;

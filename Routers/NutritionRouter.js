@@ -36,7 +36,7 @@ nutrition.get('/detailsFDC/:id', (req, res) => {
 nutrition.get('/getFood/:date', (req,res) => {
   let {nutrition} = req.app.locals;
   let {date} = req.params;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   nutrition.findOne(
     { date, user },
     { projection : { _id: 0, type: 0, date: 0, user: 0 } }
@@ -49,7 +49,7 @@ nutrition.get('/getFood/:date', (req,res) => {
 
 nutrition.get('/getRecents', (req, res) => {
   let {nutrition} = req.app.locals;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   nutrition.find(
     { user,
       $or:
@@ -75,7 +75,7 @@ nutrition.get('/getRecents', (req, res) => {
 nutrition.post('/createNutritionDocument', (req, res) => {
   let {nutrition} = req.app.locals;
   let {date} = req.body;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   nutrition.insertOne({
     user,
     date,
@@ -96,7 +96,7 @@ nutrition.post('/createNutritionDocument', (req, res) => {
 nutrition.post('/insertFood', (req,res) => {
   let {nutrition} = req.app.locals;
   let {date, FoodAdded, meal} = req.body;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   nutrition.updateOne(
     { date, user },
     { $addToSet: { [meal]: { $each: FoodAdded } } }
@@ -112,7 +112,7 @@ nutrition.post('/insertFood', (req,res) => {
 nutrition.post('/updateServings', (req, res) => {
   let {nutrition} = req.app.locals;
   let {date, meal, ndbno, servings} = req.body;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   nutrition.updateOne(
     { date, [meal + ".ndbno"] : ndbno, user },
     { $set: { [meal + ".$.servings"] : servings } }
@@ -129,7 +129,7 @@ nutrition.post('/updateServings', (req, res) => {
 nutrition.delete('/deleteFood', (req,res) => {
   let {nutrition} = req.app.locals;
   let { date, meal, ndbno } = req.body;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   nutrition.updateOne(
     { date, user },
     { $pull: { [meal] : { ndbno } } }

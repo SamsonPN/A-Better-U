@@ -246,13 +246,6 @@ export class WorkoutProvider extends Component {
     })
   }
 
-/*
-sets: [{
-  Type: '',
-  Weight: '',
-  Reps: ''
-}]
-*/
   StoreExercises = (collectionName) => {
     let {currentRoutine} = this.state;
     let {exercises} = currentRoutine;
@@ -288,12 +281,6 @@ sets: [{
   }
 
   componentDidMount(){
-    // let date = new Date();
-    // let options = {month: "2-digit", day: "2-digit", year: "numeric"};
-    // let today = date.toLocaleDateString("en-US", options);
-    // this.setState({
-    //   workoutDate: today
-    // })
     this.GetRoutines();
     this.GetWorkouts();
   }

@@ -41,9 +41,8 @@ workout.get('/getExerciseBySearch/:search', (req, res) => {
 // used by workoutcontext.js to fill the Routine tab
 workout.get('/getRoutines', (req, res) => {
   let {routines} = req.app.locals;
-  routines.find(
-    { user: req.session.passport.user }
-  )
+  let {user} = req.user;
+  routines.find({  user } )
     .sort( { name : 1 } )
     .toArray()
     .then(items => res.json(items))
@@ -55,7 +54,7 @@ workout.get('/getRoutines', (req, res) => {
 //used by workoutcontext.js to fill the Saved tab with workouts
 workout.get('/getWorkouts', (req, res) => {
   let {workouts} = req.app.locals;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   workouts.find(
     { user },
     { projection: { _id: 0, name: 0, user: 0, exercises: 0 } }
@@ -70,7 +69,8 @@ workout.get('/getWorkouts', (req, res) => {
 
 workout.get('/getWorkoutsByDate', (req, res) => {
   let {workouts} = req.app.locals;
-  let query = {...req.query, user: req.session.passport.user};
+  let {user} = req.user;
+  let query = {...req.query, user};
   workouts.find( query )
     .sort( { date : 1 } )
     .toArray()
@@ -93,15 +93,17 @@ workout.get('/getWorkoutById', (req, res) => {
 
 //used to update the exercise list for routines/workouts
 workout.post('/updateExercises', (req,res) => {
-  let { db} = req.app.locals;
+  let {db} = req.app.locals;
   let {_id, exercises, name, collectionName} = req.body;
   let collection = db.collection(collectionName);
+  let {user} = req.user;
   collection.updateOne(
-    { _id: ObjectID(_id), user: req.session.passport.user },
+    { _id: ObjectID(_id), user },
     {$set: { name, exercises } },
     {upsert: true}
   )
   .then(result => {
+    console.log({result})
     res.status(200).send(result.result)
   })
   .catch(err => {
@@ -113,7 +115,7 @@ workout.post('/updateExercises', (req,res) => {
 workout.put('/saveWorkout', (req, res) => {
   let {workouts} = req.app.locals;
   let {name, date, exercises, _id} = req.body;
-  let {user} = req.session.passport;
+  let {user} = req.user;
   workouts.updateOne(
     { _id: ObjectID(_id)},
     {$set: {name, date, user, exercises } },
@@ -129,7 +131,7 @@ workout.put('/saveWorkout', (req, res) => {
 
 //deletes the current routine shown from either the routines or workout collections
 workout.delete('/deleteCurrentRoutine/:collectionName/:id', (req, res) => {
-  let { db} = req.app.locals;
+  let {db} = req.app.locals;
   let {collectionName, id} = req.params;
   let collection = db.collection(collectionName);
   collection.deleteOne(
