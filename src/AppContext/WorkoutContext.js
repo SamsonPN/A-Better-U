@@ -12,17 +12,22 @@ export class WorkoutProvider extends Component {
     let checkBoxColor = checkBox.backgroundColor;
     if (checkBoxColor === "" || checkBoxColor === "white"){
       checkBox.backgroundColor = '#1F0CAD';
-      let addExercise= {
-        "name": name,
-        "muscle": muscle,
-        "type": type,
-        "sets": [{
-          'Type': '',
-          'Weight': '',
-          'Reps': ''
-        }]
-      };
-      newState.exercises.push(addExercise);
+      let duplicate = newState.exercises.find(exercise => {
+        return exercise.name === name && exercise.type === type && exercise.muscle === muscle
+      });
+      if(!duplicate){
+        let addExercise= {
+          "name": name,
+          "muscle": muscle,
+          "type": type,
+          "sets": [{
+            'Type': '',
+            'Weight': '',
+            'Reps': ''
+          }]
+        };
+        newState.exercises.push(addExercise);
+      }
     }
     else {
       checkBox.backgroundColor = "white";
