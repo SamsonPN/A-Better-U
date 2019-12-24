@@ -11,6 +11,12 @@ const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;
 const client = new MongoClient(keys.mongodb.dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const {authRouter, workoutRouter, nutritionRouter, userRouter, storyRouter} = require('./Routers/ExportRouters');
+const corsOptions = {
+  origin: 'https://abetteruhealth.com',
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true
+}
 
 app.use(cookieSession({
   maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -21,7 +27,8 @@ app.use(formData.parse());
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
+app.use(cors(corsOptions));
+app.enable('trust proxy');
 
 client.connect((err)=> {
   console.log('Successfully connected to the server')

@@ -1,68 +1,35 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# A BETTER U
 
-## Available Scripts
+![A Better U Photo](https://res.cloudinary.com/sotasamson96/image/upload/v1577219454/ABU-Landing_c3npx9.png)
 
-In the project directory, you can run:
+## Website: https://abetteruhealth.com/
 
-### `npm start`
+## Demo Link: https://www.youtube.com/watch?v=xnnKvFZoiVo&feature=youtu.be
+## Technologies Used: MongoDB, Express, React, NodeJS
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Cloud Services Used:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+#### MongoDB Atlas: A free cloud database service that handles deployment and management of clusters. Very easy to connect to and query from using the MongoDB Node.JS driver and it is helpful in visualizing your collections and documents for easy management. 
 
-### `npm test`
+#### Cloudinary: A free cloud-based media storage manager that allows users to upload, delete, and edit photos. It also delivers media through a Content Delivery Network (CDN) that can be cropped/resized directly from the url!
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## What is A BETTER U? 
 
-### `npm run build`
+#### A Better U is a health and fitness application focused on making you, the user, a better version of yourself.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Services:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+#### Nutrition: 
+    - Calorie and Macronutrient calculators provided to help users determine their nutritional needs based on their age, height, weight, etc...
+    - Search for various foods by using the USDA API (old API will be deprecated in March 2020)
+    - View and track macronutrient/micronutrient information on each item
+    - Provides a full nutrition report for the day depending on what items the user consumed
+    - Food diary entries saved to MongoDB Atlas
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Workouts:
+    - Create any workout routine from a thousand available exercises such as the squat, bench press, and deadlift
+    - Track workouts for the day by choosing a routine and putting in weight, repetition, and set information
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+#### Story:
+    - Create, update, or delete facebook-like status updates about your fitness journey
+    - Able to upload photos and videos for each status that will then be delivered quickly through Cloudinary.=

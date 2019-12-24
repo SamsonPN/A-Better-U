@@ -1,36 +1,36 @@
 "use strict";
-const {FDC_Key} = require('../src/API/API_Key');
+// const {FDC_Key} = require('../src/API/API_Key');
 const nutrition = require('express').Router();
-const request = require('request');
+// const request = require('request');
 
 // grabs all food from the FoodData Central API
-nutrition.get('/searchFDC/:search', (req, res) => {
-  let uri = `https://api.nal.usda.gov/fdc/v1/search/?api_key=${FDC_Key}`;
-  let requestObject = {"generalSearchInput": req.params.search};
-  request.post({
-    url: uri,
-    body: requestObject,
-    headers:{
-      'Content-Type': 'application/json'
-    },
-    json: true
-  }, (error, response, body) => {
-    res.json(body)
-  })
-});
+// nutrition.get('/searchFDC/:search', (req, res) => {
+//   let uri = `https://api.nal.usda.gov/fdc/v1/search/?api_key=${FDC_Key}`;
+//   let requestObject = {"generalSearchInput": req.params.search};
+//   request.post({
+//     url: uri,
+//     body: requestObject,
+//     headers:{
+//       'Content-Type': 'application/json'
+//     },
+//     json: true
+//   }, (error, response, body) => {
+//     res.json(body)
+//   })
+// });
 
 //grabs food details from FoodData Central API
-nutrition.get('/detailsFDC/:id', (req, res) => {
-  let uri = `https://api.nal.usda.gov/fdc/v1/${req.params.id}/?api_key=${FDC_Key}`;
-  request.get({
-    url: uri,
-    headers:{
-      'Content-Type': 'application/json'
-    },
-  }, (error, response, body) => {
-    res.json(body)
-  })
-});
+// nutrition.get('/detailsFDC/:id', (req, res) => {
+//   let uri = `https://api.nal.usda.gov/fdc/v1/${req.params.id}/?api_key=${FDC_Key}`;
+//   request.get({
+//     url: uri,
+//     headers:{
+//       'Content-Type': 'application/json'
+//     },
+//   }, (error, response, body) => {
+//     res.json(body)
+//   })
+// });
 
 // returns all food that have been consumed today
 nutrition.get('/getFood/:date', (req,res) => {
