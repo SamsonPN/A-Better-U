@@ -15,7 +15,7 @@
 
 ## What is A BETTER U? 
 
-#### A Better U is a health and fitness application focused on making you, the user, a better version of yourself.
+#### A Better U is a health and fitness web application focused on making you, the user, a better version of yourself.
 
 ## Services:
 
@@ -32,4 +32,4 @@
 
 #### Story:
     - Create, update, or delete facebook-like status updates about your fitness journey
-    - Able to upload photos and videos for each status that will then be delivered quickly through Cloudinary.=
+    - Able to upload photos and videos for each status that will then be delivered quickly through Cloudinary.
